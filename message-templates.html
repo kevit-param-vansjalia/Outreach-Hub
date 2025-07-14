@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Message Templates</title>
+  <link rel="stylesheet" href="message-campaign-styles.css" />
+</head>
+<body>
+  <header>
+    <div class="logo"><img src="./public/logo-removebg-preview.png" alt="logo"></div>
+    <nav>
+      <a href="./index.html">Home</a>
+      <a href="./contacts.html">Contacts</a>
+      <a href="./message-templates.html">Messages</a>
+      <a href="./campaigns.html">Campaigns</a>
+    </nav>
+    <button class="logout">Logout</button>
+  </header>
+
+  <main>
+    <div class="section-header">
+      <h1>Message Templates</h1>
+      <button id="addTemplateBtn">+ Add Template</button>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th><th>Type</th><th>Message</th><th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Welcome Text</td>
+          <td>Text</td>
+          <td>Hello, welcome to our service!</td>
+          <td>
+            <button>👁️</button>
+            <button>✏️</button>
+            <button>🗑️</button>
+          </td>
+        </tr>
+        <tr>
+          <td>Promo Image</td>
+          <td>Text & Image</td>
+          <td>Check out our new product!</td>
+          <td>
+            <button>👁️</button>
+            <button>✏️</button>
+            <button>🗑️</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </main>
+
+  <!-- Modal -->
+  <div class="modal" id="templateModal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Create Template</h2>
+      <form>
+        <input type="text" placeholder="Template Name" required>
+        <select required>
+          <option value="text">Text</option>
+          <option value="text-image">Text & Image</option>
+        </select>
+        <textarea placeholder="Message content..." required></textarea>
+        <input type="url" placeholder="Image URL (only for Text & Image)">
+        <button type="submit">Save</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    document.querySelector('.logout').onclick = () => location.href = 'login.html';
+    const modal = document.getElementById("templateModal");
+    document.getElementById("addTemplateBtn").onclick = () => modal.style.display = "block";
+    document.querySelector(".close").onclick = () => modal.style.display = "none";
+    window.onclick = (e) => { if (e.target == modal) modal.style.display = "none"; };
+  </script>
+</body>
+</html>

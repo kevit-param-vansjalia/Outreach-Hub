@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Campaigns</title>
+  <link rel="stylesheet" href="message-campaign-styles.css" />
+</head>
+<body>
+   <header>
+    <div class="logo"><img src="./public/logo-removebg-preview.png" alt="logo"></div>
+    <nav>
+      <a href="./index.html">Home</a>
+      <a href="./contacts.html">Contacts</a>
+      <a href="./message-templates.html">Messages</a>
+      <a href="./campaigns.html">Campaigns</a>
+    </nav>
+    <button class="logout">Logout</button>
+  </header>
+
+
+
+  <main>
+    <div class="section-header">
+      <h1>Campaigns</h1>
+      <button id="addCampaignBtn">+ New Campaign</button>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th><th>Status</th><th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="campaignList">
+        <tr>
+          <td>July Promo</td>
+          <td><span class="badge draft">Draft</span></td>
+          <td>
+            <button onclick="launchCampaign(this)">🚀 Launch</button>
+            <button>👁️</button>
+            <button>✏️</button>
+            <button>🗑️</button>
+            <button>📋</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </main>
+
+  <!-- Modal -->
+  <div class="modal" id="campaignModal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Create Campaign</h2>
+      <form>
+        <input type="text" placeholder="Campaign Name" required>
+        <textarea placeholder="Message Content" required></textarea>
+        <select>
+          <option value="text">Text</option>
+          <option value="text-image">Text & Image</option>
+        </select>
+        <button type="submit">Save as Draft</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    document.querySelector('.logout').onclick = () => location.href = 'login.html';
+    const modal = document.getElementById("campaignModal");
+    document.getElementById("addCampaignBtn").onclick = () => modal.style.display = "block";
+    document.querySelector(".close").onclick = () => modal.style.display = "none";
+    window.onclick = (e) => { if (e.target == modal) modal.style.display = "none"; };
+
+    function launchCampaign(btn) {
+      const statusEl = btn.parentElement.previousElementSibling.querySelector('.badge');
+      if (statusEl.classList.contains('draft')) {
+        statusEl.className = 'badge running';
+        statusEl.innerText = 'Running';
+
+        // Simulate polling → completion
+        setTimeout(() => {
+          statusEl.className = 'badge completed';
+          statusEl.innerText = 'Completed';
+        }, 5000);
+      } else {
+        alert("Only draft campaigns can be launched!");
+      }
+    }
+  </script>
+</body>
+</html>

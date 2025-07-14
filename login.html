@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login</title>
+  <link rel="stylesheet" href="login.css" />
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-box">
+      <img src="https://via.placeholder.com/60/000033/FFFFFF?text=⬧" alt="Logo" class="logo" />
+      <h2>Welcome Back</h2>
+      <p class="subtitle">Sign in to your account to continue</p>
+
+      <form id="loginForm">
+        <label for="email">Email</label>
+        <div class="input-field">
+          <span class="icon">📧</span>
+          <input type="email" id="email" placeholder="Enter your email" required>
+        </div>
+
+        <label for="password">Password</label>
+        <div class="input-field">
+          <span class="icon">🔒</span>
+          <input type="password" id="password" placeholder="Enter your password" required>
+        </div>
+
+        <button type="submit">Sign In</button>
+      </form>
+
+      <p class="bottom-link">
+        Don’t have an account? <a href="signup.html">Sign Up</a>
+      </p>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value.trim();
+
+      if (email === '' || password === '') {
+        alert('Please fill in all fields.');
+        return;
+      }
+
+      // ✅ Dummy check (replace with actual auth in real app)
+      if (password.length < 6) {
+        alert('Password must be at least 6 characters.');
+        return;
+      }
+
+      // ✅ On successful validation, redirect to home page
+      window.location.href = "index.html";
+    });
+  </script>
+</body>
+</html>

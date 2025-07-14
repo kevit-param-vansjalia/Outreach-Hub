@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contacts</title>
+  <link rel="stylesheet" href="contacts.css" />
+</head>
+<body>
+  <header>
+    <div class="logo"><img src="./public/logo-removebg-preview.png" alt="logo"></div>
+    <nav>
+      <a href="./index.html">Home</a>
+      <a href="./contacts.html">Contacts</a>
+      <a href="./message-templates.html">Messages</a>
+      <a href="./campaigns.html">Campaigns</a>
+    </nav>
+    <button class="logout">Logout</button>
+  </header>
+
+
+  <main>
+    <h1>Contacts</h1>
+    <p>Manage your business contacts</p>
+
+    <section class="contact-controls">
+      <h2>Contact List</h2>
+      <div class="search-add">
+        <input type="text" placeholder="🔍 Search contacts..." />
+        <button id="addContactBtn">+ Add Contact</button>
+      </div>
+    </section>
+
+    <section class="contact-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th><th>Email</th><th>Phone</th><th>Company</th><th>Status</th><th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="contactBody">
+          <tr>
+            <td><strong>John Doe</strong></td>
+            <td>john@example.com</td>
+            <td>+1-555-0123</td>
+            <td>Acme Corp</td>
+            <td><span class="badge active">active</span></td>
+            <td class="actions">
+              <button title="View">👁️</button>
+              <button title="Edit">✏️</button>
+              <button title="Delete">🗑️</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="pagination">
+        <button disabled>« Previous</button>
+        <button class="current">1</button>
+        <button>2</button>
+        <button>Next »</button>
+      </div>
+    </section>
+  </main>
+
+  <div class="modal" id="contactModal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Add Contact</h2>
+      <form id="contactForm">
+        <input type="text" placeholder="Full Name" required />
+        <input type="email" placeholder="Email" required />
+        <input type="tel" placeholder="Phone Number" required />
+        <input type="text" placeholder="Company" />
+        <input type="text" placeholder="Tags (comma-separated)" />
+        <select>
+          <option value="active">Active</option>
+          <option value="inactive">Inactive</option>
+        </select>
+        <button type="submit">Save Contact</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    document.querySelector('.logout').addEventListener('click', () => {
+      window.location.href = 'login.html';
+    });
+
+    const modal = document.getElementById("contactModal");
+    const btn = document.getElementById("addContactBtn");
+    const span = document.querySelector(".close");
+
+    btn.onclick = () => modal.style.display = "block";
+    span.onclick = () => modal.style.display = "none";
+    window.onclick = (e) => { if (e.target == modal) modal.style.display = "none"; };
+  </script>
+</body>
+</html>
