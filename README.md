@@ -1,96 +1,108 @@
-# OutreachHub – MEAN Stack Project
+# 📨 OutreachHub – MEAN Stack Project
 
-OutreachHub is a multi-tenant SaaS platform developed using the MEAN stack (MongoDB, Express/NestJS, Angular, Node.js). It enables businesses to manage contacts, create message templates, and simulate targeted campaigns effectively through an Admin and Workspace portal.
-
-## 🚀 Project Highlights
-
-- **Multi-Tenant Architecture** with Admin and Workspace portals
-- **Role-based access** (Editor, Viewer)
-- **Campaign simulation** with analytics and real-time status updates
-- **Responsive UI** using Angular + SCSS
-- Backend built with **NestJS** and **MongoDB**
+**OutreachHub** is a multi-tenant SaaS platform built using the **MEAN stack (MongoDB, Express/NestJS, Angular, Node.js)**. It enables businesses to manage contacts, create message templates, and simulate targeted outreach campaigns efficiently through dedicated **Admin** and **Workspace** portals.
 
 ---
 
-## 📁 Portals Overview
+## 🚀 Key Features
+
+- **Multi-Tenant Architecture**: Isolated workspaces with scoped data
+- **Role-Based Access Control**: Editor (CRUD) & Viewer (read-only)
+- **Real-Time Campaign Status**: Simulate campaigns with live updates
+- **Data Visualization**: Campaign insights with charts and tables
+- **Responsive UI**: Built with Angular & SCSS for all screen sizes
+- **Scalable Backend**: Powered by NestJS and MongoDB
+
+---
+
+## 🗂️ Portals Overview
 
 ### 🛠 Admin Portal
 
-For platform administrators to manage:
-- Workspaces
-- Workspace users
+For platform-level administration:
+- Manage **Workspaces** (Create, Read, Update, Delete)
+- Manage **Workspace Users** within each workspace
+- JWT-based **Authentication**
 
-Modules:
-- **Authentication**: Login/Logout
-- **Workspaces**: CRUD operations
-- **Workspace Users**: CRUD operations within a workspace
+### 👥 Workspace Portal (OutreachHub)
 
-### 👥 OutreachHub Portal
+For workspace-specific users to manage outreach operations:
 
-For workspace users to manage campaigns:
-- **Roles**:
-  - **Editor**: Full CRUD access
-  - **Viewer**: Read-only access
+**Roles**:
+- **Editor**: Full access (CRUD)
+- **Viewer**: Read-only access
 
-Modules:
-- **Authentication**
-- **Home**: Welcome message, analytics charts, top campaigns/tags
-- **Contacts**: CRUD contacts with tagging
-- **Message Templates**: Manage "Text" and "Text & Image" templates
-- **Campaigns**: Draft, launch, copy campaigns, and view live status
+**Modules**:
+- **Home Dashboard**: Campaign stats, charts, and top tags
+- **Contacts**: Add, tag, and manage contact data
+- **Message Templates**: Create "Text" or "Text & Image" templates
+- **Campaigns**: Draft, launch, copy campaigns with live status updates
 
 ---
 
-## 🛠 Tech Stack
+## 🧰 Tech Stack
 
-| Layer           | Technology       |
-|----------------|------------------|
-| Frontend       | Angular, SCSS    |
-| Backend        | NestJS (Node.js) |
-| Database       | MongoDB          |
-| Language       | TypeScript       |
-| Version Control| Git & GitHub     |
+| Layer           | Technology           |
+|----------------|----------------------|
+| Frontend       | Angular, SCSS        |
+| Backend        | NestJS (Node.js)     |
+| Database       | MongoDB              |
+| Language       | TypeScript           |
+| Version Control| Git & GitHub         |
 
 ---
 
-## 📊 Analytics Features
+## 📈 Analytics Dashboard
 
-- Campaigns sent per day (filterable by date)
-- Messages sent by type
-- Contacts reached per day
-- Tables for:
-  - Recent 5 campaigns
-  - Top 5 contact tags
+- 📅 **Campaigns per Day** (Date-filterable)
+- 🧾 **Messages by Type**
+- 📇 **Contacts Reached per Day**
+- 🧮 Tables:
+  - Recent 5 Campaigns
+  - Top 5 Tags used in Contacts
 
 ---
 
 ## 🔐 Authentication & Authorization
 
-- JWT-based authentication
-- Workspace scoping using workspace IDs
-- Role-based authorization (Editor vs Viewer)
+- **JWT-based Authentication**
+- **Workspace Scoping** with unique Workspace IDs
+- **Role-Based Authorization**: Editor & Viewer access separation
 
 ---
 
-## 🧱 Database Schema (MongoDB)
+## 🧱 MongoDB Schema Structure
 
-Multi-tenant structure:
-- AdminUsers
-- Workspaces
-- WorkspaceUsers
-- Contacts (with tags)
-- MessageTemplates
-- Campaigns
-- CampaignMessages
+Collections include:
+
+- `AdminUsers`
+- `Workspaces`
+- `WorkspaceUsers`
+- `Contacts` (with support for tagging)
+- `MessageTemplates`
+- `Campaigns`
+- `CampaignMessages`
+
+Each collection is scoped to its workspace for data isolation.
 
 ---
 
 ## ⚙️ Project Setup
 
-### Prerequisites
-- Node.js (v18+)
-- MongoDB
-- Angular CLI
-- NestJS CLI
+### ✅ Prerequisites
 
+Ensure you have the following installed:
 
+- [Node.js](https://nodejs.org/) (v18 or higher)
+- [MongoDB](https://www.mongodb.com/)
+- [Angular CLI](https://angular.io/cli)
+- [NestJS CLI](https://docs.nestjs.com/cli/overview)
+
+---
+
+### 🚀 Installation Steps
+
+1. **Clone the Repository**  
+   ```bash
+   git clone https://github.com/your-username/OutreachHub.git
+   cd OutreachHub
