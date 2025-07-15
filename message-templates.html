@@ -20,42 +20,75 @@
 
   <main>
     <div class="section-header">
-      <h1>Message Templates</h1>
-      <button id="addTemplateBtn">+ Add Template</button>
+      <h1>Messages</h1>
+      <button id="addTemplateBtn">+ New Conversation</button>
     </div>
+    <div class="hero">
+      <div class=" recepiant-section">
+        <div>
+          <h3>Contacts</h3>
+          <button id="newConversation">+ New</button>
+        </div>
+        <div class="searchBarMessages">
+           <input type="text" class="search-box" placeholder="Search...">
+           <button class="search-button">Search</button>
+        </div>
+        <div class="recepients-container">
+          <div class="recepients-list">
+              <div class="recepients-item">
+                  <img src="#" id="contact-picture" alt="recepient-image">
+                  <p class="contact-name">Param</p>
+                  <p class="contact-number">+91 7990442472</p>
+              </div>
+              <div class="recepients-item">
+                  <img src="#" id="contact-picture" alt="recepient-image">
+                  <p class="contact-name">Param</p>
+                  <p class="contact-number">+91 7990442472</p>
+              </div>
+              <div class="recepients-item">
+                  <img src="#" id="contact-picture" alt="recepient-image">
+                  <p class="contact-name">Param</p>
+                  <p class="contact-number">+91 7990442472</p>
+              </div>
+              <div class="recepients-item">
+                  <img src="#" id="contact-picture" alt="recepient-image">
+                  <p class="contact-name">Param</p>
+                  <p class="contact-number">+91 7990442472</p>
+              </div>
+              <div class="recepients-item">
+                  <img src="#" id="contact-picture" alt="recepient-image">
+                  <p class="contact-name">Param</p>
+                  <p class="contact-number">+91 7990442472</p>
+              </div>
+          </div>
+        </div>
 
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th><th>Type</th><th>Message</th><th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Welcome Text</td>
-          <td>Text</td>
-          <td>Hello, welcome to our service!</td>
-          <td>
-            <button>👁️</button>
-            <button>✏️</button>
-            <button>🗑️</button>
-          </td>
-        </tr>
-        <tr>
-          <td>Promo Image</td>
-          <td>Text & Image</td>
-          <td>Check out our new product!</td>
-          <td>
-            <button>👁️</button>
-            <button>✏️</button>
-            <button>🗑️</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+      </div>
+      <div class="message-section">
+        <div class="contact-deatils">
+          <img src="#" id="contact-picture" alt="recepient-image">
+          <p class="contact-name">Param</p>
+          <p class="contact-number">+91 7990442472</p>
+          <button class="search-button">More Options</button>
+        </div>
+        <div class="message-container">
+          <div class="message"><p>This is my message.</p></div>
+          <div class="message"><p>This is my message.</p></div>
+          <div class="message"><p>This is my message.</p></div>
+          <div class="message"><p>This is my message.</p></div>
+          <div class="message"><p>This is my message.</p></div>
+        </div>
+        <div class="input-message-section">
+          <button id="attach-file">File</button>
+          <button id="attach-image">Image</button>
+          <input type="text" placeholder="Type a message...">
+          <button class="send-button">Send</button>
+        </div>
+      </div>
+    </div>
+  
   </main>
 
-  <!-- Modal -->
   <div class="modal" id="templateModal">
     <div class="modal-content">
       <span class="close">&times;</span>

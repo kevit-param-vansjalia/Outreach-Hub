@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -59,6 +59,105 @@
         <button class="current">1</button>
         <button>2</button>
         <button>Next »</button>
+      </div>
+    </section>
+  </main>
+
+  <div class="modal" id="contactModal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Add Contact</h2>
+      <form id="contactForm">
+        <input type="text" placeholder="Full Name" required />
+        <input type="email" placeholder="Email" required />
+        <input type="tel" placeholder="Phone Number" required />
+        <input type="text" placeholder="Company" />
+        <input type="text" placeholder="Tags (comma-separated)" />
+        <select>
+          <option value="active">Active</option>
+          <option value="inactive">Inactive</option>
+        </select>
+        <button type="submit">Save Contact</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    document.querySelector('.logout').addEventListener('click', () => {
+      window.location.href = 'login.html';
+    });
+
+    const modal = document.getElementById("contactModal");
+    const btn = document.getElementById("addContactBtn");
+    const span = document.querySelector(".close");
+
+    btn.onclick = () => modal.style.display = "block";
+    span.onclick = () => modal.style.display = "none";
+    window.onclick = (e) => { if (e.target == modal) modal.style.display = "none"; };
+  </script>
+</body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contacts</title>
+
+  <!-- Font Awesome CDN -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    integrity="sha512-..."
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+
+  <!-- Link to external CSS -->
+  <link rel="stylesheet" href="contacts.css" />
+</head>
+<body>
+  <header>
+    <div class="logo"><img src="./public/logo-removebg-preview.png" alt="logo" /></div>
+    <nav>
+      <a href="./index.html">Home</a>
+      <a href="./contacts.html">Contacts</a>
+      <a href="./message-templates.html">Messages</a>
+      <a href="./campaigns.html">Campaigns</a>
+    </nav>
+    <button class="logout">Logout</button>
+  </header>
+
+  <main>
+    <h1>Contacts</h1>
+    <p>Manage your business contacts</p>
+
+    <section class="contact-controls">
+      <h2>Contact List</h2>
+      <div class="search-add">
+  <div class="search-wrapper">
+    <i class="fas fa-search"></i>
+    <input type="text" placeholder="Search contacts..." />
+  </div>
+  <button id="addContactBtn">+ Add Contact</button>
+</div>
+    </section>
+
+    <section class="contact-cards">
+      <div class="card">
+        <div class="card-header">
+          <h3>John Doe</h3>
+          <p>john@example.com</p>
+          <p>+1-555-0123</p>
+          <p>Acme Corp</p>
+          <span class="badge">Active</span>
+        </div>
+        <div class="card-actions">
+          <button title="Edit"><i class="fas fa-pen"></i></button>
+          <button title="Delete"><i class="fas fa-trash"></i></button>
+        </div>
       </div>
     </section>
   </main>
