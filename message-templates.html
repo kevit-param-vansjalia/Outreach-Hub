@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Message Templates</title>
-  <link rel="stylesheet" href="message-campaign-styles.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Admin</title>
+    <link rel="stylesheet" href="./message-campaign-styles.css">
 </head>
 <body>
-  <header>
+    <header>
     <div class="logo"><img src="./public/logo-removebg-preview.png" alt="logo"></div>
     <nav>
       <a href="./index.html">Home</a>
@@ -18,100 +18,140 @@
     <button class="logout">Logout</button>
   </header>
 
-  <main>
-    <div class="section-header">
-      <h1>Messages</h1>
-      <button id="addTemplateBtn">+ New Conversation</button>
-    </div>
-    <div class="hero">
-      <div class=" recepiant-section">
-        <div>
-          <h3>Contacts</h3>
-          <button id="newConversation">+ New</button>
-        </div>
-        <div class="searchBarMessages">
-           <input type="text" class="search-box" placeholder="Search...">
-           <button class="search-button">Search</button>
-        </div>
-        <div class="recepients-container">
-          <div class="recepients-list">
-              <div class="recepients-item">
-                  <img src="#" id="contact-picture" alt="recepient-image">
-                  <p class="contact-name">Param</p>
-                  <p class="contact-number">+91 7990442472</p>
-              </div>
-              <div class="recepients-item">
-                  <img src="#" id="contact-picture" alt="recepient-image">
-                  <p class="contact-name">Param</p>
-                  <p class="contact-number">+91 7990442472</p>
-              </div>
-              <div class="recepients-item">
-                  <img src="#" id="contact-picture" alt="recepient-image">
-                  <p class="contact-name">Param</p>
-                  <p class="contact-number">+91 7990442472</p>
-              </div>
-              <div class="recepients-item">
-                  <img src="#" id="contact-picture" alt="recepient-image">
-                  <p class="contact-name">Param</p>
-                  <p class="contact-number">+91 7990442472</p>
-              </div>
-              <div class="recepients-item">
-                  <img src="#" id="contact-picture" alt="recepient-image">
-                  <p class="contact-name">Param</p>
-                  <p class="contact-number">+91 7990442472</p>
-              </div>
-          </div>
+    <div class="container">
+       
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="conversations-section">
+                <div class="conversations-header">
+                    <h2 class="conversations-title">All Conversations</h2>
+                </div>
+
+                <div class="conversation-list">
+                    <div class="conversation-item active">
+                        <div class="conversation-avatar" style="background: linear-gradient(45deg, #6B7280, #4B5563);">
+                            <span>JM</span>
+                            <div class="online-indicator"></div>
+                        </div>
+                        <div class="conversation-info">
+                            <div class="conversation-name">Julia Megler</div>
+                            <div class="conversation-preview">Numerology, Chaldean Numerology, The numerical value of dummy message in Chaldean Numerology is</div>
+                        </div>
+                        <div class="conversation-meta">
+                            <div>4 days ago</div>
+                        </div>
+                    </div>
+
+                    <div class="conversation-item">
+                        <div class="conversation-avatar" style="background: linear-gradient(45deg, #EF4444, #DC2626);">
+                            <span>EP</span>
+                        </div>
+                        <div class="conversation-info">
+                            <div class="conversation-name">Emma Pichler</div>
+                            <div class="conversation-preview">Numerology, Chaldean Numerology, The numerical value of dummy message in Chaldean Numerology is</div>
+                        </div>
+                        <div class="conversation-meta">
+                            <div>1 week ago</div>
+                        </div>
+                    </div>
+
+                    <div class="conversation-item">
+                        <div class="conversation-avatar" style="background: linear-gradient(45deg, #10B981, #059669);">
+                            <span>JG</span>
+                            <div class="online-indicator"></div>
+                        </div>
+                        <div class="conversation-info">
+                            <div class="conversation-name">Jakob Gruber</div>
+                            <div class="conversation-preview">Numerology, Chaldean Numerology, The numerical value of dummy message in Chaldean Numerology is</div>
+                        </div>
+                        <div class="conversation-meta">
+                            <div>2 weeks ago</div>
+                        </div>
+                    </div>
+
+                    <div class="conversation-item">
+                        <div class="conversation-avatar" style="background: linear-gradient(45deg, #F59E0B, #D97706);">
+                            <span>KW</span>
+                        </div>
+                        <div class="conversation-info">
+                            <div class="conversation-name">Kilian Wimmer</div>
+                            <div class="conversation-preview">Numerology, Chaldean Numerology, The numerical value of dummy message in Chaldean Numerology is</div>
+                        </div>
+                        <div class="conversation-meta">
+                            <div>3 weeks ago</div>
+                        </div>
+                    </div>
+
+                    <div class="conversation-item">
+                        <div class="conversation-avatar" style="background: linear-gradient(45deg, #8B5CF6, #7C3AED);">
+                            <span>EH</span>
+                        </div>
+                        <div class="conversation-info">
+                            <div class="conversation-name">Elisabeth Hofer</div>
+                            <div class="conversation-preview">Numerology, Chaldean Numerology, The numerical value of dummy message in Chaldean Numerology is</div>
+                        </div>
+                        <div class="conversation-meta">
+                            <div>1 month ago</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
-      </div>
-      <div class="message-section">
-        <div class="contact-deatils">
-          <img src="#" id="contact-picture" alt="recepient-image">
-          <p class="contact-name">Param</p>
-          <p class="contact-number">+91 7990442472</p>
-          <button class="search-button">More Options</button>
-        </div>
-        <div class="message-container">
-          <div class="message"><p>This is my message.</p></div>
-          <div class="message"><p>This is my message.</p></div>
-          <div class="message"><p>This is my message.</p></div>
-          <div class="message"><p>This is my message.</p></div>
-          <div class="message"><p>This is my message.</p></div>
-        </div>
-        <div class="input-message-section">
-          <button id="attach-file">File</button>
-          <button id="attach-image">Image</button>
-          <input type="text" placeholder="Type a message...">
-          <button class="send-button">Send</button>
-        </div>
-      </div>
-    </div>
-  
-  </main>
+        <!-- Main Chat Area -->
+        <div class="main-chat">
+            <div class="chat-header">
+                <div class="chat-user-avatar">JM</div>
+                <div class="chat-user-info">
+                    <h3>Julia Megler</h3>
+                    <div class="chat-user-status">Online</div>
+                </div>
+            </div>
 
-  <div class="modal" id="templateModal">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <h2>Create Template</h2>
-      <form>
-        <input type="text" placeholder="Template Name" required>
-        <select required>
-          <option value="text">Text</option>
-          <option value="text-image">Text & Image</option>
-        </select>
-        <textarea placeholder="Message content..." required></textarea>
-        <input type="url" placeholder="Image URL (only for Text & Image)">
-        <button type="submit">Save</button>
-      </form>
-    </div>
-  </div>
+            <div class="chat-messages">
+                <div class="message sent">
+                    <div class="message-content">
+                        I bought the Product yesterday, but having Problems to turn it on. The blue lights are on but nothing happens when the machine is activated
+                    </div>
+                    <div class="message-time">4 days ago</div>
+                </div>
 
-  <script>
-    document.querySelector('.logout').onclick = () => location.href = 'login.html';
-    const modal = document.getElementById("templateModal");
-    document.getElementById("addTemplateBtn").onclick = () => modal.style.display = "block";
-    document.querySelector(".close").onclick = () => modal.style.display = "none";
-    window.onclick = (e) => { if (e.target == modal) modal.style.display = "none"; };
-  </script>
+                <div class="message received">
+                    <div class="message-content">Hello Julia</div>
+                    <div class="message-time">4 days ago</div>
+                </div>
+
+                <div class="message received">
+                    <div class="message-content">OK, can you send me a picture?</div>
+                    <div class="message-time">4 days ago</div>
+                </div>
+
+                <div class="file-message">
+                    <div class="file-info">
+                        <div class="file-icon">📷</div>
+                        <div class="file-details">
+                            <h4>Photo - Broken.jpg</h4>
+                            <div class="file-size">1.3 MB</div>
+                        </div>
+                    </div>
+                    <button class="download-btn">Download</button>
+                </div>
+
+                <div class="message received">
+                    <div class="message-content">Thank you, let me send it to our Technician.</div>
+                    <div class="message-time">3 days ago</div>
+                </div>
+            </div>
+
+            <div class="chat-input">
+                <div class="input-actions">
+                    <button class="input-action">📎</button>
+                    <button class="input-action">📷</button>
+                </div>
+                <textarea class="message-input" placeholder="Type your message..." rows="1"></textarea>
+                <button class="send-btn"></button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

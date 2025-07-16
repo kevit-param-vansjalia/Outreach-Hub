@@ -1,13 +1,14 @@
-<!-- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Contacts</title>
-  <link rel="stylesheet" href="contacts.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrimeStay - People</title>
+    <link rel="stylesheet" href="./contacts.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
-  <header>
+    <header>
     <div class="logo"><img src="./public/logo-removebg-preview.png" alt="logo"></div>
     <nav>
       <a href="./index.html">Home</a>
@@ -18,181 +19,317 @@
     <button class="logout">Logout</button>
   </header>
 
-
-  <main>
-    <h1>Contacts</h1>
-    <p>Manage your business contacts</p>
-
-    <section class="contact-controls">
-      <h2>Contact List</h2>
-      <div class="search-add">
-        <input type="text" placeholder="🔍 Search contacts..." />
-        <button id="addContactBtn">+ Add Contact</button>
-      </div>
-    </section>
-
-    <section class="contact-table">
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th><th>Email</th><th>Phone</th><th>Company</th><th>Status</th><th>Actions</th>
-          </tr>
-        </thead>
-        <tbody id="contactBody">
-          <tr>
-            <td><strong>John Doe</strong></td>
-            <td>john@example.com</td>
-            <td>+1-555-0123</td>
-            <td>Acme Corp</td>
-            <td><span class="badge active">active</span></td>
-            <td class="actions">
-              <button title="View">👁️</button>
-              <button title="Edit">✏️</button>
-              <button title="Delete">🗑️</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-
-      <div class="pagination">
-        <button disabled>« Previous</button>
-        <button class="current">1</button>
-        <button>2</button>
-        <button>Next »</button>
-      </div>
-    </section>
-  </main>
-
-  <div class="modal" id="contactModal">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <h2>Add Contact</h2>
-      <form id="contactForm">
-        <input type="text" placeholder="Full Name" required />
-        <input type="email" placeholder="Email" required />
-        <input type="tel" placeholder="Phone Number" required />
-        <input type="text" placeholder="Company" />
-        <input type="text" placeholder="Tags (comma-separated)" />
-        <select>
-          <option value="active">Active</option>
-          <option value="inactive">Inactive</option>
-        </select>
-        <button type="submit">Save Contact</button>
-      </form>
-    </div>
-  </div>
-
-  <script>
-    document.querySelector('.logout').addEventListener('click', () => {
-      window.location.href = 'login.html';
-    });
-
-    const modal = document.getElementById("contactModal");
-    const btn = document.getElementById("addContactBtn");
-    const span = document.querySelector(".close");
-
-    btn.onclick = () => modal.style.display = "block";
-    span.onclick = () => modal.style.display = "none";
-    window.onclick = (e) => { if (e.target == modal) modal.style.display = "none"; };
-  </script>
-</body>
-</html> -->
-
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Contacts</title>
-
-  <!-- Font Awesome CDN -->
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-    integrity="sha512-..."
-    crossorigin="anonymous"
-    referrerpolicy="no-referrer"
-  />
-
-  <!-- Link to external CSS -->
-  <link rel="stylesheet" href="contacts.css" />
-</head>
-<body>
-  <header>
-    <div class="logo"><img src="./public/logo-removebg-preview.png" alt="logo" /></div>
-    <nav>
-      <a href="./index.html">Home</a>
-      <a href="./contacts.html">Contacts</a>
-      <a href="./message-templates.html">Messages</a>
-      <a href="./campaigns.html">Campaigns</a>
-    </nav>
-    <button class="logout">Logout</button>
-  </header>
-
-  <main>
-    <h1>Contacts</h1>
-    <p>Manage your business contacts</p>
-
-    <section class="contact-controls">
-      <h2>Contact List</h2>
-      <div class="search-add">
-  <div class="search-wrapper">
-    <i class="fas fa-search"></i>
-    <input type="text" placeholder="Search contacts..." />
-  </div>
-  <button id="addContactBtn">+ Add Contact</button>
-</div>
-    </section>
-
-    <section class="contact-cards">
-      <div class="card">
-        <div class="card-header">
-          <h3>John Doe</h3>
-          <p>john@example.com</p>
-          <p>+1-555-0123</p>
-          <p>Acme Corp</p>
-          <span class="badge">Active</span>
+    <div class="main-content">
+        <div class="header">
+            <h1 class="page-title">People</h1>
         </div>
-        <div class="card-actions">
-          <button title="Edit"><i class="fas fa-pen"></i></button>
-          <button title="Delete"><i class="fas fa-trash"></i></button>
+
+        <div class="tabs">
+            <div class="tab active">Tenants</div>
+            <div class="tab">Owners</div>
+            <div class="tab">Service Pros</div>
         </div>
-      </div>
-    </section>
-  </main>
 
-  <div class="modal" id="contactModal">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <h2>Add Contact</h2>
-      <form id="contactForm">
-        <input type="text" placeholder="Full Name" required />
-        <input type="email" placeholder="Email" required />
-        <input type="tel" placeholder="Phone Number" required />
-        <input type="text" placeholder="Company" />
-        <input type="text" placeholder="Tags (comma-separated)" />
-        <select>
-          <option value="active">Active</option>
-          <option value="inactive">Inactive</option>
-        </select>
-        <button type="submit">Save Contact</button>
-      </form>
+        <div class="tenants-header">
+            <h2 class="tenants-title">Tenants</h2>
+            <div class="tenants-controls">
+                <div class="tenants-search">
+                    <input type="text" class="tenants-search-input" placeholder="Search tenants">
+                    <div class="tenants-search-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
+                </div>
+                
+            </div>
+        </div>
+
+        <div class="tenants-grid">
+            <div class="tenant-card">
+                <button class="tenant-menu">⋯</button>
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=48&h=48&fit=crop&crop=face" alt="Ronald Richards" class="tenant-avatar">
+                <div class="tenant-name">Ronald Richards</div>
+                <div class="tenant-phone">+1 888-888-8888</div>
+                <div class="tenant-stats">
+                    <div class="tenant-stat">
+                        <div class="tenant-stat-value">5</div>
+                        <div>Properties</div>
+                    </div>
+                    <div class="tenant-stat">
+                        <div class="tenant-stat-value">10</div>
+                        <div>Unit</div>
+                    </div>
+                </div>
+                <div class="tenant-lease">
+                    <div>Lease: <span class="multi-manual">Multi manual</span></div>
+                </div>
+                <div class="tenant-actions">
+                    <button class="message-btn">Message</button>
+                    <button class="view-profile-btn"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            </div>
+
+            <div class="tenant-card">
+                <button class="tenant-menu">⋯</button>
+                <img src="https://images.unsplash.com/photo-1519345182560-3f2917c472ef?w=48&h=48&fit=crop&crop=face" alt="Leslie Alexander" class="tenant-avatar">
+                <div class="tenant-name">Leslie Alexander</div>
+                <div class="tenant-phone">+1 888-888-8888</div>
+                <div class="tenant-stats">
+                    <div class="tenant-stat">
+                        <div class="tenant-stat-value">5</div>
+                        <div>Properties</div>
+                    </div>
+                    <div class="tenant-stat">
+                        <div class="tenant-stat-value">10</div>
+                        <div>Unit</div>
+                    </div>
+                </div>
+                <div class="tenant-lease">
+                    <div>Lease: <span class="multi-manual">Multi manual</span></div>
+                </div>
+                <div class="tenant-actions">
+                    <button class="message-btn">Message</button>
+                    <button class="view-profile-btn"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            </div>
+
+            <div class="tenant-card">
+                <button class="tenant-menu">⋯</button>
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=48&h=48&fit=crop&crop=face" alt="Darlene Robertson" class="tenant-avatar">
+                <div class="tenant-name">Darlene Robertson</div>
+                <div class="tenant-phone">+1 888-888-8888</div>
+                <div class="tenant-stats">
+                    <div class="tenant-stat">
+                        <div class="tenant-stat-value">5</div>
+                        <div>Properties</div>
+                    </div>
+                    <div class="tenant-stat">
+                        <div class="tenant-stat-value">10</div>
+                        <div>Unit</div>
+                    </div>
+                </div>
+                <div class="tenant-lease">
+                    <div>Lease: <span class="multi-manual">Multi manual</span></div>
+                </div>
+                <div class="tenant-actions">
+                    <button class="message-btn">Message</button>
+                    <button class="view-profile-btn"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            </div>
+
+            <div class="tenant-card">
+                <button class="tenant-menu">⋯</button>
+                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=48&h=48&fit=crop&crop=face" alt="Jenny Wilson" class="tenant-avatar">
+                <div class="tenant-name">Jenny Wilson</div>
+                <div class="tenant-phone">+1 888-888-8888</div>
+                <div class="tenant-stats">
+                    <div class="tenant-stat">
+                        <div class="tenant-stat-value">5</div>
+                        <div>Properties</div>
+                    </div>
+                    <div class="tenant-stat">
+                        <div class="tenant-stat-value">10</div>
+                        <div>Unit</div>
+                    </div>
+                </div>
+                <div class="tenant-lease">
+                    <div>Lease: <span class="multi-manual">Multi manual</span></div>
+                </div>
+                <div class="tenant-actions">
+                    <button class="message-btn">Message</button>
+                    <button class="view-profile-btn"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            </div>
+
+            <div class="tenant-card">
+                <button class="tenant-menu">⋯</button>
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=48&h=48&fit=crop&crop=face" alt="Arlene McCoy" class="tenant-avatar">
+                <div class="tenant-name">Arlene McCoy</div>
+                <div class="tenant-phone">+1 888-888-8888</div>
+                <div class="tenant-stats">
+                    <div class="tenant-stat">
+                        <div class="tenant-stat-value">5</div>
+                        <div>Properties</div>
+                    </div>
+                    <div class="tenant-stat">
+                        <div class="tenant-stat-value">10</div>
+                        <div>Unit</div>
+                    </div>
+                </div>
+                <div class="tenant-lease">
+                    <div>Lease: <span class="multi-manual">Multi manual</span></div>
+                </div>
+                <div class="tenant-actions">
+                    <button class="message-btn">Message</button>
+                    <button class="view-profile-btn"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            </div>
+
+            <div class="tenant-card">
+                <button class="tenant-menu">⋯</button>
+                <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=48&h=48&fit=crop&crop=face" alt="Esther Howard" class="tenant-avatar">
+                <div class="tenant-name">Esther Howard</div>
+                <div class="tenant-phone">+1 888-888-8888</div>
+                <div class="tenant-stats">
+                    <div class="tenant-stat">
+                        <div class="tenant-stat-value">5</div>
+                        <div>Properties</div>
+                    </div>
+                    <div class="tenant-stat">
+                        <div class="tenant-stat-value">10</div>
+                        <div>Unit</div>
+                    </div>
+                </div>
+                <div class="tenant-lease">
+                    <div>Lease: <span class="multi-manual">Multi manual</span></div>
+                </div>
+                <div class="tenant-actions">
+                    <button class="message-btn">Message</button>
+                    <button class="view-profile-btn"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            </div>
+
+            <div class="tenant-card">
+                <button class="tenant-menu">⋯</button>
+                <img src="https://images.unsplash.com/photo-1519345182560-3f2917c472ef?w=48&h=48&fit=crop&crop=face" alt="Guy Hawkins" class="tenant-avatar">
+                <div class="tenant-name">Guy Hawkins</div>
+                <div class="tenant-phone">+1 888-888-8888</div>
+                <div class="tenant-stats">
+                    <div class="tenant-stat">
+                        <div class="tenant-stat-value">5</div>
+                        <div>Properties</div>
+                    </div>
+                    <div class="tenant-stat">
+                        <div class="tenant-stat-value">10</div>
+                        <div>Unit</div>
+                    </div>
+                </div>
+                <div class="tenant-lease">
+                    <div>Lease: <span class="multi-manual">Multi manual</span></div>
+                </div>
+                <div class="tenant-actions">
+                    <button class="message-btn">Message</button>
+                    <button class="view-profile-btn"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            </div>
+
+            <div class="tenant-card">
+                <button class="tenant-menu">⋯</button>
+                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=48&h=48&fit=crop&crop=face" alt="Marvin McKinney" class="tenant-avatar">
+                <div class="tenant-name">Marvin McKinney</div>
+                <div class="tenant-phone">+1 888-888-8888</div>
+                <div class="tenant-stats">
+                    <div class="tenant-stat">
+                        <div class="tenant-stat-value">5</div>
+                        <div>Properties</div>
+                    </div>
+                    <div class="tenant-stat">
+                        <div class="tenant-stat-value">10</div>
+                        <div>Unit</div>
+                    </div>
+                </div>
+                <div class="tenant-lease">
+                    <div>Lease: <span class="multi-manual">Multi manual</span></div>
+                </div>
+                <div class="tenant-actions">
+                    <button class="message-btn">Message</button>
+                    <button class="view-profile-btn"></button>
+                </div>
+            </div>
+
+            <div class="tenant-card">
+                <button class="tenant-menu">⋯</button>
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=48&h=48&fit=crop&crop=face" alt="Jacob Jones" class="tenant-avatar">
+                <div class="tenant-name">Jacob Jones</div>
+                <div class="tenant-phone">+1 888-888-8888</div>
+                <div class="tenant-stats">
+                    <div class="tenant-stat">
+                        <div class="tenant-stat-value">5</div>
+                        <div>Properties</div>
+                    </div>
+                    <div class="tenant-stat">
+                        <div class="tenant-stat-value">10</div>
+                        <div>Unit</div>
+                    </div>
+                </div>
+                <div class="tenant-lease">
+                    <div>Lease: <span class="multi-manual">Multi manual</span></div>
+                </div>
+                <div class="tenant-actions">
+                    <button class="message-btn">Message</button>
+                    <button class="view-profile-btn"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            </div>
+
+            <div class="tenant-card">
+                <button class="tenant-menu">⋯</button>
+                <img src="https://images.unsplash.com/photo-1519345182560-3f2917c472ef?w=48&h=48&fit=crop&crop=face" alt="Dianne Russell" class="tenant-avatar">
+                <div class="tenant-name">Dianne Russell</div>
+                <div class="tenant-phone">+1 888-888-8888</div>
+                <div class="tenant-stats">
+                    <div class="tenant-stat">
+                        <div class="tenant-stat-value">5</div>
+                        <div>Properties</div>
+                    </div>
+                    <div class="tenant-stat">
+                        <div class="tenant-stat-value">10</div>
+                        <div>Unit</div>
+                    </div>
+                </div>
+                <div class="tenant-lease">
+                    <div>Lease: <span class="multi-manual">Multi manual</span></div>
+                </div>
+                <div class="tenant-actions">
+                    <button class="message-btn">Message</button>
+                    <button class="view-profile-btn"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            </div>
+
+            <div class="tenant-card">
+                <button class="tenant-menu">⋯</button>
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=48&h=48&fit=crop&crop=face" alt="Cameron Williamson" class="tenant-avatar">
+                <div class="tenant-name">Cameron Williamson</div>
+                <div class="tenant-phone">+1 888-888-8888</div>
+                <div class="tenant-stats">
+                    <div class="tenant-stat">
+                        <div class="tenant-stat-value">5</div>
+                        <div>Properties</div>
+                    </div>
+                    <div class="tenant-stat">
+                        <div class="tenant-stat-value">10</div>
+                        <div>Unit</div>
+                    </div>
+                </div>
+                <div class="tenant-lease">
+                    <div>Lease: <span class="multi-manual">Multi manual</span></div>
+                </div>
+                <div class="tenant-actions">
+                    <button class="message-btn">Message</button>
+                    <button class="view-profile-btn"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            </div>
+
+            <div class="tenant-card">
+                <button class="tenant-menu">⋯</button>
+                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=48&h=48&fit=crop&crop=face" alt="Brooklyn Simmons" class="tenant-avatar">
+                <div class="tenant-name">Brooklyn Simmons</div>
+                <div class="tenant-phone">+1 888-888-8888</div>
+                <div class="tenant-stats">
+                    <div class="tenant-stat">
+                        <div class="tenant-stat-value">5</div>
+                        <div>Properties</div>
+                    </div>
+                    <div class="tenant-stat">
+                        <div class="tenant-stat-value">10</div>
+                        <div>Unit</div>
+                    </div>
+                </div>
+                <div class="tenant-lease">
+                    <div>Lease: <span class="multi-manual">Multi manual</span></div>
+                </div>
+                <div class="tenant-actions">
+                    <button class="message-btn">Message</button>
+                    <button class="view-profile-btn"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-
-  <script>
-    document.querySelector('.logout').addEventListener('click', () => {
-      window.location.href = 'login.html';
-    });
-
-    const modal = document.getElementById("contactModal");
-    const btn = document.getElementById("addContactBtn");
-    const span = document.querySelector(".close");
-
-    btn.onclick = () => modal.style.display = "block";
-    span.onclick = () => modal.style.display = "none";
-    window.onclick = (e) => { if (e.target == modal) modal.style.display = "none"; };
-  </script>
 </body>
 </html>
