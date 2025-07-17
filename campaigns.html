@@ -15,7 +15,7 @@
       <a href="./message-templates.html">Messages</a>
       <a href="./campaigns.html">Campaigns</a>
     </nav>
-    <button class="logout">Logout</button>
+    <button class="logout" onclick="logout()">Logout</button>
   </header>
 
     <div class="main-content">
@@ -168,5 +168,11 @@
             </button>
         </div>
     </div>
+    <script>
+        function logout() {
+    //   localStorage.removeItem('user');
+      window.location.href = 'login.html';
+    }
+    </script>
 </body>
 </html>

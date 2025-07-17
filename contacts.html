@@ -5,23 +5,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PrimeStay - People</title>
     <link rel="stylesheet" href="./contacts.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <header>
-    <div class="logo"><img src="./public/logo-removebg-preview.png" alt="logo"></div>
-    <nav>
-      <a href="./index.html">Home</a>
-      <a href="./contacts.html">Contacts</a>
-      <a href="./message-templates.html">Messages</a>
-      <a href="./campaigns.html">Campaigns</a>
-    </nav>
-    <button class="logout">Logout</button>
-  </header>
+        <div class="logo"><img src="./public/logo-removebg-preview.png" alt="logo"></div>
+        <nav>
+            <a href="./index.html">Home</a>
+            <a href="./contacts.html">Contacts</a>
+            <a href="./message-templates.html">Messages</a>
+            <a href="./campaigns.html">Campaigns</a>
+        </nav>
+        <button class="logout" onclick="logout()">Logout</button>
+    </header>
 
     <div class="main-content">
         <div class="header">
             <h1 class="page-title">People</h1>
+            <button class="add-contact-btn">
+                + Add contact
+            </button>
+        </div>
+
+        <!-- Add/Edit Contact Modal -->
+        <div id="addContactModal" class="modal">
+            <div class="modal-content">
+                <h3>Add New Contact</h3>
+                <form id="addContactForm">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" required>
+
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+
+                    <label for="phone">Phone:</label>
+                    <input type="text" id="phone" name="phone" required>
+
+                    <div class="button-group">
+                        <button type="submit" class="save-btn">
+                            <span id="saveBtnText">Save</span>
+                            <span id="saveBtnSpinner" class="loading-spinner" style="display:none;"></span>
+                        </button>
+                        <button type="button" id="cancelBtn" class="cancel-btn">Cancel</button>
+                    </div>
+                </form>
+            </div>
         </div>
 
         <div class="tabs">
@@ -37,299 +65,425 @@
                     <input type="text" class="tenants-search-input" placeholder="Search tenants">
                     <div class="tenants-search-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
                 </div>
-                
             </div>
         </div>
 
         <div class="tenants-grid">
-            <div class="tenant-card">
-                <button class="tenant-menu">⋯</button>
-                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=48&h=48&fit=crop&crop=face" alt="Ronald Richards" class="tenant-avatar">
-                <div class="tenant-name">Ronald Richards</div>
-                <div class="tenant-phone">+1 888-888-8888</div>
-                <div class="tenant-stats">
-                    <div class="tenant-stat">
-                        <div class="tenant-stat-value">5</div>
-                        <div>Properties</div>
-                    </div>
-                    <div class="tenant-stat">
-                        <div class="tenant-stat-value">10</div>
-                        <div>Unit</div>
-                    </div>
-                </div>
-                <div class="tenant-lease">
-                    <div>Lease: <span class="multi-manual">Multi manual</span></div>
-                </div>
-                <div class="tenant-actions">
-                    <button class="message-btn">Message</button>
-                    <button class="view-profile-btn"><i class="fa-solid fa-trash"></i></button>
-                </div>
-            </div>
-
-            <div class="tenant-card">
-                <button class="tenant-menu">⋯</button>
-                <img src="https://images.unsplash.com/photo-1519345182560-3f2917c472ef?w=48&h=48&fit=crop&crop=face" alt="Leslie Alexander" class="tenant-avatar">
-                <div class="tenant-name">Leslie Alexander</div>
-                <div class="tenant-phone">+1 888-888-8888</div>
-                <div class="tenant-stats">
-                    <div class="tenant-stat">
-                        <div class="tenant-stat-value">5</div>
-                        <div>Properties</div>
-                    </div>
-                    <div class="tenant-stat">
-                        <div class="tenant-stat-value">10</div>
-                        <div>Unit</div>
-                    </div>
-                </div>
-                <div class="tenant-lease">
-                    <div>Lease: <span class="multi-manual">Multi manual</span></div>
-                </div>
-                <div class="tenant-actions">
-                    <button class="message-btn">Message</button>
-                    <button class="view-profile-btn"><i class="fa-solid fa-trash"></i></button>
-                </div>
-            </div>
-
-            <div class="tenant-card">
-                <button class="tenant-menu">⋯</button>
-                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=48&h=48&fit=crop&crop=face" alt="Darlene Robertson" class="tenant-avatar">
-                <div class="tenant-name">Darlene Robertson</div>
-                <div class="tenant-phone">+1 888-888-8888</div>
-                <div class="tenant-stats">
-                    <div class="tenant-stat">
-                        <div class="tenant-stat-value">5</div>
-                        <div>Properties</div>
-                    </div>
-                    <div class="tenant-stat">
-                        <div class="tenant-stat-value">10</div>
-                        <div>Unit</div>
-                    </div>
-                </div>
-                <div class="tenant-lease">
-                    <div>Lease: <span class="multi-manual">Multi manual</span></div>
-                </div>
-                <div class="tenant-actions">
-                    <button class="message-btn">Message</button>
-                    <button class="view-profile-btn"><i class="fa-solid fa-trash"></i></button>
-                </div>
-            </div>
-
-            <div class="tenant-card">
-                <button class="tenant-menu">⋯</button>
-                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=48&h=48&fit=crop&crop=face" alt="Jenny Wilson" class="tenant-avatar">
-                <div class="tenant-name">Jenny Wilson</div>
-                <div class="tenant-phone">+1 888-888-8888</div>
-                <div class="tenant-stats">
-                    <div class="tenant-stat">
-                        <div class="tenant-stat-value">5</div>
-                        <div>Properties</div>
-                    </div>
-                    <div class="tenant-stat">
-                        <div class="tenant-stat-value">10</div>
-                        <div>Unit</div>
-                    </div>
-                </div>
-                <div class="tenant-lease">
-                    <div>Lease: <span class="multi-manual">Multi manual</span></div>
-                </div>
-                <div class="tenant-actions">
-                    <button class="message-btn">Message</button>
-                    <button class="view-profile-btn"><i class="fa-solid fa-trash"></i></button>
-                </div>
-            </div>
-
-            <div class="tenant-card">
-                <button class="tenant-menu">⋯</button>
-                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=48&h=48&fit=crop&crop=face" alt="Arlene McCoy" class="tenant-avatar">
-                <div class="tenant-name">Arlene McCoy</div>
-                <div class="tenant-phone">+1 888-888-8888</div>
-                <div class="tenant-stats">
-                    <div class="tenant-stat">
-                        <div class="tenant-stat-value">5</div>
-                        <div>Properties</div>
-                    </div>
-                    <div class="tenant-stat">
-                        <div class="tenant-stat-value">10</div>
-                        <div>Unit</div>
-                    </div>
-                </div>
-                <div class="tenant-lease">
-                    <div>Lease: <span class="multi-manual">Multi manual</span></div>
-                </div>
-                <div class="tenant-actions">
-                    <button class="message-btn">Message</button>
-                    <button class="view-profile-btn"><i class="fa-solid fa-trash"></i></button>
-                </div>
-            </div>
-
-            <div class="tenant-card">
-                <button class="tenant-menu">⋯</button>
-                <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=48&h=48&fit=crop&crop=face" alt="Esther Howard" class="tenant-avatar">
-                <div class="tenant-name">Esther Howard</div>
-                <div class="tenant-phone">+1 888-888-8888</div>
-                <div class="tenant-stats">
-                    <div class="tenant-stat">
-                        <div class="tenant-stat-value">5</div>
-                        <div>Properties</div>
-                    </div>
-                    <div class="tenant-stat">
-                        <div class="tenant-stat-value">10</div>
-                        <div>Unit</div>
-                    </div>
-                </div>
-                <div class="tenant-lease">
-                    <div>Lease: <span class="multi-manual">Multi manual</span></div>
-                </div>
-                <div class="tenant-actions">
-                    <button class="message-btn">Message</button>
-                    <button class="view-profile-btn"><i class="fa-solid fa-trash"></i></button>
-                </div>
-            </div>
-
-            <div class="tenant-card">
-                <button class="tenant-menu">⋯</button>
-                <img src="https://images.unsplash.com/photo-1519345182560-3f2917c472ef?w=48&h=48&fit=crop&crop=face" alt="Guy Hawkins" class="tenant-avatar">
-                <div class="tenant-name">Guy Hawkins</div>
-                <div class="tenant-phone">+1 888-888-8888</div>
-                <div class="tenant-stats">
-                    <div class="tenant-stat">
-                        <div class="tenant-stat-value">5</div>
-                        <div>Properties</div>
-                    </div>
-                    <div class="tenant-stat">
-                        <div class="tenant-stat-value">10</div>
-                        <div>Unit</div>
-                    </div>
-                </div>
-                <div class="tenant-lease">
-                    <div>Lease: <span class="multi-manual">Multi manual</span></div>
-                </div>
-                <div class="tenant-actions">
-                    <button class="message-btn">Message</button>
-                    <button class="view-profile-btn"><i class="fa-solid fa-trash"></i></button>
-                </div>
-            </div>
-
-            <div class="tenant-card">
-                <button class="tenant-menu">⋯</button>
-                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=48&h=48&fit=crop&crop=face" alt="Marvin McKinney" class="tenant-avatar">
-                <div class="tenant-name">Marvin McKinney</div>
-                <div class="tenant-phone">+1 888-888-8888</div>
-                <div class="tenant-stats">
-                    <div class="tenant-stat">
-                        <div class="tenant-stat-value">5</div>
-                        <div>Properties</div>
-                    </div>
-                    <div class="tenant-stat">
-                        <div class="tenant-stat-value">10</div>
-                        <div>Unit</div>
-                    </div>
-                </div>
-                <div class="tenant-lease">
-                    <div>Lease: <span class="multi-manual">Multi manual</span></div>
-                </div>
-                <div class="tenant-actions">
-                    <button class="message-btn">Message</button>
-                    <button class="view-profile-btn"></button>
-                </div>
-            </div>
-
-            <div class="tenant-card">
-                <button class="tenant-menu">⋯</button>
-                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=48&h=48&fit=crop&crop=face" alt="Jacob Jones" class="tenant-avatar">
-                <div class="tenant-name">Jacob Jones</div>
-                <div class="tenant-phone">+1 888-888-8888</div>
-                <div class="tenant-stats">
-                    <div class="tenant-stat">
-                        <div class="tenant-stat-value">5</div>
-                        <div>Properties</div>
-                    </div>
-                    <div class="tenant-stat">
-                        <div class="tenant-stat-value">10</div>
-                        <div>Unit</div>
-                    </div>
-                </div>
-                <div class="tenant-lease">
-                    <div>Lease: <span class="multi-manual">Multi manual</span></div>
-                </div>
-                <div class="tenant-actions">
-                    <button class="message-btn">Message</button>
-                    <button class="view-profile-btn"><i class="fa-solid fa-trash"></i></button>
-                </div>
-            </div>
-
-            <div class="tenant-card">
-                <button class="tenant-menu">⋯</button>
-                <img src="https://images.unsplash.com/photo-1519345182560-3f2917c472ef?w=48&h=48&fit=crop&crop=face" alt="Dianne Russell" class="tenant-avatar">
-                <div class="tenant-name">Dianne Russell</div>
-                <div class="tenant-phone">+1 888-888-8888</div>
-                <div class="tenant-stats">
-                    <div class="tenant-stat">
-                        <div class="tenant-stat-value">5</div>
-                        <div>Properties</div>
-                    </div>
-                    <div class="tenant-stat">
-                        <div class="tenant-stat-value">10</div>
-                        <div>Unit</div>
-                    </div>
-                </div>
-                <div class="tenant-lease">
-                    <div>Lease: <span class="multi-manual">Multi manual</span></div>
-                </div>
-                <div class="tenant-actions">
-                    <button class="message-btn">Message</button>
-                    <button class="view-profile-btn"><i class="fa-solid fa-trash"></i></button>
-                </div>
-            </div>
-
-            <div class="tenant-card">
-                <button class="tenant-menu">⋯</button>
-                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=48&h=48&fit=crop&crop=face" alt="Cameron Williamson" class="tenant-avatar">
-                <div class="tenant-name">Cameron Williamson</div>
-                <div class="tenant-phone">+1 888-888-8888</div>
-                <div class="tenant-stats">
-                    <div class="tenant-stat">
-                        <div class="tenant-stat-value">5</div>
-                        <div>Properties</div>
-                    </div>
-                    <div class="tenant-stat">
-                        <div class="tenant-stat-value">10</div>
-                        <div>Unit</div>
-                    </div>
-                </div>
-                <div class="tenant-lease">
-                    <div>Lease: <span class="multi-manual">Multi manual</span></div>
-                </div>
-                <div class="tenant-actions">
-                    <button class="message-btn">Message</button>
-                    <button class="view-profile-btn"><i class="fa-solid fa-trash"></i></button>
-                </div>
-            </div>
-
-            <div class="tenant-card">
-                <button class="tenant-menu">⋯</button>
-                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=48&h=48&fit=crop&crop=face" alt="Brooklyn Simmons" class="tenant-avatar">
-                <div class="tenant-name">Brooklyn Simmons</div>
-                <div class="tenant-phone">+1 888-888-8888</div>
-                <div class="tenant-stats">
-                    <div class="tenant-stat">
-                        <div class="tenant-stat-value">5</div>
-                        <div>Properties</div>
-                    </div>
-                    <div class="tenant-stat">
-                        <div class="tenant-stat-value">10</div>
-                        <div>Unit</div>
-                    </div>
-                </div>
-                <div class="tenant-lease">
-                    <div>Lease: <span class="multi-manual">Multi manual</span></div>
-                </div>
-                <div class="tenant-actions">
-                    <button class="message-btn">Message</button>
-                    <button class="view-profile-btn"><i class="fa-solid fa-trash"></i></button>
-                </div>
+            <!-- Contacts will be rendered here dynamically -->
+            <div class="loading-state">
+                <div class="loading-spinner large"></div>
+                <p>Loading contacts...</p>
             </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mock API endpoint (using JSONPlaceholder for demonstration)
+            const API_URL = 'https://jsonplaceholder.typicode.com/users';
+            
+            // DOM elements
+            const addContactBtn = document.querySelector('.add-contact-btn');
+            const addContactModal = document.getElementById('addContactModal');
+            const cancelBtn = document.getElementById('cancelBtn');
+            const addContactForm = document.getElementById('addContactForm');
+            const tenantsGrid = document.querySelector('.tenants-grid');
+            const saveBtnText = document.getElementById('saveBtnText');
+            const saveBtnSpinner = document.getElementById('saveBtnSpinner');
+
+            // Show modal when add contact button is clicked
+            addContactBtn.addEventListener('click', () => {
+                addContactModal.style.display = 'flex';
+                addContactForm.reset();
+                addContactForm.removeAttribute('data-edit-id');
+            });
+
+            // Hide modal when cancel button is clicked
+            cancelBtn.addEventListener('click', () => {
+                addContactModal.style.display = 'none';
+            });
+
+            // Hide modal when clicking outside
+            window.addEventListener('click', (event) => {
+                if (event.target === addContactModal) {
+                    addContactModal.style.display = 'none';
+                }
+            });
+
+            // Handle form submission
+            addContactForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const name = document.getElementById('name').value;
+                const email = document.getElementById('email').value;
+                const phone = document.getElementById('phone').value;
+                
+                // Show loading state
+                saveBtnText.textContent = 'Saving...';
+                saveBtnSpinner.style.display = 'inline-block';
+                
+                // Check if we're in edit mode
+                const contactId = this.getAttribute('data-edit-id');
+                const contactData = { 
+                    name, 
+                    email, 
+                    phone,
+                    // Mock API requires username and website fields
+                    username: name.toLowerCase().replace(/\s/g, ''),
+                    website: `${name.toLowerCase().replace(/\s/g, '')}.com`
+                };
+                
+                try {
+                    if (contactId !== null) {
+                        // Update existing contact
+                        await updateContact(contactId, contactData);
+                    } else {
+                        // Add new contact
+                        await addContact(contactData);
+                    }
+                    
+                    await renderContacts();
+                    addContactModal.style.display = 'none';
+                } catch (error) {
+                    console.error('Error saving contact:', error);
+                    alert('Failed to save contact. Please try again.');
+                } finally {
+                    // Reset button state
+                    saveBtnText.textContent = 'Save';
+                    saveBtnSpinner.style.display = 'none';
+                }
+            });
+
+            // API Functions
+            async function fetchContacts() {
+                try {
+                    showLoadingState();
+                    const response = await fetch(API_URL);
+                    if (!response.ok) throw new Error('Failed to fetch contacts');
+                    const data = await response.json();
+                    // Transform data to match our structure
+                    return data.map(contact => ({
+                        id: contact.id,
+                        name: contact.name,
+                        email: contact.email,
+                        phone: contact.phone
+                    }));
+                } catch (error) {
+                    console.error('Error fetching contacts:', error);
+                    showErrorState('Failed to load contacts. Please try again.');
+                    return [];
+                }
+            }
+
+            async function addContact(contact) {
+                try {
+                    const response = await fetch(API_URL, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(contact)
+                    });
+                    if (!response.ok) throw new Error('Failed to add contact');
+                    return await response.json();
+                } catch (error) {
+                    console.error('Error adding contact:', error);
+                    throw error;
+                }
+            }
+
+            async function updateContact(id, contact) {
+                try {
+                    const response = await fetch(`${API_URL}/${id}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(contact)
+                    });
+                    if (!response.ok) throw new Error('Failed to update contact');
+                    return await response.json();
+                } catch (error) {
+                    console.error('Error updating contact:', error);
+                    throw error;
+                }
+            }
+
+            async function deleteContact(id) {
+                try {
+                    const response = await fetch(`${API_URL}/${id}`, {
+                        method: 'DELETE'
+                    });
+                    if (!response.ok) throw new Error('Failed to delete contact');
+                    return true;
+                } catch (error) {
+                    console.error('Error deleting contact:', error);
+                    throw error;
+                }
+            }
+
+            // UI State Functions
+            function showLoadingState() {
+                tenantsGrid.innerHTML = `
+                    <div class="loading-state">
+                        <div class="loading-spinner large"></div>
+                        <p>Loading contacts...</p>
+                    </div>
+                `;
+            }
+
+            function showErrorState(message) {
+                tenantsGrid.innerHTML = `
+                    <div class="error-state">
+                        <i class="fas fa-exclamation-circle error-icon"></i>
+                        <p>${message}</p>
+                        <button class="retry-btn" onclick="window.location.reload()">Retry</button>
+                    </div>
+                `;
+            }
+
+            async function renderContacts() {
+                try {
+                    const contacts = await fetchContacts();
+                    tenantsGrid.innerHTML = '';
+                    
+                    if (contacts.length === 0) {
+                        tenantsGrid.innerHTML = '<p class="no-contacts">No contacts found. Add your first contact!</p>';
+                        return;
+                    }
+                    
+                    contacts.forEach(contact => {
+                        const tenantCard = document.createElement('div');
+                        tenantCard.className = 'tenant-card';
+                        tenantCard.innerHTML = `
+                            <button class="tenant-menu">⋯</button>
+                            <img src="https://i.pravatar.cc/150?u=${contact.email}" 
+                                alt="${contact.name}" class="tenant-avatar">
+                            <div class="tenant-name">${contact.name}</div>
+                            <div class="tenant-phone">${contact.phone}</div>
+                            <div class="tenant-stats">
+                                <div class="tenant-stat">
+                                    <div class="tenant-stat-value">5</div>
+                                    <div>Properties</div>
+                                </div>
+                                <div class="tenant-stat">
+                                    <div class="tenant-stat-value">10</div>
+                                    <div>Unit</div>
+                                </div>
+                            </div>
+                            <div class="tenant-lease">
+                                <div>Lease: <span class="multi-manual">Multi manual</span></div>
+                            </div>
+                            <div class="tenant-actions">
+                                <div>
+                                    <button class="message-btn more-details-btn">More Details</button>
+                                </div>
+                                <div class="tenant-action-seperation">
+                                    <button class="view-profile-btn edit-btn" data-id="${contact.id}">
+                                        <i class="fas fa-edit edit-btn-icon"></i>
+                                    </button>
+                                    <button class="view-profile-btn delete-btn" data-id="${contact.id}">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                        tenantsGrid.appendChild(tenantCard);
+                    });
+                    
+                    setupEventListeners();
+                } catch (error) {
+                    console.error('Error rendering contacts:', error);
+                    showErrorState('Failed to load contacts. Please try again.');
+                }
+            }
+
+            function setupEventListeners() {
+                // Edit buttons
+                document.querySelectorAll('.edit-btn').forEach(btn => {
+                    btn.addEventListener('click', async function() {
+                        const contactId = this.getAttribute('data-id');
+                        try {
+                            const response = await fetch(`${API_URL}/${contactId}`);
+                            if (!response.ok) throw new Error('Failed to fetch contact');
+                            const contact = await response.json();
+                            
+                            // Populate form with contact data
+                            document.getElementById('name').value = contact.name;
+                            document.getElementById('email').value = contact.email;
+                            document.getElementById('phone').value = contact.phone;
+                            
+                            // Set edit mode
+                            addContactForm.setAttribute('data-edit-id', contactId);
+                            
+                            // Show modal
+                            addContactModal.style.display = 'flex';
+                        } catch (error) {
+                            console.error('Error fetching contact:', error);
+                            alert('Failed to load contact for editing. Please try again.');
+                        }
+                    });
+                });
+                
+                // Delete buttons
+                document.querySelectorAll('.delete-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const contactId = this.getAttribute('data-id');
+                        showDeleteConfirmation(contactId);
+                    });
+                });
+                
+                // More Details buttons
+                document.querySelectorAll('.more-details-btn').forEach(btn => {
+                    btn.addEventListener('click', async function() {
+                        const card = this.closest('.tenant-card');
+                        const contactId = card.querySelector('.edit-btn').getAttribute('data-id');
+                        try {
+                            const response = await fetch(`${API_URL}/${contactId}`);
+                            if (!response.ok) throw new Error('Failed to fetch contact details');
+                            const contact = await response.json();
+                            showDetailsModal(contact);
+                        } catch (error) {
+                            console.error('Error fetching contact details:', error);
+                            alert('Failed to load contact details. Please try again.');
+                        }
+                    });
+                });
+            }
+
+            async function showDeleteConfirmation(contactId) {
+                try {
+                    // Fetch contact details to show name in confirmation
+                    const response = await fetch(`${API_URL}/${contactId}`);
+                    if (!response.ok) throw new Error('Failed to fetch contact');
+                    const contact = await response.json();
+                    
+                    const modalHTML = `
+                        <div id="deleteConfirmationModal" class="modal">
+                            <div class="modal-content delete-modal">
+                                <h3>Delete Contact</h3>
+                                <p>Are you sure you want to delete <strong>${contact.name}</strong>?</p>
+                                <div class="button-group">
+                                    <button type="button" id="confirmDeleteBtn" class="delete-confirm-btn">
+                                        <span id="deleteBtnText">Delete</span>
+                                        <span id="deleteBtnSpinner" class="loading-spinner" style="display:none;"></span>
+                                    </button>
+                                    <button type="button" id="cancelDeleteBtn" class="cancel-btn">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    // Add modal to body
+                    document.body.insertAdjacentHTML('beforeend', modalHTML);
+                    
+                    // Get modal elements
+                    const deleteModal = document.getElementById('deleteConfirmationModal');
+                    const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+                    const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+                    const deleteBtnText = document.getElementById('deleteBtnText');
+                    const deleteBtnSpinner = document.getElementById('deleteBtnSpinner');
+                    
+                    // Show modal
+                    deleteModal.style.display = 'flex';
+                    
+                    // Confirm delete
+                    confirmDeleteBtn.addEventListener('click', async () => {
+                        try {
+                            deleteBtnText.textContent = 'Deleting...';
+                            deleteBtnSpinner.style.display = 'inline-block';
+                            
+                            await deleteContact(contactId);
+                            await renderContacts();
+                            
+                            deleteModal.style.display = 'none';
+                            deleteModal.remove();
+                        } catch (error) {
+                            console.error('Error deleting contact:', error);
+                            alert('Failed to delete contact. Please try again.');
+                        } finally {
+                            deleteBtnText.textContent = 'Delete';
+                            deleteBtnSpinner.style.display = 'none';
+                        }
+                    });
+                    
+                    // Cancel delete
+                    cancelDeleteBtn.addEventListener('click', () => {
+                        deleteModal.style.display = 'none';
+                        deleteModal.remove();
+                    });
+                    
+                    // Close modal when clicking outside
+                    window.addEventListener('click', (event) => {
+                        if (event.target === deleteModal) {
+                            deleteModal.style.display = 'none';
+                            deleteModal.remove();
+                        }
+                    });
+                } catch (error) {
+                    console.error('Error showing delete confirmation:', error);
+                    alert('Failed to load contact for deletion. Please try again.');
+                }
+            }
+
+            function showDetailsModal(contact) {
+                const modalHTML = `
+                    <div id="detailsModal" class="modal">
+                        <div class="modal-content">
+                            <h3>Contact Details</h3>
+                            <div class="contact-details">
+                                <div class="detail-row">
+                                    <strong>Name:</strong> ${contact.name}
+                                </div>
+                                <div class="detail-row">
+                                    <strong>Email:</strong> ${contact.email}
+                                </div>
+                                <div class="detail-row">
+                                    <strong>Phone:</strong> ${contact.phone}
+                                </div>
+                                <div class="detail-row">
+                                    <strong>ID:</strong> ${contact.id}
+                                </div>
+                            </div>
+                            <div class="button-group">
+                                <button type="button" id="closeDetailsBtn" class="cancel-btn">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // Add modal to body
+                document.body.insertAdjacentHTML('beforeend', modalHTML);
+                
+                // Get modal elements
+                const detailsModal = document.getElementById('detailsModal');
+                const closeDetailsBtn = document.getElementById('closeDetailsBtn');
+                
+                // Show modal
+                detailsModal.style.display = 'flex';
+                
+                // Close modal when close button is clicked
+                closeDetailsBtn.addEventListener('click', () => {
+                    detailsModal.style.display = 'none';
+                    detailsModal.remove();
+                });
+                
+                // Close modal when clicking outside
+                window.addEventListener('click', (event) => {
+                    if (event.target === detailsModal) {
+                        detailsModal.style.display = 'none';
+                        detailsModal.remove();
+                    }
+                });
+            }
+
+            function logout() {
+                window.location.href = 'login.html';
+            }
+
+            // Initial render
+            renderContacts();
+        });
+    </script>
 </body>
 </html>

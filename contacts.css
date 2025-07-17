@@ -1,4 +1,4 @@
-* {
+/* * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -288,8 +288,27 @@
 
         .tenant-actions {
             display: flex;
+            justify-content: space-between;
             gap: 12px;
         }
+
+        .add-contact-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-right: 50px;
+            
+        }
+
 
         .message-btn {
             background: none;
@@ -323,3 +342,527 @@
             font-size: 12px;
             color: #8b8b8b;
         }
+
+    
+.modal {
+  display: none; 
+  position: fixed;
+  z-index: 1000;
+  left: 0; top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: #fff;
+  padding: 20px 30px;
+  border-radius: 12px;
+  width: 400px;
+  max-width: 90%;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.modal-content label {
+  display: block;
+  margin-top: 12px;
+  font-weight: 600;
+}
+.modal-content input {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.button-group {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+.save-btn, .cancel-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.save-btn {
+  background-color: #3b82f6;
+  color: white;
+}
+.cancel-btn {
+  background-color: #e5e7eb;
+}
+.add-button {
+  margin-left: 10px;
+  padding: 6px 12px;
+  background-color: #10b981;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+} */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #f5f5f5;
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    background: linear-gradient(90deg, #3b82f6, #6366f1);
+    color: white;
+    display: flex;
+    align-items: center;
+    padding: 1rem 2rem;
+    justify-content: space-between;
+}
+
+.logo img {
+    height: 30px;
+}
+
+nav a {
+    color: white;
+    margin: 0 1rem;
+    text-decoration: none;
+    font-weight: 500;
+    transition: opacity 0.2s;
+}
+
+nav a:hover {
+    opacity: 0.8;
+}
+
+nav a.active {
+    font-weight: 600;
+}
+
+.logout {
+    background-color: white;
+    color: #3b82f6;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.logout:hover {
+    background-color: #f1f5f9;
+    transform: translateY(-1px);
+}
+
+.main-content {
+    max-width: 2000px;
+    margin: 0 auto;
+    padding: 20px;
+    width: 100%;
+    background: white;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+.page-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1a1a1a;
+}
+
+.tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: 32px;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.tab {
+    padding: 12px 0;
+    font-size: 14px;
+    font-weight: 500;
+    color: #8b8b8b;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-right: 32px;
+}
+
+.tab.active {
+    color: #22c55e;
+    border-bottom-color: #22c55e;
+}
+
+.tenants-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.tenants-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+.tenants-controls {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+.tenants-search {
+    position: relative;
+}
+
+.tenants-search-input {
+    width: 240px;
+    padding: 8px 12px 8px 36px;
+    border: 1px solid #e5e5e5;
+    border-radius: 6px;
+    font-size: 14px;
+    background: #f8f9fa;
+    outline: none;
+}
+
+.tenants-search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #8b8b8b;
+}
+
+.tenants-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    min-height: 300px;
+}
+
+.loading-state, .error-state {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    text-align: center;
+}
+
+.loading-spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(59, 130, 246, 0.3);
+    border-radius: 50%;
+    border-top-color: #3b82f6;
+    animation: spin 1s ease-in-out infinite;
+    margin-right: 8px;
+}
+
+.loading-spinner.large {
+    width: 40px;
+    height: 40px;
+    border-width: 4px;
+    margin-bottom: 20px;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.error-state {
+    color: #ef4444;
+}
+
+.error-icon {
+    font-size: 40px;
+    margin-bottom: 15px;
+}
+
+.retry-btn {
+    margin-top: 15px;
+    padding: 8px 16px;
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.retry-btn:hover {
+    background-color: #2563eb;
+}
+
+.no-contacts {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 40px;
+    color: #8b8b8b;
+    font-size: 16px;
+}
+
+.tenant-card {
+    background: white;
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+    padding: 20px;
+    position: relative;
+    transition: all 0.2s;
+}
+
+.tenant-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.tenant-menu {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: none;
+    border: none;
+    font-size: 16px;
+    color: #8b8b8b;
+    cursor: pointer;
+    padding: 4px;
+}
+
+.tenant-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    margin-bottom: 12px;
+    object-fit: cover;
+}
+
+.tenant-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 4px;
+}
+
+.tenant-phone {
+    font-size: 12px;
+    color: #8b8b8b;
+    margin-bottom: 16px;
+}
+
+.tenant-stats {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    font-size: 12px;
+    color: #8b8b8b;
+}
+
+.tenant-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.tenant-stat-value {
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 2px;
+}
+
+.tenant-lease {
+    font-size: 12px;
+    color: #8b8b8b;
+    margin-bottom: 12px;
+}
+
+.tenant-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.add-contact-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-right: 50px;
+}
+
+.add-contact-btn:hover {
+    background: #5a6fd1;
+}
+
+.message-btn {
+    background: none;
+    border: none;
+    color: #22c55e;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 0;
+}
+
+.message-btn:hover {
+    text-decoration: underline;
+}
+
+.view-profile-btn {
+    background: none;
+    border: none;
+    color: #8b8b8b;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 0;
+}
+
+.view-profile-btn:hover {
+    color: #4a4a4a;
+}
+
+.multi-manual {
+    font-size: 12px;
+    color: #8b8b8b;
+}
+
+.tenant-action-seperation {
+    display: flex;
+    gap: 8px;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #fff;
+    padding: 20px 30px;
+    border-radius: 12px;
+    width: 400px;
+    max-width: 90%;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.delete-modal {
+    text-align: center;
+}
+
+.modal-content label {
+    display: block;
+    margin-top: 12px;
+    font-weight: 600;
+}
+
+.modal-content input {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+.button-group {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.delete-modal .button-group {
+    justify-content: center;
+}
+
+.save-btn, .cancel-btn, .delete-confirm-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.save-btn {
+    background-color: #3b82f6;
+    color: white;
+}
+
+.save-btn:hover {
+    background-color: #2563eb;
+}
+
+.cancel-btn {
+    background-color: #e5e7eb;
+    color: #4b5563;
+}
+
+.cancel-btn:hover {
+    background-color: #d1d5db;
+}
+
+.delete-confirm-btn {
+    background-color: #ef4444;
+    color: white;
+}
+
+.delete-confirm-btn:hover {
+    background-color: #dc2626;
+}
+
+.contact-details {
+    margin: 20px 0;
+}
+
+.detail-row {
+    margin-bottom: 10px;
+    padding: 12px;
+    background: #f8f9fa;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+#deleteConfirmationModal p {
+    margin: 15px 0;
+    font-size: 16px;
+    color: #4b5563;
+}
