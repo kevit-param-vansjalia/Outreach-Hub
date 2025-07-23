@@ -9,20 +9,20 @@
 <body>
   <div class="login-container">
     <div class="login-box">
-      <img src="https://via.placeholder.com/60/000033/FFFFFF?text=⬧" alt="Logo" class="logo" />
+      <!-- <img src="https://via.placeholder.com/60/000033/FFFFFF?text=⬧" alt="Logo" class="logo" /> -->
       <h2>Welcome Back</h2>
       <p class="subtitle">Sign in to your account to continue</p>
 
       <form id="loginForm">
-        <label for="email">Email</label>
+        <label for="username">Username</label>
         <div class="input-field">
-          <span class="icon">📧</span>
-          <input type="email" id="email" placeholder="Enter your email" required>
+          <span class="icon"></span>
+          <input type="text" id="username" placeholder="Enter your username" required>
         </div>
 
         <label for="password">Password</label>
         <div class="input-field">
-          <span class="icon">🔒</span>
+          <span class="icon"></span>
           <input type="password" id="password" placeholder="Enter your password" required>
         </div>
 
@@ -36,37 +36,40 @@
   </div>
 
 <script>
-  const form = document.getElementById('loginForm');
-
-  form.addEventListener('submit', async function (e) {
-    e.preventDefault();
-
-    const email = document.getElementById('email').value.trim();
-    const password = document.getElementById('password').value.trim();
-
-    if (!email || !password) {
-      alert('Please fill in all fields.');
-      return;
-    }
+  document.getElementById('loginForm').addEventListener('submit', async function (event) {
+    event.preventDefault();
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
 
     try {
-      const response = await fetch('https://6878baf563f24f1fdc9f3087.mockapi.io/login');
-      const users = await response.json();
-      const matchedUser = users.find(user => user.email === email && user.password === password);
+      const response = await fetch('http://localhost:3000/auth/login', {
+        method:  'POST',
+        headers: {
+          'Content-Type': 'application/json'
+    },
+    body : JSON.stringify({username, password})
+    });
 
-      if (matchedUser) {
-        localStorage.setItem('loggedInUser', JSON.stringify(matchedUser));
+    const data = await response.json();
+    console.log(data);
 
-        alert('Login successful!');
-        window.location.href = 'index.html';
-      } else {
-        alert('Incorrect email or password.');
-      }
-    } catch (error) {
-      console.error('Login error:', error);
-      alert('Something went wrong while logging in.');
+    if(data) {
+      const token = data.access_token;
+      const payload = atob(token.split('.')[1]);
+      console.log(payload);
+      console.log(token);
+      localStorage.setItem('userData', payload);
+      localStorage.setItem('access_token', data.access_token);
+      alert("Login Successful");
+      window.location.href = "index.html";
+    } else {
+      alert(data.message || "Login Failed");
     }
+  } catch (error) {
+    console.error('Error:', error);
+  }
   });
+
 </script>
 
 </body>
