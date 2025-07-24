@@ -1,164 +1,4 @@
-/* body {
-  margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background-color: #f8f9fc;
-  color: #1f2937;
- 
-}
 
-         header {
-            background: linear-gradient(90deg, #3b82f6, #6366f1);
-            color: white;
-            display: flex;
-            align-items: center;
-            padding: 1rem 2rem;
-            justify-content: space-between;
-        }
-
-        .logo img {
-            height: 30px;
-        }
-
-        nav a {
-            color: white;
-            margin: 0 1rem;
-            text-decoration: none;
-            font-weight: 500;
-            transition: opacity 0.2s;
-        }
-
-        nav a:hover {
-            opacity: 0.8;
-        }
-
-        nav a.active {
-            font-weight: 600;
-        }
-
-        .logout {
-            background-color: white;
-            color: #3b82f6;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.2s;
-        }
-
-        .logout:hover {
-            background-color: #f1f5f9;
-            transform: translateY(-1px);
-        }
-
-        .main-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-.container {
-  padding: 2rem;
-}
-
-.welcome h1 {
-  margin-bottom: 0;
-}
-
-.metrics {
-  display: flex;
-  gap: 1rem;
-  margin-top: 2rem;
-  flex-wrap: wrap;
-}
-
-.card {
-  background: white;
-  padding: 1rem 2rem;
-  border-radius: 12px;
-  flex: 1;
-  min-width: 200px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-}
-
-.card h2 {
-  margin: 0.5rem 0;
-}
-
-.green {
-  color: green;
-  font-weight: bold;
-}
-
-.analytics {
-  display: flex;
-  gap: 2rem;
-  margin-top: 2rem;
-  flex-wrap: wrap;
-}
-
-.chart {
-  align-content: center;
-  background: white;
-  border-radius: 12px;
-  padding: 1rem;
-  flex: 1;
-  min-width: 300px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  height: 20%;
-}
-
-.chart img {
-  width: 100%;
-  height: 100%;
-  max-height: 350px;
-  border-radius: 12px;
-  margin-top: 1rem;
-}
-
-.activity {
-  background: white;
-  border-radius: 12px;
-  padding: 1.5rem;
-  margin-top: 2rem;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-}
-
-table {
-  width: 100%;
-  margin-top: 1rem;
-  border-collapse: collapse;
-}
-
-th, td {
-  text-align: left;
-  padding: 0.75rem;
-  border-bottom: 1px solid #e5e7eb;
-}
-
-.badge {
-  padding: 0.3rem 0.75rem;
-  border-radius: 9999px;
-  font-size: 0.85rem;
-  font-weight: bold;
-  text-transform: uppercase;
-}
-
-.success {
-  background-color: #d1fae5;
-  color: #059669;
-}
-
-.info {
-  background-color: #dbeafe;
-  color: #2563eb;
-}
-
-.warning {
-  background-color: #fef3c7;
-  color: #b45309;
-} */
-/* Base Styles */
 body {
   margin: 0;
   font-family: 'Segoe UI', sans-serif;
@@ -167,6 +7,9 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   position: relative;
+  min-height: 100vh;
+            display: flex;
+            flex-direction: column;
 }
 
 /* Background Animation */
@@ -241,50 +84,68 @@ body {
 
 /* Header Styles */
 header {
-  background: linear-gradient(90deg, #3b82f6, #6366f1);
-  color: white;
-  display: flex;
-  align-items: center;
-  padding: 1rem 2rem;
-  justify-content: space-between;
-  position: relative;
-}
+            background: rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            display: flex;
+            align-items: center;
+            padding: 1rem 2rem;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
 
-.logo img {
-  height: 30px;
-}
+        .logo img {
+            height: 32px;
+            filter: brightness(0) invert(1);
+        }
 
-nav a {
-  color: white;
-  margin: 0 1rem;
-  text-decoration: none;
-  font-weight: 500;
-  transition: opacity 0.2s;
-}
+        nav {
+            display: flex;
+            gap: 2rem;
+        }
 
-nav a:hover {
-  opacity: 0.8;
-}
+        nav a {
+            color: rgba(25, 20, 20, 0.9);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
 
-nav a.active {
-  font-weight: 600;
-}
+        nav a:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
 
-.logout {
-  background-color: white;
-  color: #3b82f6;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: all 0.2s;
-}
+        nav a.active {
+            background: rgba(255, 255, 255, 0.2);
+            color: rgb(0, 0, 0);
+            font-weight: 600;
+        }
 
-.logout:hover {
-  background-color: #f1f5f9;
-  transform: translateY(-1px);
-}
+        .logout {
+            background: rgba(255, 255, 255, 0.2);
+            color: rgb(0, 0, 0);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .logout:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+            font-weight: bold;
+        }
+
 
 .container {
   padding:5% 15%;
