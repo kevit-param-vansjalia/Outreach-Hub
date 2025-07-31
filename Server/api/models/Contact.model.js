@@ -6,10 +6,8 @@ const contactSchema = new mongoose.Schema({
   phoneNumber: { type: String, required: true },
   tags: [{ type: String }],
   workspaceId: { type: mongoose.Schema.Types.ObjectId, ref: 'Workspace', required: true },
-  createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date }
-});
+  createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
+}, {timestamps: true});
 
 // Indexes
 contactSchema.index({ workspaceId: 1, phoneNumber: 1 });

@@ -1,4 +1,3 @@
-// models/User.js
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
@@ -8,17 +7,14 @@ const userSchema = new mongoose.Schema({
   passwordHash: { type: String, required: true },
   isAdmin: { type: Boolean, default: false },
 
-  // A user can belong to multiple workspaces
   workspaces: [
     {
       workspaceId: { type: mongoose.Schema.Types.ObjectId, ref: 'Workspace' },
       role: { type: String, enum: ['Editor', 'Viewer'], required: true }
     }
-  ],
+  ]
 
-  createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date }
-});
+}, { timestamps: true });
 
 userSchema.index({ email: 1 }); // already unique
 

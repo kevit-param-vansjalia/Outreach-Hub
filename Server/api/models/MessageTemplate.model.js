@@ -9,10 +9,8 @@ const messageTemplateSchema = new mongoose.Schema({
     imageUrl: { type: String } // only for Text-Image
   },
   workspaceId: { type: mongoose.Schema.Types.ObjectId, ref: 'Workspace', required: true },
-  createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date }
-});
+  createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
+}, { timestamps: true });
 
 messageTemplateSchema.index({ workspaceId: 1, type: 1 });
 

@@ -7,7 +7,7 @@ const campaignSchema = new mongoose.Schema({
   status: { type: String, enum: ['Draft', 'Running', 'Completed'], default: 'Draft' },
   selectedTags: [{ type: String }],
   templateId: { type: mongoose.Schema.Types.ObjectId, ref: 'MessageTemplate' },
-  launchedAt: { type: Date },
+  // launchedAt: { type: Date },
   workspaceId: { type: mongoose.Schema.Types.ObjectId, ref: 'Workspace', required: true },
   createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
 
@@ -18,11 +18,8 @@ const campaignSchema = new mongoose.Schema({
       messageContent: { type: String },
       sentAt: { type: Date, default: Date.now }
     }
-  ],
-
-  createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date }
-});
+  ]
+}, {timestamps: true});
 
 campaignSchema.index({ workspaceId: 1, status: 1 });
 
