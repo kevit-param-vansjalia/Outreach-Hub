@@ -1,13 +1,14 @@
 const express = require("express");
-const User = require("./models/User");
-const router = express.Router();
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 const campaignController = require('../controller/Campaign.controller');
+const verifyToken = require('../Middleware/verifyToken'); // Assuming you have a middleware for token verification
 
-const app = express();
+const router = express.Router();
+router.use(verifyToken); 
 
-app.post('/campaign', campaignController.addCampaign);
-app.delete('/campaign', campaignController.deleteCampaign);
-app.put('/campaign', campaignController.updateCampaign);
-app.get('/campaign', campaignController.getCampaign);
+router.post('/create', campaignController.addCampaign);
+router.delete('/delete/:id', campaignController.deleteCampaign);
+router.put('/update/:id', campaignController.updateCampaign);
+router.get('/get/all', campaignController.getAllCampaign);
+router.get('/get', campaignController.getMyCampaign);
+
+module.exports = router;

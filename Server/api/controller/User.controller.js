@@ -1,64 +1,55 @@
 const User = require("../models/User.model");
 
-const getUser = async (req, res, next) => {
-  const user = await user
-    .find()
-    .then((res) => {
-      res.status(200).json({ message: "User found", user: res });
-    })
-    .catch((err) => {
-      res.status(500).json({ message: "Error fetching user", error: err });
+const addUser = async (req, res, next) => {
+  try {
+    const newUser = new User({
+      name: req.body.name,
+      email: req.body.email,
+      phoneNumber: req.body.phoneNumber,
+      password: req.body.password,
+      isAdmin: req.body.isAdmin || false
     });
+
+    await newUser.save();
+    res.status(201).json({
+      message: "User created successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error creating user",
+      error: error.message,
+    });
+  }
 };
 
-const addUser = async (req, res, next) => {
-  const newUser = new User({
-    name: req.body.name,
-    email: req.body.email,
-    phoneNumber: req.body.phoneNumber,
-    passwordHash: req.body.passwordHash,
-    isAdmin: req.body.isAdmin,
-    workspaces: [
-      {
-        workspaceId: req.body.workspace.workspaceId,
-        role: req.body.workspaces.role,
-      },
-    ],
-  });
-  await newUser
-    .save()
-    .then((res) => {
-      res.status(201).json({
-        message: "User added successfully",
-        user: newUser,
-      });
-    })
-    .catch((err) => {
-      res.status(400).json({ message: err.message });
-    });
+const getUser = async (req, res, next) => {
+  try {
+    const users = await User.find();
+    res.status(200).json({ message: "Users found", users });
+  } catch (err) {
+    res.status(500).json({ message: "Error fetching users", error: err.message });
+  }
 };
 
 const updateUser = async (req, res, next) => {
   const id = req.params._id;
-  const updatedUser = await User.findByIdAndUpdate(id, req.body, { new: true })
-    .then((res) => {
-      res.status(200).json({ message: "User updated successfully", user: res });
-    })
-    .catch((err) => {
-      res.status(500).json({ message: "Error updating user", error: err });
-    });
+  try {
+    const updatedUser = await User.findByIdAndUpdate(id, req.body, { new: true });
+    res.status(200).json({ message: "User updated successfully", user: updatedUser });
+  } catch (err) {
+    res.status(500).json({ message: "Error updating user", error: err.message });
+  }
 };
+
 
 const deleteUser = async (req, res, next) => {
   const id = req.params._id;
-  await user
-    .findByIdAndDelete(id)
-    .then((res) => {
-      res.status(200).json({ message: "User deleted successfully" });
-    })
-    .catch((err) => {
-      res.status(500).json({ message: "Error deleting user", error: err });
-    });
+  try {
+    await User.findByIdAndDelete(id);
+    res.status(200).json({ message: "User deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ message: "Error deleting user", error: err.message });
+  }
 };
 
 module.exports = {

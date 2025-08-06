@@ -5,13 +5,20 @@ const campaignSchema = new mongoose.Schema({
   name: { type: String, required: true },
   description: { type: String },
   status: { type: String, enum: ['Draft', 'Running', 'Completed'], default: 'Draft' },
+  message: {
+    type: {
+      type: String,
+      enum: ['Text', 'Text-Image'],
+      required: true
+    },
+    text: { type: String, required: true },
+    imageUrl: { type: String }
+  },
   selectedTags: [{ type: String }],
-  templateId: { type: mongoose.Schema.Types.ObjectId, ref: 'MessageTemplate' },
   // launchedAt: { type: Date },
   workspaceId: { type: mongoose.Schema.Types.ObjectId, ref: 'Workspace', required: true },
   createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
 
-  // Messages sent per contact (for history/audit)
   messages: [
     {
       contactId: { type: mongoose.Schema.Types.ObjectId, ref: 'Contact' },

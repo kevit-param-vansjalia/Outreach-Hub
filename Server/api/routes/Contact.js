@@ -1,13 +1,13 @@
 const express = require("express");
-const User = require("./models/User");
-const router = express.Router();
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 const contactController = require('../controller/Contact.controller');
+const verifyToken = require('../Middleware/verifyToken');
 
-const app = express();
+const router = express.Router();
+router.use(verifyToken);
 
-app.post('/contact', contactController.addContact);
-app.delete('/contact', contactController.deleteContact);
-app.put('/contact', contactController.updateContact);
-app.get('/contact', contactController.getContact);
+router.post('/create', contactController.addContact);
+router.delete('/delete/:id', contactController.deleteContact);
+router.put('/update/:id', contactController.updateContact);
+router.get('/get', contactController.getContact);
+
+module.exports = router;

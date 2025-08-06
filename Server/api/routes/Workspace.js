@@ -1,13 +1,14 @@
 const express = require("express");
-const Workspace = require("./models/Workspace");
-const router = express.Router();
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 const workspaceController = require('../controller/Workspace.controller');
+const middleware = require("../Middleware/verifyToken");
 
-const app = express();
 
-app.post('/workspace', workspaceController.addWorkspace);
-app.delete('/workspace', workspaceController.deleteWorkspace);
-app.put('/workspace', workspaceController.updateWorkspace);
-app.get('/workspace', workspaceController.getWorkspace);
+const router = express.Router();
+router.use(middleware);
+
+router.post('/create', workspaceController.addWorkspace);
+router.delete('/delete/:_id', workspaceController.deleteWorkspace);
+router.put('/update/:_id', workspaceController.updateWorkspace);
+router.get('/get', workspaceController.getWorkspace);
+
+module.exports = router;

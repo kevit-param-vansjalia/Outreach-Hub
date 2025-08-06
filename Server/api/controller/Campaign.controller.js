@@ -1,15 +1,32 @@
 const Campaign = require("../models/Campaign.model");
 
-const getCampaign = async (req, res, next) => {
-  const campaign = await campaign
+const getAllCampaign = async (req, res, next) => { //modify it to get all campaigns for perticular workspace
+  const campaign = await Campaign
     .find()
-    .then((res) => {
-      res.status(200).json({ message: "Campaign found", campaign: res });
+    .then((result) => {
+      res.status(200).json({ message: "Campaign found", campaign: result });
     })
     .catch((err) => {
       res.status(500).json({ message: "Error fetching campaign", error: err });
     });
 };
+
+const getMyCampaign = async(req,res)=> {
+    try {
+    const {id} = req.user;
+ 
+    const campaigns = await Campaign.find({
+    
+      createdBy: id
+    })
+    .sort({ createdAt: -1 });
+ 
+    res.status(200).json(campaigns);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching campaigns', error: error.message });
+  }
+};
+ 
 
 const addCampaign = async (req, res, next) => {
   const newCampaign = new Campaign({
@@ -17,20 +34,13 @@ const addCampaign = async (req, res, next) => {
     description: req.body.name,
     status: req.body.status,
     selectedTags: req.body.selectedTags,
-    templateId: req.body.templateId,
+    message: req.body.message,
     workspaceId: req.body.workspaceId,
-    createdBy: req.body.userId,
-      messages: [
-        {
-          contactId: req.body.messages.contactId,
-          messageContent: req.body.messages.messageContent,
-          sentAt: req.body.messages.sentAt,
-        }
-      ]
+    createdBy: req.user.id
   });
   await newCampaign
     .save()
-    .then((res) => {
+    .then((result) => {
       res
         .status(201)
         .json({
@@ -44,13 +54,13 @@ const addCampaign = async (req, res, next) => {
 };
 
 const updateCampaign = async (req, res, next) => {
-  const id = req.params._id;
+  const id = req.params.id;
   const updatedCampaign = await Campaign
     .findByIdAndUpdate(id, req.body, { new: true })
-    .then((res) => {
+    .then((result) => {
       res
         .status(200)
-        .json({ message: "Campaign updated successfully", campaign: res });
+        .json({ message: "Campaign updated successfully", campaign: result });
     })
     .catch((err) => {
       res.status(500).json({ message: "Error updating campaign", error: err });
@@ -58,10 +68,10 @@ const updateCampaign = async (req, res, next) => {
 };
 
 const deleteCampaign = async (req, res, next) => {
-  const id = req.params._id;
-  await campaign
+  const id = req.params.id;
+  await Campaign
     .findByIdAndDelete(id)
-    .then((res) => {
+    .then((result) => {
       res.status(200).json({ message: "Campaign deleted successfully" });
     })
     .catch((err) => {
@@ -70,7 +80,8 @@ const deleteCampaign = async (req, res, next) => {
 };
 
 module.exports = {
-  getCampaign,
+  getAllCampaign,
+  getMyCampaign,
   addCampaign,
   updateCampaign,
   deleteCampaign,

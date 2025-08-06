@@ -1,14 +1,10 @@
 const express = require("express");
-const User = require("./models/User");
+const userController = require('../controller/User.controller');
 const router = express.Router();
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const userController = require('../controller/Auth.controller');
 
-const app = express();
+router.post('/create', userController.addUser);
+router.delete('/delete/:_id', userController.deleteUser);
+router.put('/update/:_id', userController.updateUser);
+router.get('/get', userController.getUser);
 
-
-app.post('/user', userController.addUser);
-app.delete('/user', userController.deleteUser);
-app.put('/user', userController.updateUser);
-app.get('/user', userController.getUser);
+module.exports = router;

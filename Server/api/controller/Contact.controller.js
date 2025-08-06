@@ -1,11 +1,12 @@
 const Contact = require("../models/Contact.model");
 
 const getContact = async (req, res, next) => {
-  const userId = req.body.user_id;
-
-  const contacts = await User.find({ user_id: userId });
-
-  res.status(200).json(contacts);
+  try {
+    const contacts = await Contact.find();
+    res.status(200).json({ message: "Contacts found", contacts });
+  } catch (err) {
+    res.status(500).json({ message: "Error fetching contacts", error: err.message });
+  }
 };
 
 const addContact = async (req, res, next) => {
@@ -14,34 +15,44 @@ const addContact = async (req, res, next) => {
     phoneNumber: req.body.phoneNumber,
     tags: req.body.tags,
     workspaceId: req.body.workspaceId,
-    createdBy: req.body.userId,
+    createdBy: req.user.id,
   });
   await newContact
     .save()
-    .then((res) => {
+    .then((result) => {
       res
         .status(201)
-        .json({ message: "Contact added successfully", contact: newContact });
+        .json({ message: "Contact added successfully", contact: result });
     })
     .catch((err) => {
       res.status(400).json({ message: err.message });
     });
 };
 
-const updateContact = async (req, res, next) => {
-    const contactId = req.params._id;
-    const contact = await Contact.findByIdAndUpdate(contactId, req.body, { new: true }).then((res) => {
-        res.status(200).json({message: "Contact updated successfully", contact});
-    }).catch(err => {
-        res.status(400).json({message: err.message});
-    });
 
-        res.status(200).json({message: "Contact updated successfully", contact});
-        };
+const updateContact = async (req, res, next) => {
+  const contactId = req.params.id;
+
+  try {
+    const updatedContact = await Contact.findByIdAndUpdate(contactId, req.body, { new: true });
+
+    if (!updatedContact) {
+      return res.status(404).json({ message: "Contact not found" });
+    }
+
+    res.status(200).json({
+      message: "Contact updated successfully",
+      updatedContact,
+    });
+  } catch (err) {
+    res.status(400).json({ message: "Error updating contact", error: err.message });
+  }
+};
+
 
 const deleteContact = async (req, res, next) => {
-    const contactId = req.params._id;
-    await Contact.findByIdAndDelete(contactId).then((res) => {
+    const contactId = req.params.id;
+    await Contact.findByIdAndDelete(contactId).then((result) => {
         res.status(200).json({ message: "Contact deleted successfully" });
     }).catch( err => {
         res.status(400).json({ message: err.message });

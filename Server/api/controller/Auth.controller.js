@@ -1,10 +1,10 @@
-const User = require("./models/User");
+const User = require("../models/User.model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const BlacklistedToken = require("../models/BlacklistedToken");
 
 
 const loginUser = async (req, res, next) => {
-  console.log(data);
   const email = req.body.email;
   const password = req.body.password;
 
@@ -26,4 +26,29 @@ const loginUser = async (req, res, next) => {
   console.log(user);
 };
 
-module.exports = { loginUser };  
+const logoutUser = async (req, res) => {
+  try {
+    const token = req.headers.authorization?.split(' ')[1]; // Bearer token
+ 
+    if (!token) {
+      return res.status(400).json({ message: 'Token missing' });
+    }
+ 
+    const decoded = jwt.decode(token);
+ 
+    if (!decoded || !decoded.exp) {
+      return res.status(400).json({ message: 'Invalid token' });
+    }
+ 
+    const expiry = new Date(decoded.exp * 1000);
+ 
+    await BlacklistedToken.create({ token, expiresAt: expiry });
+ 
+    res.status(200).json({ message: 'Logout successful' });
+  } catch (error) {
+    console.error('Logout error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+module.exports = { loginUser, logoutUser };  

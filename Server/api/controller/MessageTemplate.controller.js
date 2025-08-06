@@ -1,30 +1,35 @@
 const MessageTemplate = require("../models/MessageTemplate.model");
 
 const getMessageTemplate = async (req, res, next) => {
-  const messageTemplate = await messageTemplate
-    .find()
-    .then((res) => {
-      res.status(200).json({ message: "MessageTemplate found", messageTemplate: res });
-    })
-    .catch((err) => {
-      res.status(500).json({ message: "Error fetching messageTemplate", error: err });
+  try {
+    const templates = await MessageTemplate.find();
+    res.status(200).json({
+      message: "Message templates found",
+      messageTemplates: templates,
     });
+  } catch (err) {
+    res.status(500).json({
+      message: "Error fetching message templates",
+      error: err.message,
+    });
+  }
 };
 
 const addMessageTemplate = async (req, res, next) => {
+  console.log(req.user);
   const newMessageTemplate = new MessageTemplate({
     name: req.body.name,
       type: req.body.type,
       message: {
-        text: req.body.text,
-        imageUrl: req.body.imageUrl
+        text: req.body.message.text,
+        imageUrl: req.body.message.imageUrl
       },
       workspaceId: req.body.workspaceId,
-      createdBy: req.body.userId
+      createdBy: req.user.id
   });
   await newMessageTemplate
     .save()
-    .then((res) => {
+    .then((result) => {
       res
         .status(201)
         .json({
@@ -38,24 +43,33 @@ const addMessageTemplate = async (req, res, next) => {
 };
 
 const updateMessageTemplate = async (req, res, next) => {
-  const id = req.params._id;
-  const updatedMessageTemplate = await MessageTemplate
-    .findByIdAndUpdate(id, req.body, { new: true })
-    .then((res) => {
-      res
-        .status(200)
-        .json({ message: "MessageTemplate updated successfully", messageTemplate: res });
-    })
-    .catch((err) => {
-      res.status(500).json({ message: "Error updating messageTemplate", error: err });
+  const id = req.params.id;
+
+  try {
+    const updatedMessageTemplate = await MessageTemplate.findByIdAndUpdate(id, req.body, { new: true });
+
+    if (!updatedMessageTemplate) {
+      return res.status(404).json({ message: "MessageTemplate not found" });
+    }
+
+    res.status(200).json({
+      message: "MessageTemplate updated successfully",
+      updatedMessageTemplate,
     });
+  } catch (err) {
+    res.status(500).json({
+      message: "Error updating messageTemplate",
+      error: err.message,
+    });
+  }
 };
 
+
 const deleteMessageTemplate = async (req, res, next) => {
-  const id = req.params._id;
-  await messageTemplate
+  const id = req.params.id;
+  await MessageTemplate
     .findByIdAndDelete(id)
-    .then((res) => {
+    .then((result) => {
       res.status(200).json({ message: "MessageTemplate deleted successfully" });
     })
     .catch((err) => {

@@ -1,14 +1,13 @@
 const express = require("express");
-const User = require("./models/User");
-const router = express.Router();
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 const messageTemplateController = require('../controller/MessageTemplate.controller');
+const verifyToken = require('../Middleware/verifyToken');
 
-const app = express();
+const router = express.Router();
+router.use(verifyToken);
 
-app.post('/messageTemplate', messageTemplateController.addMessageTemplate);
-app.delete('/messageTemplate', messageTemplateController.deleteMessageTemplate);
-app.put('/messageTemplate', messageTemplateController.updateMessageTemplate);
-app.get('/messageTemplate', messageTemplateController.getMessageTemplate);
+router.post('/create', messageTemplateController.addMessageTemplate);
+router.delete('/delete/:id', messageTemplateController.deleteMessageTemplate);
+router.put('/update/:id', messageTemplateController.updateMessageTemplate);
+router.get('/get', messageTemplateController.getMessageTemplate);
 
+module.exports = router;
