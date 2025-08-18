@@ -1,8 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import mongoose, { Document } from 'mongoose';
+import mongoose, { Document, Types } from 'mongoose';
 import * as bcrypt from 'bcrypt';
 
-export type UserDocument = User & Document;
+export type UserDocument = User & Document & { _id: Types.ObjectId };
 
 @Schema({ timestamps: true })
 export class User {
@@ -48,4 +48,3 @@ UserSchema.pre<UserDocument>('save', async function (next) {
     next(err as any);
   }
 });
-         

@@ -5,6 +5,10 @@ import { WorkspaceModule } from './workspace/workspace.module';
 import { CampaignModule } from './campaign/campaign.module';
 import { MessageTemplateModule } from './message-template/message-template.module';
 import { MongooseModule } from '@nestjs/mongoose';
+import { AuthModule } from './auth/auth.module';
+import { ConfigModule } from '@nestjs/config';
+import { JwtAuthGuard } from './auth/jwt-auth.guard';
+  import { APP_GUARD } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -13,8 +17,16 @@ import { MongooseModule } from '@nestjs/mongoose';
     ContactModule,
     WorkspaceModule,
     CampaignModule,
-    MessageTemplateModule],
+    MessageTemplateModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env',
+    }),
+    AuthModule],
   controllers: [],
-  providers: [],
+  providers: [{
+    provide:  APP_GUARD,
+    useClass: JwtAuthGuard,
+  }],
 })
 export class AppModule {}
