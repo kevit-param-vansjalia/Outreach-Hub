@@ -12,7 +12,6 @@ body {
             flex-direction: column;
 }
 
-/* Background Animation */
 .background {
   position: fixed;
   top: 0;
@@ -82,7 +81,6 @@ body {
   }
 }
 
-/* Header Styles */
 header {
             background: rgba(0, 0, 0, 0.1);
             backdrop-filter: blur(10px);

@@ -158,7 +158,6 @@
             font-weight: 600;
         }
 
-        /* Sidebar */
         .sidebar {
             width: 300px;
             background: #F9FAFB;
@@ -333,7 +332,6 @@
             border-radius: 50%;
         }
 
-        /* Main Chat Area */
         .main-chat {
             flex: 1;
             display: flex;
@@ -479,7 +477,6 @@
             content: '⬇';
         }
 
-        /* Input Area */
         .chat-input {
             padding: 20px;
             border-top: 1px solid #E5E7EB;
@@ -538,7 +535,6 @@
             content: '➤';
         }
 
-        /* Responsive */
         @media (max-width: 768px) {
             .sidebar {
                 width: 280px;
