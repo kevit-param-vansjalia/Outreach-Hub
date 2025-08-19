@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>OutreachHub</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="./home.js"></script>
+  <script src="./global.js"></script>
+</head>
+<body>
+  <div class="background">
+    <div class="gradient-bg"></div>
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+
+  <header>
+        <div class="logo">
+            <img src="./public/logo-removebg-preview.png" alt="PrimeStay Logo">
+        </div>
+        <nav>
+            <a href="./index.html" class="active">Home</a>
+            <a href="./contacts.html">Contacts</a>
+            <a href="./message-templates.html">Messages</a>
+            <a href="./campaigns.html">Campaigns</a>
+        </nav>
+        <button class="logout" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i>
+            Logout
+        </button>
+    </header>
+
+  <main class="container">
+    <section class="welcome">
+      <h1>Welcome back, param.vansjalia!</h1>
+      <p>Here's what's happening with your business today.</p>
+    </section>
+
+    <section class="metrics">
+      <div class="card">
+        <h4>Total Contacts</h4>
+        <h2>1,234</h2>
+        <p class="green">+12% from last month</p>
+      </div>
+      <div class="card">
+        <h4>Revenue</h4>
+        <h2>$45,678</h2>
+        <p class="green">+8% from last month</p>
+      </div>
+      <div class="card">
+        <h4>Growth Rate</h4>
+        <h2>23.5%</h2>
+        <p class="green">+2.1% from last month</p>
+      </div>
+      <div class="card">
+        <h4>Reports</h4>
+        <h2>89</h2>
+        <p class="green">+5% from last month</p>
+      </div>
+    </section>
+
+    <section class="analytics">
+      <div class="chart">
+        <h3>Revenue Analytics</h3>
+        <p>Monthly revenue breakdown and trends</p>
+        <img src="./public/analytics-chart.jpeg" alt="Revenue Analytics">
+      </div>
+      <div class="chart">
+        <h3>Customer Distribution</h3>
+        <p>Customer segments and demographics</p>
+        <img src="./public/analytics-pie.jpeg" alt="Customer Distribution">
+      </div>
+    </section>
+
+    <section class="activity">
+      <h3>Recent Activity</h3>
+      <p>Latest actions and updates in your system</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Action</th>
+            <th>User</th>
+            <th>Time</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>New contact added</td>
+            <td>John Doe</td>
+            <td>2 hours ago</td>
+            <td><span class="badge success">success</span></td>
+          </tr>
+          <tr>
+            <td>Report generated</td>
+            <td>Jane Smith</td>
+            <td>4 hours ago</td>
+            <td><span class="badge info">info</span></td>
+          </tr>
+          <tr>
+            <td>Contact updated</td>
+            <td>Bob Johnson</td>
+            <td>6 hours ago</td>
+            <td><span class="badge warning">warning</span></td>
+          </tr>
+          <tr>
+            <td>Data exported</td>
+            <td>Alice Brown</td>
+            <td>1 day ago</td>
+            <td><span class="badge success">success</span></td>
+          </tr>
+          <tr>
+            <td>System backup</td>
+            <td>System</td>
+            <td>2 days ago</td>
+            <td><span class="badge info">info</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</body>
+</html>
