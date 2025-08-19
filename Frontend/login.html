@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Login</title>
   <link rel="stylesheet" href="login.css" />
+  <script src="./login.js"></script>
+  <script src="./global.js"></script>
 </head>
 <body>
   <div class="login-container">
@@ -34,43 +36,6 @@
       </p>
     </div>
   </div>
-
-<script>
-  document.getElementById('loginForm').addEventListener('submit', async function (event) {
-    event.preventDefault();
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
-
-    try {
-      const response = await fetch('http://localhost:3000/auth/login', {
-        method:  'POST',
-        headers: {
-          'Content-Type': 'application/json'
-    },
-    body : JSON.stringify({username, password})
-    });
-
-    const data = await response.json();
-    console.log(data);
-
-    if(data) {
-      const token = data.access_token;
-      const payload = atob(token.split('.')[1]);
-      console.log(payload);
-      console.log(token);
-      localStorage.setItem('userData', payload);
-      localStorage.setItem('access_token', data.access_token);
-      alert("Login Successful");
-      window.location.href = "index.html";
-    } else {
-      alert(data.message || "Login Failed");
-    }
-  } catch (error) {
-    console.error('Error:', error);
-  }
-  });
-
-</script>
 
 </body>
 </html>
