@@ -1,11 +1,8 @@
-<!-- src/app/app.component.html -->
 <div class="flex h-screen bg-gray-50">
-  <!-- The static sidebar component -->
   <app-sidebar></app-sidebar>
 
-  <!-- The main content area where pages are loaded dynamically -->
   <main class="flex-1 overflow-y-auto p-8 transition-all duration-300 ease-in-out"
-        [ngClass]="(isSidebarCollapsed$ | async) ? 'ml-20' : 'ml-64'">
+        [ngClass]="(sidebarService.isSidebarCollapsed$ | async) ? 'ml-20' : 'ml-64'">
     <router-outlet></router-outlet>
   </main>
 </div>

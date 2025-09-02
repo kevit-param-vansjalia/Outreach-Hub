@@ -12,6 +12,8 @@ import { ContactsComponent } from './features/contacts/contacts.component';
 import { MessageTemplateComponent } from './features/message-template/message-template.component';
 import { CampaignComponent } from './features/campaign/campaign.component';
 import { RouterModule } from '@angular/router';
+import { LoginComponent } from './core/login/login.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -20,14 +22,16 @@ import { RouterModule } from '@angular/router';
     DashboardComponent,
     ContactsComponent,
     MessageTemplateComponent,
-    CampaignComponent
+    CampaignComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     CommonModule,
-    RouterModule
+    RouterModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

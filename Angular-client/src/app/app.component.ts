@@ -1,19 +1,13 @@
 // src/app/app.component.ts
-import { Component, OnInit } from '@angular/core';
-import { SidebarService } from './shared/layout/sidebar/sidebar.service';
+import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
+import { SidebarService } from './shared/layout/sidebar/sidebar.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
-  isSidebarCollapsed$!: Observable<boolean>;
-
-  constructor(private sidebarService: SidebarService) {}
-
-  ngOnInit() {
-    this.isSidebarCollapsed$ = this.sidebarService.isSidebarCollapsed$;
-  }
+export class AppComponent {
+  constructor(public sidebarService: SidebarService) {}
 }

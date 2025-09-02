@@ -9,7 +9,8 @@ import { MessageTemplateComponent } from './features/message-template/message-te
 
 
 const routes: Routes = [
-  { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  // { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
   { path: 'dashboard', component: DashboardComponent },
   { path: 'contacts', component: ContactsComponent },
   { path: 'campaigns', component: CampaignComponent },

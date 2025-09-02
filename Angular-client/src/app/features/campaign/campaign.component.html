@@ -1,1 +1,336 @@
-<p>campaign works!</p>
+<div class="p-8">
+  <div class="flex justify-between items-center mb-6">
+    <div>
+      <h1 class="text-3xl font-bold text-gray-900">Campaigns</h1>
+      <p class="text-gray-500 mt-1">Create and manage your outreach campaigns with targeted contact groups</p>
+    </div>
+    <button class="bg-purple-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition-colors duration-300 ease-in-out hover:bg-purple-700 flex items-center space-x-2">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 5v14m-7-7h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
+      <span>New Campaign</span>
+    </button>
+  </div>
+
+  <div class="flex items-center space-x-4 mb-8">
+    <div class="flex items-center w-full bg-white rounded-lg shadow-sm border border-gray-200 px-4 py-2">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+      </svg>
+      <input type="text" placeholder="Search campaigns by name, description, or tags..." class="w-full text-gray-700 focus:outline-none placeholder-gray-400">
+    </div>
+    <button class="bg-white text-gray-500 font-semibold py-2 px-4 rounded-lg shadow-sm border border-gray-200 transition-colors duration-200 ease-in-out hover:bg-gray-100 flex items-center space-x-2 whitespace-nowrap">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
+      <span>Status</span>
+    </button>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+    <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200 relative group">
+      <div class="absolute top-4 right-4 bg-white shadow-md rounded-lg p-1 flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 ease-in-out">
+        <button class="p-2 rounded-md hover:bg-gray-100 text-gray-500 hover:text-gray-700">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+          </svg>
+        </button>
+        <button class="p-2 rounded-md hover:bg-gray-100 text-gray-500 hover:text-violet-600">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+          </svg>
+        </button>
+        <button class="p-2 rounded-md hover:bg-gray-100 text-gray-500 hover:text-red-600">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+          </svg>
+        </button>
+      </div>
+      
+      <div class="flex justify-between items-start mb-4">
+        <h3 class="font-bold text-gray-900">Q4 Product Launch Campaign</h3>
+        <div class="flex space-x-2">
+          <span class="bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded-full">Completed</span>
+          <span class="bg-gray-100 text-gray-700 text-xs font-semibold px-2 py-1 rounded-full">65%</span>
+        </div>
+      </div>
+      <p class="text-sm text-gray-700 leading-relaxed mb-4">
+        Comprehensive launch campaign for our new enterprise feature set targeting C-level executives and decision makers.
+      </p>
+
+      <div class="space-y-4">
+        <div class="space-y-2">
+          <p class="text-sm font-semibold text-gray-700">Campaign Progress</p>
+          <div class="w-full bg-gray-200 rounded-full h-2.5">
+            <div class="bg-purple-600 h-2.5 rounded-full" style="width: 65%;"></div>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center text-sm text-gray-600">
+          <div>
+            <p class="font-semibold text-gray-900">890</p>
+            <p>Targeted</p>
+          </div>
+          <div>
+            <p class="font-semibold text-gray-900">812</p>
+            <p>Sent</p>
+          </div>
+          <div>
+            <p class="font-semibold text-gray-900">524</p>
+            <p>Opened</p>
+          </div>
+          <div>
+            <p class="font-semibold text-gray-900">89</p>
+            <p>Clicked</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="flex items-center space-x-2 mt-4 text-xs text-gray-500">
+        <span class="bg-red-100 text-red-800 px-2 py-1 rounded-full">high priority</span>
+        <span class="bg-gray-200 text-gray-700 px-2 py-1 rounded-full">c-level</span>
+      </div>
+      <div class="grid grid-cols-2 mt-4 text-xs text-gray-500 gap-2">
+        <div>
+          <p>Duration:</p>
+          <p class="font-semibold">2024-01-15 - 2024-02-15</p>
+        </div>
+        <div>
+          <p>Budget:</p>
+          <p class="font-semibold">$5,000 / $3,250</p>
+        </div>
+        <div>
+          <p>ROI:</p>
+          <p class="font-semibold text-green-600">245.6%</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200 relative group">
+      <div class="absolute top-4 right-4 bg-white shadow-md rounded-lg p-1 flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 ease-in-out">
+        <button class="p-2 rounded-md hover:bg-gray-100 text-gray-500 hover:text-gray-700">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+          </svg>
+        </button>
+        <button class="p-2 rounded-md hover:bg-gray-100 text-gray-500 hover:text-violet-600">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+          </svg>
+        </button>
+        <button class="p-2 rounded-md hover:bg-gray-100 text-gray-500 hover:text-red-600">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="flex justify-between items-start mb-4">
+        <h3 class="font-bold text-gray-900">Customer Retention Drive</h3>
+        <span class="bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded-full">Completed</span>
+      </div>
+      <p class="text-sm text-gray-700 leading-relaxed mb-4">
+        Re-engagement campaign targeting inactive users with special offers and product updates to increase retention…
+      </p>
+
+      <div class="space-y-4">
+        <div class="space-y-2">
+          <p class="text-sm font-semibold text-gray-700">Campaign Progress</p>
+          <div class="w-full bg-gray-200 rounded-full h-2.5">
+            <div class="bg-purple-600 h-2.5 rounded-full" style="width: 100%;"></div>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center text-sm text-gray-600">
+          <div>
+            <p class="font-semibold text-gray-900">890</p>
+            <p>Targeted</p>
+          </div>
+          <div>
+            <p class="font-semibold text-gray-900">890</p>
+            <p>Sent</p>
+          </div>
+          <div>
+            <p class="font-semibold text-gray-900">623</p>
+            <p>Opened</p>
+          </div>
+          <div>
+            <p class="font-semibold text-gray-900">156</p>
+            <p>Clicked</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-2 mt-4 text-xs text-gray-500">
+        <span class="bg-violet-100 text-violet-700 px-2 py-1 rounded-full">targeted</span>
+        <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full">retention</span>
+      </div>
+      <div class="grid grid-cols-2 mt-4 text-xs text-gray-500 gap-2">
+        <div>
+          <p>Duration:</p>
+          <p class="font-semibold">2024-01-01 - 2024-01-31</p>
+        </div>
+        <div>
+          <p>Budget:</p>
+          <p class="font-semibold">$5,000 / $5,000</p>
+        </div>
+        <div>
+          <p>ROI:</p>
+          <p class="font-semibold text-green-600">189.3%</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200 relative group">
+      <div class="absolute top-4 right-4 bg-white shadow-md rounded-lg p-1 flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 ease-in-out">
+        <button class="p-2 rounded-md hover:bg-gray-100 text-gray-500 hover:text-gray-700">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+          </svg>
+        </button>
+        <button class="p-2 rounded-md hover:bg-gray-100 text-gray-500 hover:text-violet-600">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+          </svg>
+        </button>
+        <button class="p-2 rounded-md hover:bg-gray-100 text-gray-500 hover:text-red-600">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="flex justify-between items-start mb-4">
+        <h3 class="font-bold text-gray-900">New Feature Announcement</h3>
+        <span class="bg-gray-200 text-gray-700 text-xs font-semibold px-2 py-1 rounded-full">Draft</span>
+      </div>
+      <p class="text-sm text-gray-700 leading-relaxed mb-4">
+        Announcing our latest AI-powered analytics dashboard to existing customers and prospects in the mid-market segment.
+      </p>
+
+      <div class="space-y-4">
+        <div class="space-y-2">
+          <p class="text-sm font-semibold text-gray-700">Campaign Progress</p>
+          <div class="w-full bg-gray-200 rounded-full h-2.5">
+            <div class="bg-purple-600 h-2.5 rounded-full" style="width: 0%;"></div>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center text-sm text-gray-600">
+          <div>
+            <p class="font-semibold text-gray-900">1,580</p>
+            <p>Targeted</p>
+          </div>
+          <div>
+            <p class="font-semibold text-gray-900">0</p>
+            <p>Sent</p>
+          </div>
+          <div>
+            <p class="font-semibold text-gray-900">0</p>
+            <p>Opened</p>
+          </div>
+          <div>
+            <p class="font-semibold text-gray-900">0</p>
+            <p>Clicked</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-2 mt-4 text-xs text-gray-500">
+        <span class="bg-violet-100 text-violet-700 px-2 py-1 rounded-full">targeted</span>
+        <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full">existing customers</span>
+      </div>
+      <div class="grid grid-cols-2 mt-4 text-xs text-gray-500 gap-2">
+        <div>
+          <p>Duration:</p>
+          <p class="font-semibold">2024-02-01 - 2024-02-28</p>
+        </div>
+        <div>
+          <p>Budget:</p>
+          <p class="font-semibold">$4,500 / $0</p>
+        </div>
+        <div>
+          <p>ROI:</p>
+          <p class="font-semibold text-green-600">0.0%</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200 relative group">
+      <div class="absolute top-4 right-4 bg-white shadow-md rounded-lg p-1 flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 ease-in-out">
+        <button class="p-2 rounded-md hover:bg-gray-100 text-gray-500 hover:text-gray-700">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+          </svg>
+        </button>
+        <button class="p-2 rounded-md hover:bg-gray-100 text-gray-500 hover:text-violet-600">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+          </svg>
+        </button>
+        <button class="p-2 rounded-md hover:bg-gray-100 text-gray-500 hover:text-red-600">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="flex justify-between items-start mb-4">
+        <h3 class="font-bold text-gray-900">Webinar Invitation Series</h3>
+        <span class="bg-gray-200 text-gray-700 text-xs font-semibold px-2 py-1 rounded-full">Draft</span>
+      </div>
+      <p class="text-sm text-gray-700 leading-relaxed mb-4">
+        Three-part webinar series invitation campaign focusing on industry best practices and thought leadership content.
+      </p>
+
+      <div class="space-y-4">
+        <div class="space-y-2">
+          <p class="text-sm font-semibold text-gray-700">Campaign Progress</p>
+          <div class="w-full bg-gray-200 rounded-full h-2.5">
+            <div class="bg-purple-600 h-2.5 rounded-full" style="width: 0%;"></div>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center text-sm text-gray-600">
+          <div>
+            <p class="font-semibold text-gray-900">2,400</p>
+            <p>Targeted</p>
+          </div>
+          <div>
+            <p class="font-semibold text-gray-900">0</p>
+            <p>Sent</p>
+          </div>
+          <div>
+            <p class="font-semibold text-gray-900">0</p>
+            <p>Opened</p>
+          </div>
+          <div>
+            <p class="font-semibold text-gray-900">0</p>
+            <p>Clicked</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-2 mt-4 text-xs text-gray-500">
+        <span class="bg-violet-100 text-violet-700 px-2 py-1 rounded-full">targeted</span>
+        <span class="bg-gray-200 text-gray-700 px-2 py-1 rounded-full">webinar</span>
+        <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full">thought leadership</span>
+      </div>
+      <div class="grid grid-cols-2 mt-4 text-xs text-gray-500 gap-2">
+        <div>
+          <p>Duration:</p>
+          <p class="font-semibold">2024-02-01 - 2024-03-28</p>
+        </div>
+        <div>
+          <p>Budget:</p>
+          <p class="font-semibold">$5,000 / $0</p>
+        </div>
+        <div>
+          <p>ROI:</p>
+          <p class="font-semibold text-green-600">0.0%</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
