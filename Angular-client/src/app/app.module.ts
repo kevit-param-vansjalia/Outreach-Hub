@@ -1,39 +1,33 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { CommonModule } from '@angular/common'; // Re-added for directives like ngClass
-
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { SidebarComponent } from './shared/layout/sidebar/sidebar.component';
+
 import { DashboardComponent } from './features/dashboard/dashboard.component';
-import { ContactsComponent } from './features/contacts/contacts.component';
-import { MessageTemplateComponent } from './features/message-template/message-template.component';
+import { MessageListComponent } from './features/message-template/message-list/message-list.component';
 import { CampaignComponent } from './features/campaign/campaign.component';
-import { RouterModule } from '@angular/router';
-import { LoginComponent } from './core/login/login.component';
-import { ReactiveFormsModule } from '@angular/forms';
+
+import { LayoutModule } from './shared/layout/layout.module';
 
 @NgModule({
   declarations: [
     AppComponent,
-    SidebarComponent,
     DashboardComponent,
-    ContactsComponent,
-    MessageTemplateComponent,
-    CampaignComponent,
-    LoginComponent
+    CampaignComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     CommonModule,
-    RouterModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    LayoutModule           
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}
