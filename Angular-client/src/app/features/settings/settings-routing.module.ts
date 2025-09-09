@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CampaignListComponent } from './campaign-list/campaign-list.component';
+import { SettingListComponent } from './setting-list/setting-list.component';
 
 const routes: Routes = [
-  { path: '', component: CampaignListComponent }
+  { path: '', component: SettingListComponent}
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class CampaignRoutingModule { }
+export class SettingsRoutingModule { }

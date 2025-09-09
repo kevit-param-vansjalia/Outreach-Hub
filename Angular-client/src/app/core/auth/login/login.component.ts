@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { Router } from '@angular/router';
+import { AuthService } from '../auth.service';
+import { jwtDecode } from 'jwt-decode';
 
 @Component({
   selector: 'app-login',
@@ -47,7 +49,7 @@ export class LoginComponent implements OnInit {
   isLoading: boolean = false;
   buttonState: string = 'inactive';
 
-  constructor(private fb: FormBuilder, private router: Router) {
+  constructor(private fb: FormBuilder, private router: Router,  private authService: AuthService) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]]
@@ -73,14 +75,31 @@ export class LoginComponent implements OnInit {
       this.isLoading = true;
       this.buttonState = 'active';
 
-      // Simulate API call
-      setTimeout(() => {
-        this.isLoading = false;
-        this.buttonState = 'inactive';
-        console.log('Form Submitted!', this.loginForm.value);
-        // Here you would typically navigate to a new page
-        // this.router.navigate(['/dashboard']);
-      }, 2000);
+      const { email, password} = this.loginForm.value;
+
+      this.authService.login({ email, password}).subscribe({
+        next: (response) => {
+          this.isLoading = false;
+          this.buttonState = 'inactive';
+
+          localStorage.setItem('access_token', response.accessToken);
+          localStorage.setItem('refresh_token', response.refreshToken);
+
+          const decoded: any = jwtDecode(response.accessToken);
+          if (decoded && decoded.sub) {
+          localStorage.setItem('userId', decoded.sub);
+         }
+
+          this.router.navigate(['/dashboard']);
+        },
+
+        error: (err) => {
+          this.isLoading = false;
+          this.buttonState = 'inactive';
+          console.error(' Login Error', err);
+          alert('Invalid Email or Password');
+        }
+      });
     } else {
       this.loginForm.markAllAsTouched();
     }

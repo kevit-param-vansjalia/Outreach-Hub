@@ -1,88 +1,123 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ContactsService, Contact } from '../contacts.service';
 
 @Component({
   selector: 'app-contact-list',
   templateUrl: './contact-list.component.html',
   styleUrls: ['./contact-list.component.scss']
 })
-export class ContactListComponent {
-  // Example contacts
-  contacts = [
-    {
-      name: 'John Doe',
-      email: 'john.doe@example.com',
-      phone: '+91 9876543210',
-      location: 'Mumbai, India',
-      role: 'Manager',
-      company: 'ABC Corp',
-      status: 'Active',
-      tags: ['targeted', 'high priority'],
-      lastContact: '2025-09-01'
-    },
-    {
-      name: 'Jane Smith',
-      email: 'jane.smith@example.com',
-      phone: '+91 9123456780',
-      location: 'Delhi, India',
-      role: 'HR',
-      company: 'XYZ Ltd',
-      status: 'Inactive',
-      tags: ['non targeted', 'warm lead'],
-      lastContact: '2025-08-28'
-    }
-  ];
+export class ContactListComponent implements OnInit {
+  contacts: Contact[] = [];
 
   // Modal state
-  showAddModal = false;
+  showContactModal = false;
+  modalMode: 'add' | 'details' | 'edit' = 'add';
+  selectedContact: Contact | null = null;
 
-  // New contact model
-  newContact = {
+  // Form model
+  contactForm: { [key: string]: string } = {
     name: '',
-    email: '',
-    phone: '',
-    location: '',
-    role: '',
-    company: '',
+    phoneNumber: '',
     tags: ''
   };
 
-  // Open modal
-  openAddContactModal() {
-    this.showAddModal = true;
+  constructor(private contactsService: ContactsService) {}
+
+  ngOnInit(): void {
+    this.loadContacts();
   }
 
-  // Close modal
-  closeAddContactModal() {
-    this.showAddModal = false;
+  loadContacts() {
+    this.contactsService.getContactsByUser().subscribe({
+      next: (data: Contact[]) => this.contacts = data,
+      error: (err) => console.error('Error fetching contacts:', err)
+    });
+  }
+
+  openAddContactModal() {
+    this.modalMode = 'add';
+    this.resetForm();
+    this.showContactModal = true;
+  }
+
+  openContactDetails(contact: Contact) {
+    this.selectedContact = contact;
+    this.modalMode = 'details';
+    this.showContactModal = true;
+  }
+
+  openEditContact(contact: Contact) {
+    this.selectedContact = contact;
+    this.modalMode = 'edit';
+    this.contactForm = {
+      name: contact.name,
+      phoneNumber: contact.phoneNumber,
+      tags: contact.tags.join(', ')
+    };
+    this.showContactModal = true;
+  }
+
+  closeContactModal() {
+    this.showContactModal = false;
+    this.selectedContact = null;
     this.resetForm();
   }
 
-  // Save contact
   saveContact() {
-    if (this.newContact.name && this.newContact.phone) {
-      const contact = {
-        ...this.newContact,
-        tags: this.newContact.tags
-          ? this.newContact.tags.split(',').map(tag => tag.trim())
-          : [],
-        status: 'Active',
-        lastContact: new Date().toISOString().split('T')[0]
-      };
+    const newContact = {
+      name: this.contactForm['name'],
+      phoneNumber: this.contactForm['phoneNumber'],
+      tags: this.contactForm['tags']
+        ? this.contactForm['tags'].split(',').map(tag => tag.trim())
+        : [],
+      workspaceId: '68932904349fdbf48847312a' 
+    };
 
-      this.contacts.unshift(contact); // add new contact at top
-      this.closeAddContactModal();
-    }
+    this.contactsService.createContact(newContact).subscribe({
+      next: (created: Contact) => {
+        this.contacts.unshift(created);
+        this.closeContactModal();
+      },
+      error: (err) => console.error('Error creating contact:', err)
+    });
+  }
+
+  updateContact() {
+    if (!this.selectedContact) return;
+
+    const updated = {
+      name: this.contactForm['name'],
+      phoneNumber: this.contactForm['phoneNumber'],
+      tags: this.contactForm['tags']
+        ? this.contactForm['tags'].split(',').map(tag => tag.trim())
+        : []
+    };
+
+    this.contactsService.updateContact(this.selectedContact._id, updated).subscribe({
+      next: (res: Contact) => {
+        const index = this.contacts.findIndex(c => c._id === this.selectedContact?._id);
+        if (index > -1) this.contacts[index] = res;
+        this.closeContactModal();
+      },
+      error: (err) => console.error('Error updating contact:', err)
+    });
+  }
+
+  deleteContact(contact: Contact) {
+    if (!confirm(`Are you sure you want to delete ${contact.name}?`)) return;
+
+    this.contactsService.deleteContact(contact._id).subscribe({
+      next: () => {
+        this.contacts = this.contacts.filter(c => c._id !== contact._id);
+        if (this.selectedContact?._id === contact._id) {
+          this.closeContactModal();
+        }
+      },
+      error: (err) => console.error('Error deleting contact:', err)
+    });
   }
 
   private resetForm() {
-    this.newContact = {
-      name: '',
-      email: '',
-      phone: '',
-      location: '',
-      role: '',
-      company: '',
-      tags: ''
-    };
+    this.contactForm = { name: '', phoneNumber: '', tags: '' };
   }
 }

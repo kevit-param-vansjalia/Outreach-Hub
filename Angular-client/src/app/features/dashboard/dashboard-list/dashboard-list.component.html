@@ -12,7 +12,9 @@
     </button>
   </div>
 
+  <!-- Stats Cards -->
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <!-- Total Contacts -->
     <div class="bg-white p-6 rounded-lg shadow-md flex items-center justify-between">
       <div>
         <h3 class="text-xl font-bold text-gray-900">Total Contacts</h3>
@@ -28,7 +30,8 @@
         </svg>
       </div>
     </div>
-    
+
+    <!-- Active Campaigns -->
     <div class="bg-white p-6 rounded-lg shadow-md flex items-center justify-between">
       <div>
         <h3 class="text-xl font-bold text-gray-900">Active Campaigns</h3>
@@ -44,7 +47,8 @@
         </svg>
       </div>
     </div>
-    
+
+    <!-- Templates -->
     <div class="bg-white p-6 rounded-lg shadow-md flex items-center justify-between">
       <div>
         <h3 class="text-xl font-bold text-gray-900">Templates</h3>
@@ -60,7 +64,8 @@
         </svg>
       </div>
     </div>
-    
+
+    <!-- Success Rate -->
     <div class="bg-white p-6 rounded-lg shadow-md flex items-center justify-between">
       <div>
         <h3 class="text-xl font-bold text-gray-900">Success Rate</h3>
@@ -78,103 +83,47 @@
     </div>
   </div>
 
+  <!-- Charts Section -->
   <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
     <div class="lg:col-span-2 bg-white p-6 rounded-lg shadow-md">
-      <div class="flex items-center justify-between mb-4">
-        <h2 class="text-xl font-bold text-gray-900">Recent Campaigns</h2>
-        <a routerLink="/campaigns" class="text-purple-600 font-semibold text-sm hover:underline">View All</a>
+      <h2 class="text-xl font-bold text-gray-900 mb-6">Campaign Analytics</h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Bar Chart -->
+        <div class="bg-white p-4 rounded-lg shadow">
+          <h3 class="text-md font-semibold text-gray-700 mb-2">Performance</h3>
+          <canvas baseChart
+                  [data]="{ labels: barChartLabels, datasets: barChartData }"
+                  [options]="barChartOptions"
+                  chartType="bar">
+          </canvas>
+        </div>
+
+        <!-- Line Chart -->
+        <div class="bg-white p-4 rounded-lg shadow">
+          <h3 class="text-md font-semibold text-gray-700 mb-2">Engagement Trend</h3>
+          <canvas baseChart
+                  [data]="{ labels: lineChartLabels, datasets: lineChartData }"
+                  [options]="lineChartOptions"
+                  chartType="line">
+          </canvas>
+        </div>
       </div>
-      <div class="space-y-4">
-        <div class="border-b border-gray-200 pb-4 last:border-b-0 last:pb-0">
-          <h3 class="font-semibold text-lg text-gray-900">Q4 Product Launch</h3>
-          <p class="text-xs text-gray-500">2024-01-15 - 2024-02-15</p>
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-2">
-            <div>
-              <p class="text-lg font-bold text-gray-900">1250</p>
-              <p class="text-sm text-gray-500">Contacts</p>
-            </div>
-            <div>
-              <p class="text-lg font-bold text-gray-900">812</p>
-              <p class="text-sm text-gray-500">Sent</p>
-            </div>
-            <div>
-              <p class="text-lg font-bold text-gray-900">524</p>
-              <p class="text-sm text-gray-500">Opened</p>
-            </div>
-            <div>
-              <p class="text-lg font-bold text-gray-900">89</p>
-              <p class="text-sm text-gray-500">Clicked</p>
-            </div>
-          </div>
-          <div class="mt-4">
-            <p class="text-sm font-semibold text-gray-700 mb-1">Progress</p>
-            <div class="w-full bg-gray-200 rounded-full h-2.5">
-              <div class="bg-purple-600 h-2.5 rounded-full" style="width: 65%"></div>
-            </div>
-          </div>
-        </div>
 
-        <div class="border-b border-gray-200 pb-4 last:border-b-0 last:pb-0">
-          <h3 class="font-semibold text-lg text-gray-900">Customer Retention Drive</h3>
-          <p class="text-xs text-gray-500">2024-01-01 - 2024-01-31</p>
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-2">
-            <div>
-              <p class="text-lg font-bold text-gray-900">890</p>
-              <p class="text-sm text-gray-500">Contacts</p>
-            </div>
-            <div>
-              <p class="text-lg font-bold text-gray-900">890</p>
-              <p class="text-sm text-gray-500">Sent</p>
-            </div>
-            <div>
-              <p class="text-lg font-bold text-gray-900">623</p>
-              <p class="text-sm text-gray-500">Opened</p>
-            </div>
-            <div>
-              <p class="text-lg font-bold text-gray-900">156</p>
-              <p class="text-sm text-gray-500">Clicked</p>
-            </div>
-          </div>
-          <div class="mt-4">
-            <p class="text-sm font-semibold text-gray-700 mb-1">Progress</p>
-            <div class="w-full bg-gray-200 rounded-full h-2.5">
-              <div class="bg-purple-600 h-2.5 rounded-full" style="width: 100%"></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="border-b border-gray-200 pb-4 last:border-b-0 last:pb-0">
-          <h3 class="font-semibold text-lg text-gray-900">New Feature Announcement</h3>
-          <p class="text-xs text-gray-500">2024-02-01 - 2024-02-28</p>
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-2">
-            <div>
-              <p class="text-lg font-bold text-gray-900">2100</p>
-              <p class="text-sm text-gray-500">Contacts</p>
-            </div>
-            <div>
-              <p class="text-lg font-bold text-gray-900">0</p>
-              <p class="text-sm text-gray-500">Sent</p>
-            </div>
-            <div>
-              <p class="text-lg font-bold text-gray-900">0</p>
-              <p class="text-sm text-gray-500">Opened</p>
-            </div>
-            <div>
-              <p class="text-lg font-bold text-gray-900">0</p>
-              <p class="text-sm text-gray-500">Clicked</p>
-            </div>
-          </div>
-          <div class="mt-4">
-            <p class="text-sm font-semibold text-gray-700 mb-1">Progress</p>
-            <div class="w-full bg-gray-200 rounded-full h-2.5">
-              <div class="bg-purple-600 h-2.5 rounded-full" style="width: 25%"></div>
-            </div>
-          </div>
-        </div>
+      <!-- Pie Chart -->
+      <div class="bg-white p-4 rounded-lg shadow mt-6">
+        <h3 class="text-md font-semibold text-gray-700 mb-2">Success Rate</h3>
+        <canvas baseChart
+                [data]="{ labels: pieChartLabels, datasets: pieChartData }"
+                [options]="pieChartOptions"
+                chartType="pie">
+        </canvas>
       </div>
     </div>
 
+    <!-- Right Side Column -->
     <div class="flex flex-col space-y-6">
+      <!-- Quick Actions -->
       <div class="bg-white p-6 rounded-lg shadow-md">
         <h2 class="text-xl font-bold text-gray-900 mb-4">Quick Actions</h2>
         <ul class="space-y-3">
@@ -216,6 +165,7 @@
         </ul>
       </div>
 
+      <!-- Today's Summary -->
       <div class="bg-white p-6 rounded-lg shadow-md">
         <h2 class="text-xl font-bold text-gray-900 mb-4">Today's Summary</h2>
         <div class="space-y-2">

@@ -36,6 +36,21 @@ const routes: Routes = [
         (m) => m.MessageTemplateModule
       ),
   },
+  {
+    path: 'campaign',
+    component: MainLayoutComponent,
+
+    loadChildren: () =>
+      import('./features/campaign/campaign.module').then(
+        (m) => m.CampaignModule
+      ),
+  },
+  {
+  path: 'settings',
+  component: MainLayoutComponent,
+  loadChildren: () =>
+    import('./features/settings/settings.module').then(m => m.SettingsModule),
+},
   { path: '**', redirectTo: '' },
 ];
 

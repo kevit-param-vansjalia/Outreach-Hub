@@ -1,71 +1,127 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { MessageTemplateService } from '../message-template.service';
 
-interface Template {
-  title: string;
-  category: string;
-  preview: string;
-  used: number;
-  openRate: string;
-  clickRate: string;
-  lastModified: string;
+interface MessageTemplate {
+  _id?: string;
+  name: string;
+  type: 'Text' | 'Text-Image';
+  message: { text: string };
+  workspaceId: string;
 }
 
 @Component({
-  selector: 'app-message-list',                   // ✅ fixed selector
-  templateUrl: './message-list.component.html',   // ✅ correct template
-  styleUrls: ['./message-list.component.scss']    // ✅ optional SCSS
+  selector: 'app-message-list',
+  templateUrl: './message-list.component.html',
+  styleUrls: ['./message-list.component.scss']
 })
-export class MessageListComponent {
-  templates: Template[] = [
-    {
-      title: 'Product Launch Announcement',
-      category: 'Announcements',
-      preview:
-        'Exciting News: {ProductName} Is Here! Hi {FirstName}, We’re thrilled to announce...',
-      used: 24,
-      openRate: '68.2%',
-      clickRate: '12.4%',
-      lastModified: '2024-01-15'
-    },
-    {
-      title: 'Welcome Email Series - Part 1',
-      category: 'Onboarding',
-      preview:
-        'Welcome to {CompanyName}! Let’s get you started. Welcome {FirstName}! ...',
-      used: 156,
-      openRate: '82.1%',
-      clickRate: '23.7%',
-      lastModified: '2024-01-10'
-    },
-    {
-      title: 'Follow-up After Demo',
-      category: 'Sales',
-      preview:
-        'Thanks for your time today - Next steps. Hi {FirstName}, Thank you...',
-      used: 89,
-      openRate: '71.5%',
-      clickRate: '18.9%',
-      lastModified: '2024-01-08'
-    },
-    {
-      title: 'Customer Feedback Request',
-      category: 'Feedback',
-      preview:
-        'We’d love your feedback on {productName}! Hi {FirstName}, We’re hoping...',
-      used: 45,
-      openRate: '64.8%',
-      clickRate: '31.2%',
-      lastModified: '2024-01-12'
-    },
-    {
-      title: 'Event Invitation',
-      category: 'Events',
-      preview:
-        "You're invited: {eventName} - {eventDate}. Hi {FirstName}, You're cordially...",
-      used: 12,
-      openRate: '59.3%',
-      clickRate: '15.8%',
-      lastModified: '2024-01-14'
-    }
-  ];
+export class MessageListComponent implements OnInit {
+  templates: MessageTemplate[] = [];
+
+  // Modal state
+  showTemplateModal = false;
+  modalMode: 'add' | 'details' | 'edit' = 'add';
+  selectedTemplate: MessageTemplate | null = null;
+
+  // Form model
+  templateForm: { [key: string]: string } = {
+    name: '',
+    type: '',
+    messageText: ''
+  };
+
+  constructor(private messageTemplateService: MessageTemplateService) {}
+
+  ngOnInit(): void {
+    this.loadTemplates();
+  }
+
+  loadTemplates() {
+    this.messageTemplateService.getTemplates().subscribe({
+      next: (data) => this.templates = data,
+      error: (err) => console.error('Error fetching templates:', err)
+    });
+  }
+
+  openAddTemplateModal() {
+    this.modalMode = 'add';
+    this.resetForm();
+    this.showTemplateModal = true;
+  }
+
+  openTemplateDetails(template: MessageTemplate) {
+    this.selectedTemplate = template;
+    this.modalMode = 'details';
+    this.showTemplateModal = true;
+  }
+
+  openEditTemplate(template: MessageTemplate) {
+    this.selectedTemplate = template;
+    this.modalMode = 'edit';
+    this.templateForm = {
+      name: template.name,
+      type: template.type,
+      messageText: template.message.text
+    };
+    this.showTemplateModal = true;
+  }
+
+  closeTemplateModal() {
+    this.showTemplateModal = false;
+    this.selectedTemplate = null;
+    this.resetForm();
+  }
+
+  saveTemplate() {
+    const newTemplate: MessageTemplate = {
+      name: this.templateForm['name'],
+      type: this.templateForm['type'] as 'Text' | 'Text-Image',
+      message: { text: this.templateForm['messageText'] },
+      workspaceId: '68932904349fdbf48847312a'
+    };
+
+    this.messageTemplateService.createTemplate(newTemplate).subscribe({
+      next: (created) => {
+        this.templates.unshift(created);
+        this.closeTemplateModal();
+      },
+      error: (err) => console.error('Error creating template:', err)
+    });
+  }
+
+  updateTemplate() {
+    if (!this.selectedTemplate) return;
+
+    const updatedTemplate: Partial<MessageTemplate> = {
+      name: this.templateForm['name'],
+      type: this.templateForm['type'] as 'Text' | 'Text-Image',
+      message: { text: this.templateForm['messageText'] }
+    };
+
+    this.messageTemplateService.updateTemplate(this.selectedTemplate._id!, updatedTemplate).subscribe({
+      next: (res) => {
+        const index = this.templates.findIndex(t => t._id === this.selectedTemplate?._id);
+        if (index > -1) this.templates[index] = res;
+        this.closeTemplateModal();
+      },
+      error: (err) => console.error('Error updating template:', err)
+    });
+  }
+
+  deleteTemplate(template: MessageTemplate) {
+    if (!confirm(`Are you sure you want to delete "${template.name}"?`)) return;
+
+    this.messageTemplateService.deleteTemplate(template._id!).subscribe({
+      next: () => {
+        this.templates = this.templates.filter(t => t._id !== template._id);
+        if (this.selectedTemplate?._id === template._id) {
+          this.closeTemplateModal();
+        }
+      },
+      error: (err) => console.error('Error deleting template:', err)
+    });
+  }
+
+  private resetForm() {
+    this.templateForm = { name: '', type: '', messageText: '' };
+  }
 }

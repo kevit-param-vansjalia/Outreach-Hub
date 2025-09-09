@@ -7,17 +7,14 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
-import { DashboardComponent } from './features/dashboard/dashboard.component';
-import { MessageListComponent } from './features/message-template/message-list/message-list.component';
-import { CampaignComponent } from './features/campaign/campaign.component';
 
 import { LayoutModule } from './shared/layout/layout.module';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { AuthInterceptor } from './core/auth/auth.interceptor';
 
 @NgModule({
   declarations: [
     AppComponent,
-    DashboardComponent,
-    CampaignComponent
   ],
   imports: [
     BrowserModule,
@@ -25,9 +22,10 @@ import { LayoutModule } from './shared/layout/layout.module';
     BrowserAnimationsModule,
     CommonModule,
     ReactiveFormsModule,
-    LayoutModule           
+    LayoutModule,
+    HttpClientModule           
   ],
-  providers: [],
+  providers: [{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
