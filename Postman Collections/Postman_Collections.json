@@ -729,6 +729,34 @@
 						"disableBodyPruning": true
 					},
 					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2ODkyZWYzODUzMWJkNTFhNzQxOTEwOGQiLCJlbWFpbCI6InBhcmFtMTIzQGdtYWlsLmNvbSIsImlhdCI6MTc1NzM5ODY2MSwiZXhwIjoxNzU3Mzk5NTYxfQ.6jI2dnelhYfHGCj6VQ2Rf_a1DutMdNiK2iySumCyDRM",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"workspace\": \"68932904349fdbf48847312a\",\n    \"campaign\": \"689c79e14c67ab3e35fdbd65\",\n    \"contactIds\": [\"68be75328d5f6f2f4a56ff6f\"],\n    \"messageContent\": \"My name is Param\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:3000/campaignMessage/create"
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"id": "591d4eb7-b123-47bb-b25d-3e04784e8395",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
 						"method": "GET",
 						"header": []
 					},
