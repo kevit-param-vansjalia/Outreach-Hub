@@ -718,6 +718,24 @@
 				}
 			],
 			"id": "f0343e67-32f1-4a14-8e6e-cf1368c8b85e"
+		},
+		{
+			"name": "CampaignMessages",
+			"item": [
+				{
+					"name": "New Request",
+					"id": "aa55f40e-4659-4aaa-96a5-94f51da3c50c",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			],
+			"id": "66cc398a-16a7-43bc-895a-900b5fa18c28"
 		}
 	]
 }
