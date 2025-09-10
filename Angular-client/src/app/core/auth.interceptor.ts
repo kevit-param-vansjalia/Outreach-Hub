@@ -8,7 +8,7 @@ import {
 } from '@angular/common/http';
 import { Observable, throwError, BehaviorSubject } from 'rxjs';
 import { catchError, filter, take, switchMap } from 'rxjs/operators';
-import { RefreshTokenService } from '../refresh-token.service';
+import { RefreshTokenService } from './refresh-token.service';
 import { Router } from '@angular/router';
 
 @Injectable()
@@ -55,11 +55,9 @@ export class AuthInterceptor implements HttpInterceptor {
       return this.refreshTokenService.refreshToken().pipe(
         switchMap((token: any) => {
           this.isRefreshing = false;
-          // FIX: Correctly access the camelCase keys from the backend response
-          localStorage.setItem('access_token', token.accessToken);
-          localStorage.setItem('refresh_token', token.refreshToken);
-          this.refreshTokenSubject.next(token.accessToken);
-          return next.handle(this.addToken(request, token.accessToken));
+          localStorage.setItem('access_token', token.access_token);
+          this.refreshTokenSubject.next(token.access_token);
+          return next.handle(this.addToken(request, token.access_token));
         }),
         catchError((err) => {
           this.isRefreshing = false;

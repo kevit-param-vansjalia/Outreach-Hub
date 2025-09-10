@@ -49,7 +49,7 @@ export class LoginComponent implements OnInit {
   isLoading: boolean = false;
   buttonState: string = 'inactive';
 
-  constructor(private fb: FormBuilder, private router: Router,  private authService: AuthService) {
+  constructor(private fb: FormBuilder, private router: Router, private authService: AuthService) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]]
@@ -77,7 +77,7 @@ export class LoginComponent implements OnInit {
 
       const { email, password} = this.loginForm.value;
 
-      this.authService.login({ email, password}).subscribe({
+      this.authService.login({ email, password }).subscribe({
         next: (response) => {
           this.isLoading = false;
           this.buttonState = 'inactive';
@@ -87,16 +87,15 @@ export class LoginComponent implements OnInit {
 
           const decoded: any = jwtDecode(response.accessToken);
           if (decoded && decoded.sub) {
-          localStorage.setItem('userId', decoded.sub);
-         }
+            localStorage.setItem('userId', decoded.sub);
+          }
 
           this.router.navigate(['/dashboard']);
         },
-
         error: (err) => {
           this.isLoading = false;
           this.buttonState = 'inactive';
-          console.error(' Login Error', err);
+          console.error('Login Error', err);
           alert('Invalid Email or Password');
         }
       });

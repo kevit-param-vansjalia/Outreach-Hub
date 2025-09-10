@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 export interface Campaign {
@@ -7,12 +7,13 @@ export interface Campaign {
   name: string;
   description?: string;
   selectedTags?: string[];
-  message: {
+  message?: {
     type: 'Text' | 'Text-Image';
     text: string;
     imageUrl?: string;
     templateId?: string;
   };
+  templateId?: string;
   status: 'Draft' | 'Running' | 'Completed';
   workspaceId: string;
 }
@@ -25,7 +26,6 @@ export class CampaignService {
 
   constructor(private http: HttpClient) {}
 
-  // ✅ Fetch campaigns by workspace
   getCampaigns(workspaceId: string): Observable<Campaign[]> {
     return this.http.get<Campaign[]>(`${this.apiUrl}/getByWorkspace/${workspaceId}`);
   }

@@ -3,6 +3,7 @@ import { CampaignService, Campaign } from '../campaign.service';
 import { MessageTemplateService, MessageTemplate } from '../../message-template/message-template.service';
 import { ContactsService } from '../../contacts/contacts.service';
 import { CampaignMessageService } from '../campaign-message.service';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-campaign-list',
@@ -48,31 +49,29 @@ export class CampaignListComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.fetchCampaigns();
-    this.loadMessageTemplates();
+    this.fetchCampaignsAndTemplates();
   }
 
-  fetchCampaigns() {
-    this.campaignService.getCampaigns(this.workspaceId).subscribe({
+  fetchCampaignsAndTemplates() {
+    forkJoin({
+      campaigns: this.campaignService.getCampaigns(this.workspaceId),
+      templates: this.messageTemplateService.getTemplates()
+    }).subscribe({
       next: (res) => {
-        this.campaigns = res.map(c => ({
-          ...c,
-          selectedTags: c.selectedTags || [],
-          message: c.message || { type: 'Text', text: '', imageUrl: '' }
-        }));
-      },
-      error: (err) => console.error('Error fetching campaigns:', err)
-    });
-  }
-
-  loadMessageTemplates() {
-    this.messageTemplateService.getTemplates().subscribe({
-      next: (res) => {
-        this.messageTemplates = res.filter(
+        this.messageTemplates = res.templates.filter(
           t => !t.workspaceId || String(t.workspaceId) === this.workspaceId
         );
+        this.campaigns = res.campaigns.map(c => ({
+          ...c,
+          selectedTags: c.selectedTags || [],
+          message: c.templateId
+            ? this.getMessageFromTemplate(c.templateId)
+            : { type: 'Text', text: '', imageUrl: '' }
+        }));
       },
-      error: (err) => console.error('Error loading message templates:', err)
+      error: (err) => {
+        console.error('Error fetching data:', err);
+      }
     });
   }
 
@@ -116,14 +115,16 @@ export class CampaignListComponent implements OnInit {
   openEditCampaign(campaign: Campaign) {
     this.selectedCampaign = campaign;
     this.modalMode = 'edit';
+    const messageDetails = this.getMessageFromTemplate(campaign.templateId);
+    
     this.campaignForm = {
       name: campaign.name,
       description: campaign.description || '',
       selectedTags: (campaign.selectedTags || []).join(', '),
-      selectedTemplateId: campaign.message?.templateId ?? undefined,
-      messageType: campaign.message?.type ?? 'Text',
-      messageText: campaign.message?.text ?? '',
-      messageImageUrl: campaign.message?.imageUrl ?? '',
+      selectedTemplateId: campaign.templateId ?? undefined,
+      messageType: messageDetails.type,
+      messageText: messageDetails.text,
+      messageImageUrl: messageDetails.imageUrl,
       status: campaign.status ?? 'Draft',
     };
     this.showCampaignModal = true;
@@ -143,63 +144,58 @@ export class CampaignListComponent implements OnInit {
   const selectedTemplate = this.messageTemplates.find(
     t => t._id === this.campaignForm.selectedTemplateId
   );
-
-  // Build message object with type enforced
-  const messageObj = selectedTemplate
-    ? {
-        type: selectedTemplate.type || 'Text', // ensure type exists
-        text: selectedTemplate.message?.text || '',
-        imageUrl: selectedTemplate.message?.imageUrl || '',
-        templateId: selectedTemplate._id
-      }
-    : {
-        type: this.campaignForm.messageType as 'Text' | 'Text-Image',
-        text: this.campaignForm.messageText,
-        imageUrl: this.campaignForm.messageImageUrl || ''
-      };
-
-  // Build campaign payload
+  
   const payload = {
     name: this.campaignForm.name,
     description: this.campaignForm.description,
     selectedTags: tagsArray,
     templateId: selectedTemplate?._id,
-    message: messageObj,          // ✅ type now guaranteed
     workspaceId: this.workspaceId,
     createdBy: localStorage.getItem('userId') || 'defaultUserId'
   };
 
-  // 1) Create campaign
+  const messageContent = this.campaignForm.messageText;
+
   this.campaignService.createCampaign(payload).subscribe({
     next: (created) => {
-      // Add campaign locally
+      const messageForLocalState = created.templateId
+        ? this.getMessageFromTemplate(created.templateId)
+        : {
+            type: this.campaignForm.messageType as 'Text' | 'Text-Image',
+            text: this.campaignForm.messageText,
+            imageUrl: this.campaignForm.messageImageUrl || ''
+          };
+
       this.campaigns.unshift({
         ...created,
         selectedTags: created.selectedTags || [],
-        message: created.message || { type: 'Text', text: '', imageUrl: '' }
+        message: messageForLocalState
       });
 
-      // 2) If tags exist, fetch contacts
       if (tagsArray.length > 0) {
         this.contactService.getContactsByTags(this.workspaceId, tagsArray).subscribe({
           next: (contacts) => {
             const contactIds = contacts.map(c => c._id!).filter(Boolean);
 
-            // 3) Campaign message payload
-            const msgPayload = {
-              workspace: this.workspaceId,
-              campaign: created._id!,
-              contactIds,
-              messageContent: messageObj.text
-            };
+            if (contactIds.length > 0) {
+              const msgPayload = {
+                workspace: this.workspaceId,
+                campaign: created._id!,
+                contactIds,
+                messageContent: messageContent
+              };
 
-            this.campaignMessageService.create(msgPayload).subscribe({
-              next: () => this.closeCampaignModal(),
-              error: (err) => {
-                console.error('Error creating campaign message:', err);
-                this.closeCampaignModal();
-              }
-            });
+              this.campaignMessageService.create(msgPayload).subscribe({
+                next: () => this.closeCampaignModal(),
+                error: (err) => {
+                  console.error('Error creating campaign message:', err);
+                  this.closeCampaignModal();
+                }
+              });
+            } else {
+              console.warn('No contacts found for selected tags. Campaign created without messages.');
+              this.closeCampaignModal();
+            }
           },
           error: (err) => {
             console.error('Error fetching contacts by tags:', err);
@@ -211,12 +207,10 @@ export class CampaignListComponent implements OnInit {
       }
     },
     error: (err) => {
-      console.error('Error creating campaign:', err);
+      console.error('Error creating campaign:', err)
     }
   });
 }
-
-
 
   updateCampaign() {
     if (!this.selectedCampaign) return;
@@ -227,22 +221,28 @@ export class CampaignListComponent implements OnInit {
 
     const selectedTemplate = this.messageTemplates.find(t => t._id === this.campaignForm.selectedTemplateId);
 
-    const messageObj = selectedTemplate
-      ? { type: selectedTemplate.type, text: selectedTemplate.message.text, imageUrl: selectedTemplate.message.imageUrl, templateId: selectedTemplate._id }
-      : { type: (this.campaignForm.messageType as 'Text' | 'Text-Image'), text: this.campaignForm.messageText, imageUrl: this.campaignForm.messageImageUrl };
-
+    // FIX: The payload now correctly includes the status from the form
     const payload: Partial<Campaign> = {
       name: this.campaignForm.name,
       description: this.campaignForm.description,
       selectedTags: tagsArray,
-      message: messageObj as any,
+      templateId: selectedTemplate?._id,
       status: this.campaignForm.status as ('Draft'|'Running'|'Completed')
     };
 
     this.campaignService.updateCampaign(this.selectedCampaign._id!, payload).subscribe({
       next: (res) => {
         const index = this.campaigns.findIndex(c => c._id === res._id);
-        if (index !== -1) this.campaigns[index] = { ...res, selectedTags: res.selectedTags || [], message: res.message || { type: 'Text', text: '', imageUrl: '' } };
+        if (index !== -1) {
+          const updatedMessage = this.getMessageFromTemplate(res.templateId);
+          // FIX: The local state is updated with all properties from the server response, including the new status
+          this.campaigns[index] = { 
+            ...res, 
+            selectedTags: res.selectedTags || [], 
+            message: updatedMessage,
+            status: res.status 
+          };
+        }
         this.closeCampaignModal();
       },
       error: (err) => console.error('Error updating campaign:', err)
@@ -261,8 +261,18 @@ export class CampaignListComponent implements OnInit {
     });
   }
 
+  private getMessageFromTemplate(templateId?: string): { type: 'Text' | 'Text-Image', text: string, imageUrl?: string } {
+    const template = this.messageTemplates.find(t => t._id === templateId);
+    if (template) {
+      const type = template.type as 'Text' | 'Text-Image';
+      return { type, text: template.message.text, imageUrl: template.message.imageUrl };
+    } else {
+      return { type: 'Text', text: '', imageUrl: '' };
+    }
+  }
+
   private resetForm() {
-    this.campaignForm = {
+      this.campaignForm = {
       name: '',
       description: '',
       selectedTags: '',

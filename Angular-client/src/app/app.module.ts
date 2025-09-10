@@ -11,6 +11,7 @@ import { AppComponent } from './app.component';
 import { LayoutModule } from './shared/layout/layout.module';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AuthInterceptor } from './core/auth/auth.interceptor';
+import { RefreshTokenService } from './core/refresh-token.service';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,7 @@ import { AuthInterceptor } from './core/auth/auth.interceptor';
     LayoutModule,
     HttpClientModule           
   ],
-  providers: [{ provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },],
+  providers: [RefreshTokenService, { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

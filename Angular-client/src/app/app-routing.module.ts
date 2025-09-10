@@ -1,17 +1,10 @@
-// src/app/app-routing.module.ts
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { MainLayoutComponent } from './shared/layout/main-layout/main-layout.component';
 import { AuthLayoutComponent } from './shared/layout/auth-layout/auth-layout.component';
-
+import { AuthGuard } from './core/auth/auth.guard';
 
 const routes: Routes = [
-  {
-    path: 'dashboard',
-    component: MainLayoutComponent,
-    loadChildren: () =>
-      import('./features/dashboard/dashboard.module').then((m) => m.DashboardModule),
-  },
   {
     path: '',
     component: AuthLayoutComponent,
@@ -19,9 +12,16 @@ const routes: Routes = [
       import('./core/auth/auth.module').then((m) => m.AuthModule),
   },
   {
+    path: 'dashboard',
+    component: MainLayoutComponent,
+    canActivate: [AuthGuard],
+    loadChildren: () =>
+      import('./features/dashboard/dashboard.module').then((m) => m.DashboardModule),
+  },
+  {
     path: 'contacts',
     component: MainLayoutComponent,
-
+    canActivate: [AuthGuard],
     loadChildren: () =>
       import('./features/contacts/contacts.module').then(
         (m) => m.ContactsModule
@@ -30,7 +30,7 @@ const routes: Routes = [
   {
     path: 'message-template',
     component: MainLayoutComponent,
-
+    canActivate: [AuthGuard],
     loadChildren: () =>
       import('./features/message-template/message-template.module').then(
         (m) => m.MessageTemplateModule
@@ -39,7 +39,7 @@ const routes: Routes = [
   {
     path: 'campaign',
     component: MainLayoutComponent,
-
+    canActivate: [AuthGuard],
     loadChildren: () =>
       import('./features/campaign/campaign.module').then(
         (m) => m.CampaignModule
@@ -48,9 +48,11 @@ const routes: Routes = [
   {
   path: 'settings',
   component: MainLayoutComponent,
+  canActivate: [AuthGuard],
   loadChildren: () =>
     import('./features/settings/settings.module').then(m => m.SettingsModule),
 },
+  // Catch-all route to redirect to the login path
   { path: '**', redirectTo: '' },
 ];
 

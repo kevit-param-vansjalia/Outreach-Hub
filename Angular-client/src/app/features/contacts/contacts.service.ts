@@ -22,7 +22,7 @@ export class ContactsService {
   constructor(private http: HttpClient) { }
 
   // Get all contacts for the logged-in user
-  getContactsByUser(): Observable<Contact[]> {
+   getContactsByUser(): Observable<Contact[]> {
     return this.http.get<Contact[]>(`${this.apiUrl}/my-contacts`);
   }
 
