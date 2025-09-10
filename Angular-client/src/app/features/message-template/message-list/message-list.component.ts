@@ -5,7 +5,7 @@ interface MessageTemplate {
   _id?: string;
   name: string;
   type: 'Text' | 'Text-Image';
-  message: { text: string };
+  message: { text: string, imageUrl?: string };
   workspaceId: string;
 }
 
@@ -22,11 +22,17 @@ export class MessageListComponent implements OnInit {
   modalMode: 'add' | 'details' | 'edit' = 'add';
   selectedTemplate: MessageTemplate | null = null;
 
-  // Form model
-  templateForm: { [key: string]: string } = {
+  // FIX: Define a specific type for templateForm
+  templateForm: {
+    name: string;
+    type: string;
+    messageText: string;
+    messageImageUrl: string;
+  } = {
     name: '',
     type: '',
-    messageText: ''
+    messageText: '',
+    messageImageUrl: ''
   };
 
   constructor(private messageTemplateService: MessageTemplateService) {}
@@ -60,7 +66,8 @@ export class MessageListComponent implements OnInit {
     this.templateForm = {
       name: template.name,
       type: template.type,
-      messageText: template.message.text
+      messageText: template.message.text,
+      messageImageUrl: template.message.imageUrl || ''
     };
     this.showTemplateModal = true;
   }
@@ -72,10 +79,15 @@ export class MessageListComponent implements OnInit {
   }
 
   saveTemplate() {
+    const message = {
+      text: this.templateForm.messageText,
+      ...(this.templateForm.type === 'Text-Image' && { imageUrl: this.templateForm.messageImageUrl })
+    };
+    
     const newTemplate: MessageTemplate = {
-      name: this.templateForm['name'],
-      type: this.templateForm['type'] as 'Text' | 'Text-Image',
-      message: { text: this.templateForm['messageText'] },
+      name: this.templateForm.name,
+      type: this.templateForm.type as 'Text' | 'Text-Image',
+      message: message,
       workspaceId: '68932904349fdbf48847312a'
     };
 
@@ -91,10 +103,15 @@ export class MessageListComponent implements OnInit {
   updateTemplate() {
     if (!this.selectedTemplate) return;
 
+    const message = {
+      text: this.templateForm.messageText,
+      ...(this.templateForm.type === 'Text-Image' && { imageUrl: this.templateForm.messageImageUrl })
+    };
+
     const updatedTemplate: Partial<MessageTemplate> = {
-      name: this.templateForm['name'],
-      type: this.templateForm['type'] as 'Text' | 'Text-Image',
-      message: { text: this.templateForm['messageText'] }
+      name: this.templateForm.name,
+      type: this.templateForm.type as 'Text' | 'Text-Image',
+      message: message
     };
 
     this.messageTemplateService.updateTemplate(this.selectedTemplate._id!, updatedTemplate).subscribe({
@@ -122,6 +139,6 @@ export class MessageListComponent implements OnInit {
   }
 
   private resetForm() {
-    this.templateForm = { name: '', type: '', messageText: '' };
+    this.templateForm = { name: '', type: '', messageText: '', messageImageUrl: '' };
   }
 }
