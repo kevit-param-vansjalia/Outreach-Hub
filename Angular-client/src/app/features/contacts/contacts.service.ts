@@ -22,9 +22,16 @@ export class ContactsService {
   constructor(private http: HttpClient) {}
 
   // Get all contacts for the logged-in user
-  getContactsByUser(): Observable<Contact[]> {
-    return this.http.get<Contact[]>(`${this.apiUrl}/my-contacts`);
-  }
+  getContactsByUser(workspaceId?: string): Observable<Contact[]> {
+    const wsId = workspaceId || localStorage.getItem('workspaceId') || '';
+    return this.http.get<Contact[]>(`${this.apiUrl}/my-contacts?workspaceId=${wsId}`);
+}
+
+
+// Get all contacts in the current workspace
+getContactsByWorkspace(workspaceId: string): Observable<Contact[]> {
+  return this.http.get<Contact[]>(`${this.apiUrl}/workspace/${workspaceId}/all`);
+}
 
   // Create new contact (do NOT send createdBy, backend sets it)
   createContact(payload: Partial<Contact>): Observable<Contact> {

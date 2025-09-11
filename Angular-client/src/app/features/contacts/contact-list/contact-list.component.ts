@@ -1,6 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ContactsService, Contact } from '../contacts.service';
 
+interface ContactForm {
+  name: string;
+  phoneNumber: string;
+  tags: string;
+}
+
 @Component({
   selector: 'app-contact-list',
   templateUrl: './contact-list.component.html',
@@ -9,13 +15,16 @@ import { ContactsService, Contact } from '../contacts.service';
 export class ContactListComponent implements OnInit {
   contacts: Contact[] = [];
 
+  // Toggle view state
+  viewMode: 'my' | 'workspace' = 'my';
+
   // Modal state
   showContactModal = false;
   modalMode: 'add' | 'details' | 'edit' = 'add';
   selectedContact: Contact | null = null;
 
-  // Form model
-  contactForm: { [key: string]: string } = {
+  // Strongly typed form model
+  contactForm: ContactForm = {
     name: '',
     phoneNumber: '',
     tags: ''
@@ -28,10 +37,23 @@ export class ContactListComponent implements OnInit {
   }
 
   loadContacts() {
-    this.contactsService.getContactsByUser().subscribe({
-      next: (data: Contact[]) => this.contacts = data,
-      error: (err) => console.error('Error fetching contacts:', err)
-    });
+    if (this.viewMode === 'my') {
+      this.contactsService.getContactsByUser().subscribe({
+        next: (data: Contact[]) => (this.contacts = data),
+        error: (err) => console.error('Error fetching user contacts:', err)
+      });
+    } else {
+      const workspaceId = localStorage.getItem('workspaceId') || '';
+      this.contactsService.getContactsByWorkspace(workspaceId).subscribe({
+        next: (data: Contact[]) => (this.contacts = data),
+        error: (err) => console.error('Error fetching workspace contacts:', err)
+      });
+    }
+  }
+
+  switchView(mode: 'my' | 'workspace') {
+    this.viewMode = mode;
+    this.loadContacts();
   }
 
   openAddContactModal() {
@@ -64,38 +86,39 @@ export class ContactListComponent implements OnInit {
   }
 
   saveContact() {
-  const newContact = {
-    name: this.contactForm['name'],
-    phoneNumber: this.contactForm['phoneNumber'],
-    tags: this.contactForm['tags']
-      ? this.contactForm['tags'].split(',').map(tag => tag.trim())
-      : [],
-    workspaceId: localStorage.getItem('workspaceId') || ''
-  };
+    const newContact = {
+      name: this.contactForm.name,
+      phoneNumber: this.contactForm.phoneNumber,
+      tags: this.contactForm.tags
+        ? this.contactForm.tags.split(',').map((tag) => tag.trim())
+        : [],
+      workspaceId: localStorage.getItem('workspaceId') || ''
+    };
 
-  // Backend will automatically set createdBy from JWT
-  this.contactsService.createContact(newContact).subscribe({
-    next: (created: Contact) => {
-      this.contacts.unshift(created);
-      this.closeContactModal();
-    },
-    error: (err) => console.error('Error creating contact:', err)
-  });
-}
+    // Backend will automatically set createdBy from JWT
+    this.contactsService.createContact(newContact).subscribe({
+      next: (created: Contact) => {
+        this.contacts.unshift(created);
+        this.closeContactModal();
+      },
+      error: (err) => console.error('Error creating contact:', err)
+    });
+  }
+
   updateContact() {
     if (!this.selectedContact) return;
 
     const updated = {
-      name: this.contactForm['name'],
-      phoneNumber: this.contactForm['phoneNumber'],
-      tags: this.contactForm['tags']
-        ? this.contactForm['tags'].split(',').map(tag => tag.trim())
+      name: this.contactForm.name,
+      phoneNumber: this.contactForm.phoneNumber,
+      tags: this.contactForm.tags
+        ? this.contactForm.tags.split(',').map((tag) => tag.trim())
         : []
     };
 
     this.contactsService.updateContact(this.selectedContact._id, updated).subscribe({
       next: (res: Contact) => {
-        const index = this.contacts.findIndex(c => c._id === this.selectedContact?._id);
+        const index = this.contacts.findIndex((c) => c._id === this.selectedContact?._id);
         if (index > -1) this.contacts[index] = res;
         this.closeContactModal();
       },
@@ -108,7 +131,7 @@ export class ContactListComponent implements OnInit {
 
     this.contactsService.deleteContact(contact._id).subscribe({
       next: () => {
-        this.contacts = this.contacts.filter(c => c._id !== contact._id);
+        this.contacts = this.contacts.filter((c) => c._id !== contact._id);
         if (this.selectedContact?._id === contact._id) {
           this.closeContactModal();
         }

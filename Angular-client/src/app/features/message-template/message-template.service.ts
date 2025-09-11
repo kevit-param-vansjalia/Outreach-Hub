@@ -23,8 +23,11 @@ export class MessageTemplateService {
 
   constructor(private http: HttpClient) {}
 
-  getTemplates(): Observable<MessageTemplate[]> {
-    return this.http.get<MessageTemplate[]>(`${this.baseUrl}/get`);
+  getTemplates(workspaceId: string): Observable<MessageTemplate[]> {
+    if (!workspaceId) {
+      return this.http.get<MessageTemplate[]>(`${this.baseUrl}/get`); // Fallback, though should be avoided
+    }
+    return this.http.get<MessageTemplate[]>(`${this.baseUrl}/get-by-workspace/${workspaceId}`);
   }
 
   createTemplate(template: Partial<MessageTemplate>): Observable<MessageTemplate> {

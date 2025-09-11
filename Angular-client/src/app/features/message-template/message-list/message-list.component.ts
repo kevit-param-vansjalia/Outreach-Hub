@@ -42,7 +42,8 @@ export class MessageListComponent implements OnInit {
   }
 
   loadTemplates() {
-    this.messageTemplateService.getTemplates().subscribe({
+    const workspaceId = localStorage.getItem('workspaceId') || '';
+    this.messageTemplateService.getTemplates(workspaceId).subscribe({
       next: (data) => this.templates = data,
       error: (err) => console.error('Error fetching templates:', err)
     });

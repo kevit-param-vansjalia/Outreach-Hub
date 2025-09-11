@@ -16,6 +16,32 @@
     </button>
   </div>
 
+  <!-- Toggle Section -->
+  <div class="flex space-x-4 mb-6">
+    <button
+      class="px-4 py-2 rounded-lg font-medium transition"
+      [ngClass]="
+        viewMode === 'my'
+          ? 'bg-purple-600 text-white shadow'
+          : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+      "
+      (click)="switchView('my')"
+    >
+      My Contacts
+    </button>
+    <button
+      class="px-4 py-2 rounded-lg font-medium transition"
+      [ngClass]="
+        viewMode === 'workspace'
+          ? 'bg-purple-600 text-white shadow'
+          : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+      "
+      (click)="switchView('workspace')"
+    >
+      Workspace Contacts
+    </button>
+  </div>
+
   <!-- Search + Filters -->
   <div class="flex items-center space-x-4 mb-8">
     <div class="flex items-center w-full bg-white rounded-lg shadow-sm border border-gray-200 px-4 py-2">
@@ -33,7 +59,7 @@
   </div>
 
   <!-- Contact Grid -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+  <div *ngIf="contacts.length > 0; else noContacts" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
     <div *ngFor="let contact of contacts" class="bg-white p-6 rounded-lg shadow-md border border-gray-200 relative transition-all duration-300 ease-in-out hover:shadow-lg hover:-translate-y-1 hover:bg-gray-50">
       <!-- Contact Info -->
       <div class="flex items-center justify-between mb-2">
@@ -51,50 +77,66 @@
           More details →
         </button>
         <div class="flex space-x-2">
-          <button (click)="openEditContact(contact)" class="p-2 rounded-md hover:bg-gray-100 text-gray-500 hover:text-violet-600" title="Edit Contact">
-            <i class="fas fa-pen w-5 h-5"></i>
+          <button (click)="openEditContact(contact); $event.stopPropagation()" class="p-2 rounded-md hover:bg-gray-100 text-gray-500 hover:text-violet-600" title="Edit Contact">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.5L16.732 3.732z"></path></svg>
           </button>
-          <button (click)="deleteContact(contact)" class="p-2 rounded-md hover:bg-gray-100 text-gray-500 hover:text-red-600" title="Delete Contact">
-            <i class="fas fa-trash w-5 h-5"></i>
+          <button (click)="deleteContact(contact); $event.stopPropagation()" class="p-2 rounded-md hover:bg-gray-100 text-gray-500 hover:text-red-600" title="Delete Contact">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
           </button>
         </div>
       </div>
     </div>
   </div>
-</div>
 
-<!-- Unified Contact Modal -->
-<div *ngIf="showContactModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-  <div class="bg-white rounded-xl shadow-lg w-full max-w-md p-6 relative">
-    <button (click)="closeContactModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">✖</button>
+  <!-- No Contacts -->
+  <ng-template #noContacts>
+    <div class="text-center py-16 bg-white rounded-lg shadow-sm border border-gray-200">
+      <h3 class="text-lg font-semibold text-gray-800">No Contacts Found</h3>
+      <p class="text-gray-500 mt-2">Click "Add Contact" to start building your database.</p>
+    </div>
+  </ng-template>
 
-    <!-- Add / Edit Contact -->
-    <ng-container *ngIf="modalMode === 'add' || modalMode === 'edit'">
-      <h2 class="text-2xl font-bold text-gray-900 mb-4" *ngIf="modalMode==='add'">Add New Contact</h2>
-      <h2 class="text-2xl font-bold text-gray-900 mb-4" *ngIf="modalMode==='edit'">Edit Contact</h2>
-      <form (ngSubmit)="modalMode==='add' ? saveContact() : updateContact()">
-        <div class="mb-4" *ngFor="let field of ['name','phoneNumber','tags']">
-          <label class="block text-sm font-medium text-gray-700 mb-1">{{ field.charAt(0).toUpperCase() + field.slice(1) }}</label>
-          <input type="text" [(ngModel)]="contactForm[field]" name="{{modalMode}}{{field}}" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"/>
+  <!-- Unified Contact Modal -->
+  <div *ngIf="showContactModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+    <div class="bg-white rounded-xl shadow-lg w-full max-w-md p-6 relative">
+      <button (click)="closeContactModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">✖</button>
+
+      <!-- Add / Edit Contact -->
+      <ng-container *ngIf="modalMode === 'add' || modalMode === 'edit'">
+        <h2 class="text-2xl font-bold text-gray-900 mb-4" *ngIf="modalMode==='add'">Add New Contact</h2>
+        <h2 class="text-2xl font-bold text-gray-900 mb-4" *ngIf="modalMode==='edit'">Edit Contact</h2>
+        <form (ngSubmit)="modalMode==='add' ? saveContact() : updateContact()">
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+            <input type="text" [(ngModel)]="contactForm.name" name="name" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"/>
+          </div>
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+            <input type="text" [(ngModel)]="contactForm.phoneNumber" name="phoneNumber" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"/>
+          </div>
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Tags (comma separated)</label>
+            <input type="text" [(ngModel)]="contactForm.tags" name="tags" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500"/>
+          </div>
+          <div class="flex justify-end space-x-3">
+            <button type="button" (click)="closeContactModal()" class="px-4 py-2 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100">Cancel</button>
+            <button type="submit" class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700">Save</button>
+          </div>
+        </form>
+      </ng-container>
+
+      <!-- Contact Details -->
+      <ng-container *ngIf="modalMode === 'details' && selectedContact">
+        <h2 class="text-2xl font-bold text-gray-900 mb-4">{{ selectedContact.name }}</h2>
+        <p class="text-gray-600 mb-2">📞 {{ selectedContact.phoneNumber }}</p>
+        <div class="flex flex-wrap gap-2 mb-4">
+          <span *ngFor="let tag of selectedContact.tags" class="px-2 py-1 text-xs bg-purple-100 text-purple-700 rounded-full">{{ tag }}</span>
         </div>
-        <div class="flex justify-end space-x-3">
-          <button type="button" (click)="closeContactModal()" class="px-4 py-2 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100">Cancel</button>
-          <button type="submit" class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700">Save</button>
+        <div class="flex justify-end space-x-3 mt-6">
+          <button (click)="openEditContact(selectedContact)" class="px-4 py-2 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100">Edit</button>
+          <button (click)="deleteContact(selectedContact); $event.stopPropagation()" class="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700">Delete</button>
         </div>
-      </form>
-    </ng-container>
-
-    <!-- Contact Details -->
-    <ng-container *ngIf="modalMode === 'details' && selectedContact">
-      <h2 class="text-2xl font-bold text-gray-900 mb-4">{{ selectedContact.name }}</h2>
-      <p class="text-gray-600 mb-2">📞 {{ selectedContact.phoneNumber }}</p>
-      <div class="flex flex-wrap gap-2 mb-4">
-        <span *ngFor="let tag of selectedContact.tags" class="px-2 py-1 text-xs bg-purple-100 text-purple-700 rounded-full">{{ tag }}</span>
-      </div>
-      <div class="flex justify-end space-x-3 mt-6">
-        <button (click)="openEditContact(selectedContact)" class="px-4 py-2 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100">Edit</button>
-        <button (click)="deleteContact(selectedContact)" class="px-4 py-2 rounded-lg bg-purple-600 text-white hover:bg-red-700">Delete</button>
-      </div>
-    </ng-container>
+      </ng-container>
+    </div>
   </div>
 </div>

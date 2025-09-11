@@ -55,7 +55,7 @@ export class CampaignListComponent implements OnInit {
   fetchCampaignsAndTemplates() {
     forkJoin({
       campaigns: this.campaignService.getCampaigns(this.workspaceId),
-      templates: this.messageTemplateService.getTemplates()
+      templates: this.messageTemplateService.getTemplates(this.workspaceId)
     }).subscribe({
       next: (res) => {
         this.messageTemplates = res.templates.filter(
