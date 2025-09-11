@@ -19,7 +19,7 @@ export class CampaignListComponent implements OnInit {
 
   messageTemplates: MessageTemplate[] = [];
 
-  private workspaceId = '68932904349fdbf48847312a';
+  private workspaceId = localStorage.getItem('workspaceId') || '';
 
   campaignForm: {
     name: string;

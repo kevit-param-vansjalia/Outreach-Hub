@@ -12,11 +12,21 @@ const routes: Routes = [
       import('./core/auth/auth.module').then((m) => m.AuthModule),
   },
   {
+    path: 'workspace',
+    component: AuthLayoutComponent,
+    loadChildren: () =>
+      import('./core/workspace-selection/workspace-selection.module').then(
+        (m) => m.WorkspaceSelectionModule
+      ),
+  },
+  {
     path: 'dashboard',
     component: MainLayoutComponent,
     canActivate: [AuthGuard],
     loadChildren: () =>
-      import('./features/dashboard/dashboard.module').then((m) => m.DashboardModule),
+      import('./features/dashboard/dashboard.module').then(
+        (m) => m.DashboardModule
+      ),
   },
   {
     path: 'contacts',
@@ -46,18 +56,20 @@ const routes: Routes = [
       ),
   },
   {
-  path: 'settings',
-  component: MainLayoutComponent,
-  canActivate: [AuthGuard],
-  loadChildren: () =>
-    import('./features/settings/settings.module').then(m => m.SettingsModule),
-},
+    path: 'settings',
+    component: MainLayoutComponent,
+    canActivate: [AuthGuard],
+    loadChildren: () =>
+      import('./features/settings/settings.module').then(
+        (m) => m.SettingsModule
+      ),
+  },
   // Catch-all route to redirect to the login path
   { path: '**', redirectTo: '' },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

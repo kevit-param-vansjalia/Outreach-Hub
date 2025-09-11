@@ -8,11 +8,18 @@ export class AuthGuard implements CanActivate {
   constructor(private router: Router) {}
 
   canActivate(): boolean {
-    const accessToken = localStorage.getItem('access_token');
-    if (accessToken) {
-      return true;
+  const accessToken = localStorage.getItem('access_token');
+  const workspaceId = localStorage.getItem('workspaceId'); // 👈 corrected key
+
+  if (accessToken) {
+    if (!workspaceId) {
+      this.router.navigate(['/workspace']);
+      return false;
     }
-    this.router.navigate(['/']); // Redirect to the base path, which should handle the login route
-    return false;
+    return true;
   }
+
+  this.router.navigate(['/']);
+  return false;
+}
 }

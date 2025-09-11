@@ -64,24 +64,24 @@ export class ContactListComponent implements OnInit {
   }
 
   saveContact() {
-    const newContact = {
-      name: this.contactForm['name'],
-      phoneNumber: this.contactForm['phoneNumber'],
-      tags: this.contactForm['tags']
-        ? this.contactForm['tags'].split(',').map(tag => tag.trim())
-        : [],
-      workspaceId: '68932904349fdbf48847312a' 
-    };
+  const newContact = {
+    name: this.contactForm['name'],
+    phoneNumber: this.contactForm['phoneNumber'],
+    tags: this.contactForm['tags']
+      ? this.contactForm['tags'].split(',').map(tag => tag.trim())
+      : [],
+    workspaceId: localStorage.getItem('workspaceId') || ''
+  };
 
-    this.contactsService.createContact(newContact).subscribe({
-      next: (created: Contact) => {
-        this.contacts.unshift(created);
-        this.closeContactModal();
-      },
-      error: (err) => console.error('Error creating contact:', err)
-    });
-  }
-
+  // Backend will automatically set createdBy from JWT
+  this.contactsService.createContact(newContact).subscribe({
+    next: (created: Contact) => {
+      this.contacts.unshift(created);
+      this.closeContactModal();
+    },
+    error: (err) => console.error('Error creating contact:', err)
+  });
+}
   updateContact() {
     if (!this.selectedContact) return;
 

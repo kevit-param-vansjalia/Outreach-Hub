@@ -1,0 +1,26 @@
+<div class="flex justify-center items-center min-h-screen bg-gray-50">
+  <div *ngIf="isLoading" class="text-gray-600 text-lg font-medium">
+    Loading workspaces...
+  </div>
+
+  <div *ngIf="!isLoading && hasNoWorkspaces" class="text-center max-w-md">
+    <h2 class="text-2xl font-bold text-gray-800 mb-4">No Workspaces Found</h2>
+    <p class="text-gray-600">
+      Sorry, you don’t have any workspaces assigned.<br />
+      Please ask your admin to enroll you in a workspace.
+    </p>
+  </div>
+
+  <div *ngIf="!isLoading && !hasNoWorkspaces" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div
+      *ngFor="let workspace of workspaces"
+      (click)="selectWorkspace(workspace)"
+      class="cursor-pointer bg-white p-6 rounded-2xl shadow-md hover:shadow-xl transition duration-300 border border-gray-200 hover:border-purple-500"
+    >
+      <h3 class="text-xl font-semibold text-gray-800 mb-2">
+        {{ workspace.name }}
+      </h3>
+      <p class="text-gray-500">Role: {{ workspace.role }}</p>
+    </div>
+  </div>
+</div>

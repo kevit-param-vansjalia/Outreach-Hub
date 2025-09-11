@@ -88,7 +88,7 @@ export class MessageListComponent implements OnInit {
       name: this.templateForm.name,
       type: this.templateForm.type as 'Text' | 'Text-Image',
       message: message,
-      workspaceId: '68932904349fdbf48847312a'
+      workspaceId: localStorage.getItem('workspaceId') || ''
     };
 
     this.messageTemplateService.createTemplate(newTemplate).subscribe({
