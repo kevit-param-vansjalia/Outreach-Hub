@@ -1,22 +1,40 @@
-import { Body, Controller, Delete, Get, HttpException, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpException, Param, Patch, Post, UseGuards, Req, Query } from '@nestjs/common';
 import { CreateContactDto } from './dtos/CreateContact.dto';
 import { ContactService } from './contact.service';
 import mongoose from 'mongoose';
 import { UpdateContactDto } from './dtos/UpdateContact.dto';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('contact')
+@UseGuards(JwtAuthGuard)
 export class ContactController {
     constructor(private contactsService: ContactService) {}
 
 @Post('create')
-    createcontact(@Body() createcontactDto: CreateContactDto) {
-        console.log(createcontactDto);
+    createcontact(@Body() createcontactDto: CreateContactDto, @Req() req: { user: { sub: string } }) {
+        createcontactDto.createdBy = req.user.sub;
         return this.contactsService.createContact(createcontactDto);
     }
 
 @Get('get')
     getContacts() {
         return this.contactsService.getContacts();
+    }
+
+@Get('my-contacts')
+    getContactsByUser(@Req() req: { user: { sub: string } }, @Query('workspaceId') workspaceId: string) {
+        return this.contactsService.getContactsByUser(req.user.sub, workspaceId);
+    }
+
+@Get('workspace/:workspaceId/all')
+    getContactsByWorkspace(@Param('workspaceId') workspaceId: string) {
+        return this.contactsService.getContactsByWorkspace(workspaceId);
+    }
+
+@Get('workspace/:workspaceId/by-tags')
+    getContactsByTags(@Param('workspaceId') workspaceId: string, @Query('tags') tags: string) {
+        const tagsArray = tags.split(',');
+        return this.contactsService.getContactsByTags(workspaceId, tagsArray);
     }
 
     @Get('get/:id')
@@ -46,5 +64,3 @@ export class ContactController {
         return deleteContact;
     }
 };
-
-

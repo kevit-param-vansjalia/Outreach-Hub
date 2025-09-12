@@ -1,11 +1,15 @@
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import * as jwt from 'jsonwebtoken';
 import { IS_PUBLIC_KEY } from './public.decorator';
+import { JwtService } from '@nestjs/jwt';
+
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
-  constructor(private reflector: Reflector) {}
+  constructor(
+    private reflector: Reflector,
+    private jwtService: JwtService,
+  ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
@@ -30,7 +34,9 @@ export class JwtAuthGuard implements CanActivate {
     }
 
     try {
-      const payload = jwt.verify(token, process.env.JWT_ACCESS_SECRET!);
+      const payload = await this.jwtService.verifyAsync(token, {
+        secret: process.env.JWT_SECRET
+      });
       request.user = payload;
       return true;
     } catch (err) {

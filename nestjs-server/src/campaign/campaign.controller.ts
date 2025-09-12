@@ -1,48 +1,35 @@
-import { Body, Controller, Delete, Get, HttpException, Param, Patch, Post } from '@nestjs/common';
-import { CreateCampaignDto } from './dtos/CreateCampaign.dto';
+// src/campaign/campaign.controller.ts
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { CampaignService } from './campaign.service';
-import mongoose from 'mongoose';
+import { CreateCampaignDto } from './dtos/CreateCampaign.dto';
 import { UpdateCampaignDto } from './dtos/UpdateCampaign.dto';
 
 @Controller('campaign')
 export class CampaignController {
-    constructor(private campaignsService: CampaignService) {}
+  constructor(private readonly campaignService: CampaignService) {}
 
-@Post('create')
-    createcampaign(@Body() createcampaignDto: CreateCampaignDto) {
-        console.log(createcampaignDto);
-        return this.campaignsService.createCampaign(createcampaignDto);
-    }
+  @Post('create')
+  create(@Body() createCampaignDto: CreateCampaignDto) {
+    return this.campaignService.createCampaign(createCampaignDto);
+  }
 
-@Get('get')
-    getCampaigns() {
-        return this.campaignsService.getCampaigns();
-    }
+  @Get('getByWorkspace/:workspaceId')
+  getByWorkspace(@Param('workspaceId') workspaceId: string) {
+    return this.campaignService.getCampaignsByWorkspace(workspaceId);
+  }
 
-    @Get('get/:id')
-    async getcampaignById(@Param('id') id: string) {
+  @Get(':id')
+  getById(@Param('id') id: string) {
+    return this.campaignService.getCampaignById(id);
+  }
 
-        const isValid = mongoose.Types.ObjectId.isValid(id);
-        if(!isValid) throw new HttpException('Campaign Not found', 404);
-        const findCampaign = await this.campaignsService.getCampaignById(id);
-        if (!findCampaign) throw new HttpException('Campaign Not Found', 404);
-        return findCampaign;
-    }
+  @Patch('update/:id')
+  update(@Param('id') id: string, @Body() updateCampaignDto: UpdateCampaignDto) {
+    return this.campaignService.updateCampaign(id, updateCampaignDto);
+  }
 
-    @Patch('update/:id')
-    async updatecampaign(@Param('id') id: string, @Body() updateCampaignDto: UpdateCampaignDto) {
-        const isValid = mongoose.Types.ObjectId.isValid(id);
-        if(!isValid) throw new HttpException('Invalid Id', 404);
-        const updatedCampaign = await this.campaignsService.updateCampaign(id, updateCampaignDto);
-        if(!updatedCampaign) throw new HttpException('Campaign Not Found', 404);
-        return updatedCampaign;
-    }
-
-    @Delete('delete/:id')
-    async deleteCampaign(@Param('id') id: string) {
-        const isValid = mongoose.Types.ObjectId.isValid(id);
-        if(!isValid) throw new HttpException('Invalid Id', 404);
-        const deleteCampaign = await this.campaignsService.deleteCampaign(id);
-        return deleteCampaign;
-    }
-};
+  @Delete('delete/:id')
+  delete(@Param('id') id: string) {
+    return this.campaignService.deleteCampaign(id);
+  }
+}

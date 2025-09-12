@@ -1,0 +1,52 @@
+import { Controller, Get, Post, Body, Param, Put, Delete, Req,UseGuards, HttpException } from '@nestjs/common';
+import { CampaignMessagesService } from './campaign-message.service';
+import { CreateCampaignMessageDto } from './dto/campaign-message.dto';
+import { UpdateCampaignMessageDto } from './dto/updatecampaign-message.dto';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+
+@Controller('campaignMessage')
+@UseGuards(JwtAuthGuard)
+export class CampaignMessagesController {
+  constructor(
+    private readonly campaignMessagesService: CampaignMessagesService,
+  ) {}
+
+  @Post('create')
+  create(
+    @Body() dto: CreateCampaignMessageDto,
+    @Req() req,
+  ) {
+    if (!dto.workspace || !dto.campaign) {
+      throw new HttpException('Workspace ID and Campaign ID are required in the request body.', 400);
+    }
+    return this.campaignMessagesService.create(
+      dto.workspace,
+      dto.campaign,
+      dto,
+      req.user._id,
+    );
+  }
+
+  @Get('get/:workspaceId/:campaignId')
+  findAll(
+    @Param('workspaceId') workspaceId: string,
+    @Param('campaignId') campaignId: string,
+  ) {
+    return this.campaignMessagesService.findAll(workspaceId, campaignId);
+  }
+
+  @Get('get/:id')
+  findOne(@Param('id') id: string) {
+    return this.campaignMessagesService.findOne(id);
+  }
+
+  @Put('update/:id')
+  update(@Param('id') id: string, @Body() dto: UpdateCampaignMessageDto) {
+    return this.campaignMessagesService.update(id, dto);
+  }
+
+  @Delete('delete/:id')
+  remove(@Param('id') id: string) {
+    return this.campaignMessagesService.remove(id);
+  }
+}

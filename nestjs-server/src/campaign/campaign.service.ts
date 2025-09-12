@@ -1,9 +1,10 @@
+// src/campaign/campaign.service.ts
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { CreateCampaignDto } from 'src/campaign/dtos/CreateCampaign.dto';
-import { Campaign } from 'src/schemas/campaign.schema';
-import { Model } from 'mongoose';
-import { UpdateCampaignDto } from 'src/campaign/dtos/UpdateCampaign.dto';
+import { Model, Types } from 'mongoose';
+import { Campaign } from '../schemas/campaign.schema';
+import { CreateCampaignDto } from './dtos/CreateCampaign.dto';
+import { UpdateCampaignDto } from './dtos/UpdateCampaign.dto';
 
 @Injectable()
 export class CampaignService {
@@ -20,12 +21,20 @@ export class CampaignService {
     return await this.campaignModel.find().exec();
   }
 
+  async getCampaignsByWorkspace(workspaceId: string) {
+    return await this.campaignModel
+      .find({ workspaceId: new Types.ObjectId(workspaceId) })
+      .exec();
+  }
+
   async getCampaignById(id: string) {
     return await this.campaignModel.findById(id).exec();
   }
 
   async updateCampaign(id: string, updateCampaignDto: UpdateCampaignDto) {
-    return await this.campaignModel.findByIdAndUpdate(id, updateCampaignDto, { new: true }).exec();
+    return await this.campaignModel
+      .findByIdAndUpdate(id, updateCampaignDto, { new: true })
+      .exec();
   }
 
   async deleteCampaign(id: string) {

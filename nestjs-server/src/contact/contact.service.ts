@@ -20,6 +20,18 @@ export class ContactService {
     return await this.contactModel.find().exec();
   }
 
+  async getContactsByUser(userId: string, workspaceId: string) {
+    return await this.contactModel.find({ createdBy: userId, workspaceId }).exec();
+  }
+
+  async getContactsByWorkspace(workspaceId: string) {
+    return await this.contactModel.find({ workspaceId }).exec();
+  }
+
+  async getContactsByTags(workspaceId: string, tags: string[]) {
+    return await this.contactModel.find({ workspaceId, tags: { $in: tags } }).exec();
+  }
+
   async getContactById(id: string) {
     return await this.contactModel.findById(id).exec();
   }

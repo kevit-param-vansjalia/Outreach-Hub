@@ -1,35 +1,41 @@
-import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+  UseGuards,
+  Req,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
-import type { Request } from 'express';
-import { Public } from './public.decorator';
-
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Public()
+  // ---------------- LOGIN ----------------
   @Post('login')
   async login(@Body() body: { email: string; password: string }) {
-    return this.authService.login(body.email, body.password);
+    const { email, password } = body;
+    return this.authService.login(email, password);
   }
 
-  @Public()
+  // ---------------- REGISTER ----------------
+  @Post('register')
+  async register(@Body() body: { email: string; password: string }) {
+    const { email, password } = body;
+    return this.authService.register(email, password);
+  }
+
+  // ---------------- REFRESH TOKEN ----------------
+  // @UseGuards(RefreshAuthGuard) // Guard is removed as we now take token from body
   @Post('refresh')
   async refresh(@Body() body: { refreshToken: string }) {
     return this.authService.refreshTokens(body.refreshToken);
   }
 
-  @Public()
-  @Post('logout')
-  async logout(@Body() body: { refreshToken: string }) {
-    await this.authService.removeRefreshToken(body.refreshToken);
-    return { message: 'Logged out successfully' };
-  }
-
+  // ---------------- TEST ROUTE (Protected) ----------------
   @UseGuards(JwtAuthGuard)
-  @Post('protected')
-  async protectedRoute(@Req() req: Request) {
-    return { message: `Hello ${req['user'].email}, you have access!` };
+  @Post('profile')
+  async profile(@Req() req: any) {
+    return { user: req.user };
   }
 }

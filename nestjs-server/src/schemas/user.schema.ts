@@ -6,7 +6,7 @@ export type UserDocument = User & Document & { _id: Types.ObjectId };
 
 @Schema({ timestamps: true })
 export class User {
-  @Prop({ required: true, trim: true })
+  @Prop({ required: false, trim: true }) // Set to false as it might not be there for old users
   name: string;
 
   @Prop({ required: true, unique: true, lowercase: true })

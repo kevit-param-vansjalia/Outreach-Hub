@@ -1,22 +1,29 @@
-import { Body, Controller, Delete, Get, HttpException, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpException, Param, Patch, Post, UseGuards, Req } from '@nestjs/common';
 import { CreateMessageTemplateDto } from './dtos/CreateMessageTemplate.dto';
 import { MessageTemplateService } from './message-template.service';
 import mongoose from 'mongoose';
 import { UpdateMessageTemplateDto } from './dtos/UpdateMessageTemplate.dto';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('messageTemplate')
+@UseGuards(JwtAuthGuard)
 export class MessageTemplateController {
     constructor(private messageTemplatesService: MessageTemplateService) {}
 
 @Post('create')
-    createmessageTemplate(@Body() createmessageTemplateDto: CreateMessageTemplateDto) {
-        console.log(createmessageTemplateDto);
+    createmessageTemplate(@Body() createmessageTemplateDto: CreateMessageTemplateDto, @Req() req: { user: { sub: string } }) {
+        createmessageTemplateDto.createdBy = req.user.sub;
         return this.messageTemplatesService.createMessageTemplate(createmessageTemplateDto);
     }
 
 @Get('get')
     getMessageTemplates() {
         return this.messageTemplatesService.getMessageTemplates();
+    }
+
+    @Get('get-by-workspace/:workspaceId')
+    getTemplatesByWorkspace(@Param('workspaceId') workspaceId: string) {
+        return this.messageTemplatesService.getTemplatesByWorkspace(workspaceId);
     }
 
     @Get('get/:id')

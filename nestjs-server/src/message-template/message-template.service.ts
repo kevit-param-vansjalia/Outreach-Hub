@@ -20,6 +20,10 @@ export class MessageTemplateService {
     return await this.messageTemplateModel.find().exec();
   }
 
+  async getTemplatesByWorkspace(workspaceId: string) {
+    return await this.messageTemplateModel.find({ workspaceId }).exec();
+  }
+
   async getMessageTemplateById(id: string) {
     return await this.messageTemplateModel.findById(id).exec();
   }

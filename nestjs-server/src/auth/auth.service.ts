@@ -1,107 +1,106 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
+import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
-import * as jwt from 'jsonwebtoken';
-
-import { User, UserDocument } from '../schemas/user.schema';
-import { RefreshToken, RefreshTokenDocument } from '../schemas/refresh-token.schema';
+import { User } from '../schemas/user.schema';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectModel(User.name) private userModel: Model<UserDocument>,
-    @InjectModel(RefreshToken.name) private refreshTokenModel: Model<RefreshTokenDocument>,
+    @InjectModel(User.name) private userModel: Model<User>,
+    private jwtService: JwtService,
   ) {}
 
-  // ✅ 1. Login: validate + issue tokens
+  // ---------------- LOGIN ----------------
   async login(email: string, password: string) {
-    const user = await this.validateUser(email, password);
-    if (!user) throw new UnauthorizedException('Invalid email or password');
+    const user = await this.userModel.findOne({ email }).populate('workspaces.workspaceId').exec();
+    if (!user) {
+      throw new UnauthorizedException('Invalid email or password');
+    }
 
-    const tokens = await this.generateTokens(user);
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      throw new UnauthorizedException('Invalid email or password');
+    }
 
-    // save refresh token
-    await this.saveRefreshToken(user._id as Types.ObjectId, tokens.refreshToken);
+    const tokens = await this.getTokens(user._id.toString(), user.email);
 
     return {
       accessToken: tokens.accessToken,
       refreshToken: tokens.refreshToken,
-      message: `Welcome ${user.email}`,
+      user: {
+        _id: user._id,
+        email: user.email,
+        workspaces: user.workspaces || [],
+      },
     };
   }
 
-  // ✅ 2. Validate user credentials
-  async validateUser(email: string, password: string): Promise<UserDocument | null> {
-    const user = await this.userModel.findOne({ email }).exec();
-    if (!user) return null;
+  // ---------------- REGISTER ----------------
+  async register(email: string, password: string) {
+    const existingUser = await this.userModel.findOne({ email });
+    if (existingUser) {
+      throw new UnauthorizedException('User already exists');
+    }
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) return null;
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = new this.userModel({
+      email,
+      password: hashedPassword,
+      workspaces: [],
+    });
 
-    return user;
+    const savedUser = await newUser.save();
+    const tokens = await this.getTokens(savedUser._id.toString(), savedUser.email);
+
+    return {
+      accessToken: tokens.accessToken,
+      refreshToken: tokens.refreshToken,
+      user: {
+        _id: savedUser._id,
+        email: savedUser.email,
+        workspaces: [],
+      },
+    };
   }
 
-  // ✅ 3. Generate access & refresh tokens
-  async generateTokens(user: UserDocument) {
-    const payload = { sub: user._id.toString(), email: user.email };
+  // ---------------- REFRESH ----------------
+  async refreshTokens(refreshToken: string) {
+    try {
+      const payload = await this.jwtService.verifyAsync(refreshToken, {
+        secret: process.env.JWT_REFRESH_SECRET,
+      });
 
-    const accessToken = jwt.sign(payload, process.env.JWT_ACCESS_SECRET!, {
+      const user = await this.userModel.findById(payload.sub);
+      if (!user) {
+        throw new UnauthorizedException('User not found');
+      }
+
+      const tokens = await this.getTokens(user._id.toString(), user.email);
+      return {
+        accessToken: tokens.accessToken,
+        refreshToken: tokens.refreshToken,
+      };
+    } catch (e) {
+      throw new UnauthorizedException('Invalid or expired refresh token');
+    }
+  }
+
+  // ---------------- TOKEN GENERATOR ----------------
+  private async getTokens(userId: string, email: string) {
+    const payload = { sub: userId, email };
+
+    const accessToken = await this.jwtService.signAsync(payload, {
+      secret: process.env.JWT_SECRET,
       expiresIn: '15m',
     });
 
-    const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET!, {
+    const refreshToken = await this.jwtService.signAsync(payload, {
+      secret: process.env.JWT_REFRESH_SECRET,
       expiresIn: '7d',
     });
 
     return { accessToken, refreshToken };
-  }
-
-  // ✅ 4. Save refresh token in DB
-  async saveRefreshToken(userId: Types.ObjectId, token: string, expiresIn = 7) {
-    const expiresAt = new Date();
-    expiresAt.setDate(expiresAt.getDate() + expiresIn);
-
-    const refreshToken = new this.refreshTokenModel({
-      userId,
-      token,
-      expiresAt,
-    });
-
-    await refreshToken.save();
-    return refreshToken;
-  }
-
-  // ✅ 5. Refresh tokens using stored refresh token
-  async refreshTokens(token: string) {
-    try {
-      const payload = jwt.verify(token, process.env.JWT_REFRESH_SECRET!) as any;
-
-      const storedToken = await this.refreshTokenModel.findOne({ token }).exec();
-      if (!storedToken) throw new UnauthorizedException('Refresh token not found');
-      if (storedToken.expiresAt < new Date()) {
-        await storedToken.deleteOne();
-        throw new UnauthorizedException('Refresh token expired');
-      }
-
-      const user = await this.userModel.findById(payload.sub).exec();
-      if (!user) throw new UnauthorizedException('User not found');
-
-      // generate new tokens
-      const tokens = await this.generateTokens(user);
-
-      // replace old refresh token
-      await storedToken.deleteOne();
-      await this.saveRefreshToken(user._id as Types.ObjectId, tokens.refreshToken);
-
-      return tokens;
-    } catch (err) {
-      throw new UnauthorizedException('Invalid refresh token');
-    }
-  }
-
-  // ✅ 6. Logout (remove refresh token)
-  async removeRefreshToken(token: string) {
-    await this.refreshTokenModel.deleteOne({ token }).exec();
   }
 }

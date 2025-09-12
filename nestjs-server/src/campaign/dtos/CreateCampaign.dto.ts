@@ -8,32 +8,6 @@ import {
   IsNotEmpty,
   IsUrl
 } from 'class-validator';
-import { Type } from 'class-transformer';
-
-class MessageDto {
-  @IsEnum(['Text', 'Text-Image'])
-  type: 'Text' | 'Text-Image';
-
-  @IsString()
-  @IsNotEmpty()
-  text: string;
-
-  @IsOptional()
-  @IsUrl()
-  imageUrl?: string;
-}
-
-class MessageLogDto {
-  @IsMongoId()
-  contactId: string;
-
-  @IsOptional()
-  @IsString()
-  messageContent?: string;
-
-  @IsOptional()
-  sentAt?: Date;
-}
 
 export class CreateCampaignDto {
   @IsString()
@@ -48,10 +22,9 @@ export class CreateCampaignDto {
   @IsEnum(['Draft', 'Running', 'Completed'])
   status?: 'Draft' | 'Running' | 'Completed';
 
-  @ValidateNested()
-  @Type(() => MessageDto)
-  message: MessageDto;
-
+  @IsOptional()
+  @IsMongoId()
+  templateId?: string;
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
@@ -63,10 +36,4 @@ export class CreateCampaignDto {
   @IsOptional()
   @IsMongoId()
   createdBy: string;
-
-  @IsOptional()
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => MessageLogDto)
-  messages?: MessageLogDto[];
 }

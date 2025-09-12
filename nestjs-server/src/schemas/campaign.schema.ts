@@ -1,55 +1,36 @@
+// src/campaign/schemas/campaign.schema.ts
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import mongoose, { Document } from 'mongoose';
-
-export type CampaignDocument = Campaign & Document;
-
-class Message {
-  @Prop({ enum: ['Text', 'Text-Image'], required: true })
-  type: 'Text' | 'Text-Image';
-
-  @Prop({ required: true })
-  text: string;
-
-  @Prop()
-  imageUrl?: string;
-}
-
-class MessageLog {
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Contact', required: true })
-  contactId: mongoose.Types.ObjectId;
-
-  @Prop()
-  messageContent?: string;
-
-  @Prop({ type: Date, default: Date.now })
-  sentAt?: Date;
-}
+import { Document, Types } from 'mongoose';
 
 @Schema({ timestamps: true })
-export class Campaign {
+export class Campaign extends Document {
   @Prop({ required: true })
   name: string;
 
   @Prop()
   description?: string;
 
-  @Prop({ enum: ['Draft', 'Running', 'Completed'], default: 'Draft' })
-  status: 'Draft' | 'Running' | 'Completed';
+  @Prop({
+    type: String,
+    enum: ['Draft', 'Running', 'Completed'],
+    default: 'Draft'
+  })
+  status: string;
 
-  @Prop({ type: Message, required: true })
-  message: Message;
+  @Prop({ type: [String], default: [] })
+  selectedTags: string[];
 
-  @Prop({ type: [String] })
-  selectedTags?: string[];
+  @Prop({ type: Types.ObjectId, ref: 'MessageTemplate' })
+  templateId?: Types.ObjectId;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Workspace', required: true })
-  workspaceId: mongoose.Types.ObjectId;
+  @Prop()
+  launchedAt?: Date;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
-  createdBy?: mongoose.Types.ObjectId;
+  @Prop({ type: Types.ObjectId, ref: 'Workspace', required: true })
+  workspaceId: Types.ObjectId;
 
-  @Prop({ type: [MessageLog] })
-  messages?: MessageLog[];
+  @Prop({ type: Types.ObjectId, ref: 'User', required: true })
+  createdBy: Types.ObjectId;
 }
 
 export const CampaignSchema = SchemaFactory.createForClass(Campaign);
