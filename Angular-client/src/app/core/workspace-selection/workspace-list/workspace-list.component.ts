@@ -31,6 +31,7 @@ export class WorkspaceListComponent implements OnInit {
   }
 
   selectWorkspace(workspace: Workspace) {
+    
     localStorage.setItem('workspaceId', workspace.workspaceId);
     localStorage.setItem('workspaceRole', workspace.role);
     this.router.navigate(['/dashboard']);

@@ -1,44 +1,34 @@
-import { HttpClient } from '@angular/common/http';
+// src/app/services/campaign.service.ts (or wherever your service is)
+
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-export interface Campaign {
-  _id?: string;
-  name: string;
-  description?: string;
-  selectedTags?: string[];
-  message?: {
-    type: 'Text' | 'Text-Image';
-    text: string;
-    imageUrl?: string;
-    templateId?: string;
-  };
-  templateId?: string;
-  status: 'Draft' | 'Running' | 'Completed';
-  workspaceId: string;
-}
-
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CampaignService {
-  private apiUrl = 'http://localhost:3000/campaign';
+  private apiUrl = 'http://localhost:3000/campaign';  // ✅ point to backend
 
   constructor(private http: HttpClient) {}
 
-  getCampaigns(workspaceId: string): Observable<Campaign[]> {
-    return this.http.get<Campaign[]>(`${this.apiUrl}/getByWorkspace/${workspaceId}`);
+  getCampaignsByWorkspace(workspaceId: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/getByWorkspace/${workspaceId}`);
   }
 
-  createCampaign(campaign: Partial<Campaign>): Observable<Campaign> {
-    return this.http.post<Campaign>(`${this.apiUrl}/create`, campaign);
+  getCampaignById(id: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/${id}`);
   }
 
-  updateCampaign(id: string, campaign: Partial<Campaign>): Observable<Campaign> {
-    return this.http.patch<Campaign>(`${this.apiUrl}/update/${id}`, campaign);
+  createCampaign(campaign: any): Observable<any> {
+    return this.http.post(this.apiUrl, campaign);
   }
 
-  deleteCampaign(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/delete/${id}`);
+  updateCampaign(id: string, campaign: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${id}`, campaign);
+  }
+
+  deleteCampaign(id: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${id}`);
   }
 }

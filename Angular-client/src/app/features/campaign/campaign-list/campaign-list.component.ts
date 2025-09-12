@@ -1,9 +1,25 @@
 import { Component, OnInit } from '@angular/core';
-import { CampaignService, Campaign } from '../campaign.service';
+import { CampaignService } from '../campaign.service';
 import { MessageTemplateService, MessageTemplate } from '../../message-template/message-template.service';
 import { ContactsService } from '../../contacts/contacts.service';
 import { CampaignMessageService } from '../campaign-message.service';
 import { forkJoin } from 'rxjs';
+
+interface Campaign {
+  _id?: string;
+  name: string;
+  description?: string;
+  selectedTags?: string[];
+  message?: {
+    type: 'Text' | 'Text-Image';
+    text: string;
+    imageUrl?: string;
+    templateId?: string;
+  };
+  templateId?: string;
+  status: 'Draft' | 'Running' | 'Completed';
+  workspaceId: string;
+}
 
 @Component({
   selector: 'app-campaign-list',
@@ -20,6 +36,7 @@ export class CampaignListComponent implements OnInit {
   messageTemplates: MessageTemplate[] = [];
 
   private workspaceId = localStorage.getItem('workspaceId') || '';
+  userRole = localStorage.getItem('role') || '';
 
   campaignForm: {
     name: string;
@@ -54,14 +71,14 @@ export class CampaignListComponent implements OnInit {
 
   fetchCampaignsAndTemplates() {
     forkJoin({
-      campaigns: this.campaignService.getCampaigns(this.workspaceId),
+      campaigns: this.campaignService.getCampaignsByWorkspace(this.workspaceId),
       templates: this.messageTemplateService.getTemplates(this.workspaceId)
     }).subscribe({
       next: (res) => {
         this.messageTemplates = res.templates.filter(
           t => !t.workspaceId || String(t.workspaceId) === this.workspaceId
         );
-        this.campaigns = res.campaigns.map(c => ({
+        this.campaigns = res.campaigns.map((c: Campaign) => ({
           ...c,
           selectedTags: c.selectedTags || [],
           message: c.templateId
@@ -136,84 +153,92 @@ export class CampaignListComponent implements OnInit {
     this.resetForm();
   }
 
- saveCampaign() {
-  const tagsArray = this.campaignForm.selectedTags
-    ? this.campaignForm.selectedTags.split(',').map(t => t.trim()).filter(Boolean)
-    : [];
+  saveCampaign() {
+    if (localStorage.getItem('role') === 'Viewer') {
+      console.warn('Viewer role cannot create campaigns.');
+      return;
+    }
+    const tagsArray = this.campaignForm.selectedTags
+      ? this.campaignForm.selectedTags.split(',').map(t => t.trim()).filter(Boolean)
+      : [];
 
-  const selectedTemplate = this.messageTemplates.find(
-    t => t._id === this.campaignForm.selectedTemplateId
-  );
-  
-  const payload = {
-    name: this.campaignForm.name,
-    description: this.campaignForm.description,
-    selectedTags: tagsArray,
-    templateId: selectedTemplate?._id,
-    workspaceId: this.workspaceId,
-    createdBy: localStorage.getItem('userId') || 'defaultUserId'
-  };
+    const selectedTemplate = this.messageTemplates.find(
+      t => t._id === this.campaignForm.selectedTemplateId
+    );
+    
+    const payload = {
+      name: this.campaignForm.name,
+      description: this.campaignForm.description,
+      selectedTags: tagsArray,
+      templateId: selectedTemplate?._id,
+      workspaceId: this.workspaceId,
+      createdBy: localStorage.getItem('userId') || 'defaultUserId'
+    };
 
-  const messageContent = this.campaignForm.messageText;
+    const messageContent = this.campaignForm.messageText;
 
-  this.campaignService.createCampaign(payload).subscribe({
-    next: (created) => {
-      const messageForLocalState = created.templateId
-        ? this.getMessageFromTemplate(created.templateId)
-        : {
-            type: this.campaignForm.messageType as 'Text' | 'Text-Image',
-            text: this.campaignForm.messageText,
-            imageUrl: this.campaignForm.messageImageUrl || ''
-          };
+    this.campaignService.createCampaign(payload).subscribe({
+      next: (created) => {
+        const messageForLocalState = created.templateId
+          ? this.getMessageFromTemplate(created.templateId)
+          : {
+              type: this.campaignForm.messageType as 'Text' | 'Text-Image',
+              text: this.campaignForm.messageText,
+              imageUrl: this.campaignForm.messageImageUrl || ''
+            };
 
-      this.campaigns.unshift({
-        ...created,
-        selectedTags: created.selectedTags || [],
-        message: messageForLocalState
-      });
+        this.campaigns.unshift({
+          ...created,
+          selectedTags: created.selectedTags || [],
+          message: messageForLocalState
+        });
 
-      if (tagsArray.length > 0) {
-        this.contactService.getContactsByTags(this.workspaceId, tagsArray).subscribe({
-          next: (contacts) => {
-            const contactIds = contacts.map(c => c._id!).filter(Boolean);
+        if (tagsArray.length > 0) {
+          this.contactService.getContactsByTags(this.workspaceId, tagsArray).subscribe({
+            next: (contacts) => {
+              const contactIds = contacts.map(c => c._id!).filter(Boolean);
 
-            if (contactIds.length > 0) {
-              const msgPayload = {
-                workspace: this.workspaceId,
-                campaign: created._id!,
-                contactIds,
-                messageContent: messageContent
-              };
+              if (contactIds.length > 0) {
+                const msgPayload = {
+                  workspace: this.workspaceId,
+                  campaign: created._id!,
+                  contactIds,
+                  messageContent: messageContent
+                };
 
-              this.campaignMessageService.create(msgPayload).subscribe({
-                next: () => this.closeCampaignModal(),
-                error: (err) => {
-                  console.error('Error creating campaign message:', err);
-                  this.closeCampaignModal();
-                }
-              });
-            } else {
-              console.warn('No contacts found for selected tags. Campaign created without messages.');
+                this.campaignMessageService.create(msgPayload).subscribe({
+                  next: () => this.closeCampaignModal(),
+                  error: (err) => {
+                    console.error('Error creating campaign message:', err);
+                    this.closeCampaignModal();
+                  }
+                });
+              } else {
+                console.warn('No contacts found for selected tags. Campaign created without messages.');
+                this.closeCampaignModal();
+              }
+            },
+            error: (err) => {
+              console.error('Error fetching contacts by tags:', err);
               this.closeCampaignModal();
             }
-          },
-          error: (err) => {
-            console.error('Error fetching contacts by tags:', err);
-            this.closeCampaignModal();
-          }
-        });
-      } else {
-        this.closeCampaignModal();
+          });
+        } else {
+          this.closeCampaignModal();
+        }
+      },
+      error: (err) => {
+        console.error('Error creating campaign:', err)
       }
-    },
-    error: (err) => {
-      console.error('Error creating campaign:', err)
-    }
-  });
-}
+    });
+  }
 
   updateCampaign() {
     if (!this.selectedCampaign) return;
+    if (localStorage.getItem('role') === 'Viewer') {
+      console.warn('Viewer role cannot update campaigns.');
+      return;
+    }
 
     const tagsArray = this.campaignForm.selectedTags
       ? this.campaignForm.selectedTags.split(',').map(t => t.trim()).filter(Boolean)
@@ -221,7 +246,6 @@ export class CampaignListComponent implements OnInit {
 
     const selectedTemplate = this.messageTemplates.find(t => t._id === this.campaignForm.selectedTemplateId);
 
-    // FIX: The payload now correctly includes the status from the form
     const payload: Partial<Campaign> = {
       name: this.campaignForm.name,
       description: this.campaignForm.description,
@@ -235,7 +259,6 @@ export class CampaignListComponent implements OnInit {
         const index = this.campaigns.findIndex(c => c._id === res._id);
         if (index !== -1) {
           const updatedMessage = this.getMessageFromTemplate(res.templateId);
-          // FIX: The local state is updated with all properties from the server response, including the new status
           this.campaigns[index] = { 
             ...res, 
             selectedTags: res.selectedTags || [], 
@@ -250,6 +273,10 @@ export class CampaignListComponent implements OnInit {
   }
 
   deleteCampaign(campaign: Campaign) {
+    if (localStorage.getItem('role') === 'Viewer') {
+      console.warn('Viewer role cannot delete campaigns.');
+      return;
+    }
     if (!confirm(`Are you sure you want to delete ${campaign.name}?`)) return;
 
     this.campaignService.deleteCampaign(campaign._id!).subscribe({
@@ -272,7 +299,7 @@ export class CampaignListComponent implements OnInit {
   }
 
   private resetForm() {
-      this.campaignForm = {
+    this.campaignForm = {
       name: '',
       description: '',
       selectedTags: '',

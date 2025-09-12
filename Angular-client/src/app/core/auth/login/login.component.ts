@@ -111,8 +111,10 @@ export class LoginComponent implements OnInit {
 
         // fetch workspaces from user object in response
         if (response.user?.workspaces?.length) {
-          const workspaceObservables = response.user.workspaces.map((w: any) =>
-            this.workspaceService.getWorkspaceById(w.workspaceId)
+          const workspaceObservables = response.user.workspaces.map((w: any) => {
+            return this.workspaceService.getWorkspaceById(w.workspaceId._id);
+          }
+            
           );
 
           // 👇 Tell forkJoin that it will return Workspace[]
@@ -120,7 +122,7 @@ export class LoginComponent implements OnInit {
             next: (workspaceData) => {
               const enrichedWorkspaces: Workspace[] = workspaceData.map(
                 (ws: Workspace, index: number) => ({
-                  workspaceId: response.user.workspaces[index].workspaceId!,
+                  workspaceId: response.user.workspaces[index].workspaceId._id!,
                   role: response.user.workspaces[index].role!,
                   name: ws.name,
                 })
