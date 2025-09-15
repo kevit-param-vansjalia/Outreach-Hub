@@ -22,6 +22,8 @@ export class MessageListComponent implements OnInit {
   modalMode: 'add' | 'details' | 'edit' = 'add';
   selectedTemplate: MessageTemplate | null = null;
 
+  userRole = localStorage.getItem('workspaceRole') || '';
+
   // FIX: Define a specific type for templateForm
   templateForm: {
     name: string;

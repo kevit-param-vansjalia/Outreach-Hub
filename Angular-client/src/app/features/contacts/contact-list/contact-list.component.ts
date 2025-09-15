@@ -23,6 +23,8 @@ export class ContactListComponent implements OnInit {
   modalMode: 'add' | 'details' | 'edit' = 'add';
   selectedContact: Contact | null = null;
 
+  userRole = localStorage.getItem('workspaceRole') || '';
+
   // Strongly typed form model
   contactForm: ContactForm = {
     name: '',

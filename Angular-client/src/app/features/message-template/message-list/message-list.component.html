@@ -7,7 +7,8 @@
       </p>
     </div>
     <button
-      (click)="openAddTemplateModal()"
+      *ngIf="userRole === 'Editor'"
+      (click)="openAddTemplateModal()" 
       class="bg-purple-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition-colors duration-300 ease-in-out hover:bg-purple-700 flex items-center space-x-2"
     >
       <svg
@@ -226,13 +227,14 @@
       </div>
 
       <div class="flex justify-end space-x-3 mt-6">
-        <button
+        <button *ngIf="userRole === 'Editor'"
           (click)="openEditTemplate(selectedTemplate)"
           class="px-4 py-2 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100"
         >
           Edit
         </button>
-        <button
+        <button 
+          *ngIf="userRole === 'Editor'"
           (click)="deleteTemplate(selectedTemplate)"
           class="px-4 py-2 rounded-lg bg-purple-600 text-white hover:bg-red-700"
         >

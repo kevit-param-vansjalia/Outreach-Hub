@@ -37,7 +37,7 @@ export class CampaignListComponent implements OnInit {
   messageTemplates: MessageTemplate[] = [];
 
   private workspaceId = localStorage.getItem('workspaceId') || '';
-  userRole = localStorage.getItem('role') || '';
+  userRole = localStorage.getItem('workspaceRole') || '';
 
   campaignForm: {
     name: string;

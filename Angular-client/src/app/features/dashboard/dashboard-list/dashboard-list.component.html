@@ -4,7 +4,7 @@
       <h1 class="text-3xl font-bold text-gray-900">Dashboard</h1>
       <p class="text-gray-500 mt-1">Welcome back! Here's what's happening with your campaigns.</p>
     </div>
-    <button class="bg-purple-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition-colors duration-300 ease-in-out hover:bg-purple-700 flex items-center space-x-2">
+    <button *ngIf="userRole === 'Editor'" class="bg-purple-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition-colors duration-300 ease-in-out hover:bg-purple-700 flex items-center space-x-2">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
         <path d="M12 5v14m-7-7h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
       </svg>

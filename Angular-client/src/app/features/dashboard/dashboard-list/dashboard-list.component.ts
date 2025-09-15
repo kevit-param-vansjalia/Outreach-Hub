@@ -7,6 +7,9 @@ import { ChartConfiguration, ChartOptions } from 'chart.js';
   styleUrls: ['./dashboard-list.component.scss']
 })
 export class DashboardListComponent {
+
+  userRole = localStorage.getItem('workspaceRole') || '';
+
   // Bar Chart
   public barChartOptions: ChartOptions<'bar'> = { responsive: true };
   public barChartLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'];

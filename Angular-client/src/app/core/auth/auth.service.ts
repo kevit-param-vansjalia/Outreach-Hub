@@ -37,7 +37,7 @@ export class AuthService {
     localStorage.removeItem('refresh_token');
     localStorage.removeItem('userId');
     localStorage.removeItem('workspaceId');
-    localStorage.removeItem('role');
+    localStorage.removeItem('workspaceRole');
   }
 
   /**
