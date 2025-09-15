@@ -11,11 +11,15 @@ import { catchError, filter, take, switchMap } from 'rxjs/operators';
 import { RefreshTokenService } from './refresh-token.service';
 import { Router } from '@angular/router';
 
+interface TokenResponse {
+  accessToken: string;
+  refreshToken: string;
+}
+
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-
   private isRefreshing = false;
-  private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+  private refreshTokenSubject: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
 
   constructor(
     private refreshTokenService: RefreshTokenService,
@@ -24,17 +28,22 @@ export class AuthInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     const accessToken = localStorage.getItem('access_token');
-    
+
     if (accessToken) {
       request = this.addToken(request, accessToken);
     }
-    
+
     return next.handle(request).pipe(
       catchError(error => {
-        if (error instanceof HttpErrorResponse && error.status === 401 && !request.url.includes('/auth/login') && !request.url.includes('/auth/refresh')) {
+        if (
+          error instanceof HttpErrorResponse &&
+          error.status === 401 &&
+          !request.url.includes('/auth/login') &&
+          !request.url.includes('/auth/refresh')
+        ) {
           return this.handle401Error(request, next);
         }
-        return throwError(error);
+        return throwError(() => error);
       })
     );
   }
@@ -42,7 +51,7 @@ export class AuthInterceptor implements HttpInterceptor {
   private addToken(request: HttpRequest<any>, token: string) {
     return request.clone({
       setHeaders: {
-        'Authorization': `Bearer ${token}`
+        Authorization: `Bearer ${token}`
       }
     });
   }
@@ -53,27 +62,30 @@ export class AuthInterceptor implements HttpInterceptor {
       this.refreshTokenSubject.next(null);
 
       return this.refreshTokenService.refreshToken().pipe(
-        switchMap((token: any) => {
+        switchMap((token: TokenResponse) => {
           this.isRefreshing = false;
-          localStorage.setItem('access_token', token.access_token);
-          this.refreshTokenSubject.next(token.access_token);
-          return next.handle(this.addToken(request, token.access_token));
+          this.storeTokens(token);
+          this.refreshTokenSubject.next(token.accessToken);
+          return next.handle(this.addToken(request, token.accessToken));
         }),
-        catchError((err) => {
+        catchError(err => {
           this.isRefreshing = false;
           localStorage.clear();
           this.router.navigate(['/']);
-          return throwError(err);
+          return throwError(() => err);
         })
       );
     } else {
       return this.refreshTokenSubject.pipe(
         filter(token => token != null),
         take(1),
-        switchMap(jwt => {
-          return next.handle(this.addToken(request, jwt));
-        })
+        switchMap(jwt => next.handle(this.addToken(request, jwt!)))
       );
     }
+  }
+
+  private storeTokens(token: TokenResponse) {
+    localStorage.setItem('access_token', token.accessToken);
+    localStorage.setItem('refresh_token', token.refreshToken);
   }
 }

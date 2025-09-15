@@ -1,3 +1,4 @@
+// src/app/campaign-list/campaign-list.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CampaignService } from '../campaign.service';
 import { MessageTemplateService, MessageTemplate } from '../../message-template/message-template.service';
@@ -66,31 +67,51 @@ export class CampaignListComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    // ensure workspace id present and attempt fetch
+    this.workspaceId = localStorage.getItem('workspaceId') || '';
     this.fetchCampaignsAndTemplates();
   }
 
   fetchCampaignsAndTemplates() {
-    forkJoin({
-      campaigns: this.campaignService.getCampaignsByWorkspace(this.workspaceId),
-      templates: this.messageTemplateService.getTemplates(this.workspaceId)
-    }).subscribe({
-      next: (res) => {
-        this.messageTemplates = res.templates.filter(
-          t => !t.workspaceId || String(t.workspaceId) === this.workspaceId
-        );
-        this.campaigns = res.campaigns.map((c: Campaign) => ({
-          ...c,
-          selectedTags: c.selectedTags || [],
-          message: c.templateId
-            ? this.getMessageFromTemplate(c.templateId)
-            : { type: 'Text', text: '', imageUrl: '' }
-        }));
-      },
-      error: (err) => {
-        console.error('Error fetching data:', err);
-      }
-    });
+  
+  if (!this.workspaceId) {
+    console.error('No workspaceId available');
+    return;
   }
+
+  forkJoin({
+    campaigns: this.campaignService.getCampaignsByWorkspace(this.workspaceId),
+    templates: this.messageTemplateService.getTemplates(this.workspaceId)
+  }).subscribe({
+    next: (res) => {
+      
+      this.messageTemplates = res.templates.filter(
+        t => !t.workspaceId || String(t.workspaceId) === this.workspaceId
+      );
+      
+      this.campaigns = res.campaigns.map((c: Campaign) => ({
+        ...c,
+        selectedTags: c.selectedTags || [],
+        message: c.templateId
+          ? this.getMessageFromTemplate(c.templateId)
+          : { type: 'Text', text: '', imageUrl: '' }
+      }));
+      
+    },
+    error: (err) => {
+      console.error('Error fetching data:', err);
+      console.error('Error status:', err.status);
+      console.error('Error message:', err.message);
+      
+      // Check if it's an authentication error
+      if (err.status === 401) {
+        console.error('Authentication failed - token might be invalid');
+      } else if (err.status === 0) {
+        console.error('Network error - backend might not be reachable');
+      }
+    }
+  });
+}
 
   onMessageTemplateChange(templateId?: string) {
     this.campaignForm.selectedTemplateId = templateId;
@@ -133,7 +154,8 @@ export class CampaignListComponent implements OnInit {
     this.selectedCampaign = campaign;
     this.modalMode = 'edit';
     const messageDetails = this.getMessageFromTemplate(campaign.templateId);
-    
+
+    // ensure the current status is displayed in the edit form
     this.campaignForm = {
       name: campaign.name,
       description: campaign.description || '',
@@ -165,14 +187,15 @@ export class CampaignListComponent implements OnInit {
     const selectedTemplate = this.messageTemplates.find(
       t => t._id === this.campaignForm.selectedTemplateId
     );
-    
+
     const payload = {
       name: this.campaignForm.name,
       description: this.campaignForm.description,
       selectedTags: tagsArray,
       templateId: selectedTemplate?._id,
       workspaceId: this.workspaceId,
-      createdBy: localStorage.getItem('userId') || 'defaultUserId'
+      createdBy: localStorage.getItem('userId') || 'defaultUserId',
+      status: this.campaignForm.status || 'Draft',
     };
 
     const messageContent = this.campaignForm.messageText;

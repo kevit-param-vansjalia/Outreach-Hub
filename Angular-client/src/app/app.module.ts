@@ -10,7 +10,7 @@ import { AppComponent } from './app.component';
 
 import { LayoutModule } from './shared/layout/layout.module';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { AuthInterceptor } from './core/auth/auth.interceptor';
+import { AuthInterceptor } from './core/auth.interceptor';
 import { RefreshTokenService } from './core/refresh-token.service';
 
 @NgModule({

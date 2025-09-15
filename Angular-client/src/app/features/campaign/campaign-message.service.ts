@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface CampaignMessageCreatePayload {
@@ -17,7 +17,16 @@ export class CampaignMessageService {
 
   constructor(private http: HttpClient) {}
 
+  private getHeaders() {
+    const token = localStorage.getItem('access_token');
+    return new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+  }
+
   create(payload: CampaignMessageCreatePayload): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/create`, payload);
+    return this.http.post<any>(`${this.apiUrl}/create`, payload, 
+      { headers: this.getHeaders() }
+    );
   }
 }

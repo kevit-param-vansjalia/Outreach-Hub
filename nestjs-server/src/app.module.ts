@@ -10,7 +10,7 @@ import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb+srv://paramvansjalia:Par%40kev.2025@learningproject.9uhsmza.mongodb.net/OutreachHub?retryWrites=true&w=majority&appName=LearningProject'),
+    MongooseModule.forRoot('mongodb+srv://paramvansjalia:param2003@learningproject.9uhsmza.mongodb.net/OutreachHub?retryWrites=true&w=majority&appName=LearningProject'),
     UserModule,
     ContactModule,
     WorkspaceModule,

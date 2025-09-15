@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { CampaignMessagesController } from './campaign-message.controller';
+import { CampaignMessageController } from './campaign-message.controller';
 import { CampaignMessagesService } from './campaign-message.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { CampaignMessage, CampaignMessageSchema } from '../schemas/campaign-message.schema';
@@ -13,7 +13,7 @@ import { AuthModule } from 'src/auth/auth.module';
     {name: CampaignMessage.name , schema: CampaignMessageSchema},
     {name: Campaign.name, schema: CampaignSchema}
   ])],
-  controllers: [CampaignMessagesController],
+  controllers: [CampaignMessageController],
   providers: [CampaignMessagesService]
 })
 export class CampaignMessageModule {}

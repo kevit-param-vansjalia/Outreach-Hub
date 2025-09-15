@@ -1,4 +1,3 @@
-// src/campaign/campaign.service.ts
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
@@ -22,9 +21,16 @@ export class CampaignService {
   }
 
   async getCampaignsByWorkspace(workspaceId: string) {
-    return await this.campaignModel
-      .find({ workspaceId: new Types.ObjectId(workspaceId) })
-      .exec();
+    
+    const query: any = {};
+    query.workspaceId = workspaceId;
+    try {
+      const result = await this.campaignModel.find(query).exec();
+      return result;
+    } catch (error) {
+      console.error('Database error:', error);
+      throw error;
+    }
   }
 
   async getCampaignById(id: string) {

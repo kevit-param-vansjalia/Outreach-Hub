@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Body, Param, Put, Delete, Req,UseGuards, HttpException } from '@nestjs/common';
+// src/campaign-message/campaign-message.controller.ts
+import { Controller, Get, Post, Body, Param, Put, Delete, Req, UseGuards, HttpException } from '@nestjs/common';
 import { CampaignMessagesService } from './campaign-message.service';
 import { CreateCampaignMessageDto } from './dto/campaign-message.dto';
 import { UpdateCampaignMessageDto } from './dto/updatecampaign-message.dto';
@@ -6,7 +7,7 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('campaignMessage')
 @UseGuards(JwtAuthGuard)
-export class CampaignMessagesController {
+export class CampaignMessageController {
   constructor(
     private readonly campaignMessagesService: CampaignMessagesService,
   ) {}
@@ -35,7 +36,8 @@ export class CampaignMessagesController {
     return this.campaignMessagesService.findAll(workspaceId, campaignId);
   }
 
-  @Get('get/:id')
+  // renamed to avoid route ambiguity with the above
+  @Get('getById/:id')
   findOne(@Param('id') id: string) {
     return this.campaignMessagesService.findOne(id);
   }

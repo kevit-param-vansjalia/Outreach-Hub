@@ -1,4 +1,4 @@
-// campaign-messages/campaign-messages.service.ts
+// src/campaign-messages/campaign-messages.service.ts
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
@@ -24,8 +24,7 @@ export class CampaignMessagesService {
       workspace: new Types.ObjectId(workspaceId),
       campaign: new Types.ObjectId(campaignId),
       createdBy: new Types.ObjectId(userId),
-      contactIds: dto.contactIds.map(id => new Types.ObjectId(id),
-    )
+      contactIds: dto.contactIds.map(id => new Types.ObjectId(id))
     });
     return message.save();
   }
@@ -34,11 +33,11 @@ export class CampaignMessagesService {
     return this.campaignMessageModel.find({
       workspace: new Types.ObjectId(workspaceId),
       campaign: new Types.ObjectId(campaignId),
-    });
+    }).exec();
   }
 
   async findOne(id: string) {
-    const message = await this.campaignMessageModel.findById(id);
+    const message = await this.campaignMessageModel.findById(id).exec();
     if (!message) throw new NotFoundException('Message not found');
     return message;
   }
@@ -48,13 +47,13 @@ export class CampaignMessagesService {
       id,
       dto,
       { new: true },
-    );
+    ).exec();
     if (!updated) throw new NotFoundException('Message not found');
     return updated;
   }
 
   async remove(id: string) {
-    const deleted = await this.campaignMessageModel.findByIdAndDelete(id);
+    const deleted = await this.campaignMessageModel.findByIdAndDelete(id).exec();
     if (!deleted) throw new NotFoundException('Message not found');
     return { message: 'Deleted successfully' };
   }
