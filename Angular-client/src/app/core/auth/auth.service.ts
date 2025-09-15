@@ -33,11 +33,7 @@ export class AuthService {
    * Logout the user
    */
   logout(): void {
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('refresh_token');
-    localStorage.removeItem('userId');
-    localStorage.removeItem('workspaceId');
-    localStorage.removeItem('workspaceRole');
+    localStorage.clear();
   }
 
   /**

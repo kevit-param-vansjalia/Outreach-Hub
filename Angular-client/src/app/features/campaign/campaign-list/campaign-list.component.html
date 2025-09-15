@@ -6,9 +6,7 @@
       <p class="text-gray-500 mt-1">Manage your marketing campaigns and monitor progress</p>
     </div>
     <button *ngIf="userRole === 'Editor'" (click)="openAddCampaignModal()" class="bg-purple-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-purple-700 flex items-center space-x-2">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M12 5v14m-7-7h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
+      <i class="fa-solid fa-plus"></i>
       <span>New Campaign</span>
     </button>
   </div>
@@ -46,7 +44,9 @@
 <!-- Modal -->
 <div *ngIf="showCampaignModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
   <div class="bg-white rounded-xl shadow-lg w-full max-w-md p-6 relative">
-    <button (click)="closeCampaignModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">✖</button>
+    <button (click)="closeCampaignModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+      <i class="fa-solid fa-times"></i>
+    </button>
 
     <!-- Add / Edit Campaign -->
     <ng-container *ngIf="modalMode === 'add' || modalMode === 'edit'">
