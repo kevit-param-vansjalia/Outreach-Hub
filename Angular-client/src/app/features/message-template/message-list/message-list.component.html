@@ -24,6 +24,8 @@
         type="text"
         placeholder="Search templates by name or type..."
         class="w-full text-gray-700 focus:outline-none placeholder-gray-400"
+        [(ngModel)]="searchTerm"
+        (input)="onSearchChange()"
       />
     </div>
   </div>

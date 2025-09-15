@@ -110,31 +110,25 @@
     <!-- Right Side Column -->
     <div class="flex flex-col space-y-6">
       <!-- Quick Actions -->
-      <div class="bg-white p-6 rounded-lg shadow-md">
+      <div *ngIf="userRole === 'Editor'" class="bg-white p-6 rounded-lg shadow-md">
         <h2 class="text-xl font-bold text-gray-900 mb-4">Quick Actions</h2>
         <ul class="space-y-3">
           <li>
-            <a href="#" class="flex items-center space-x-3 text-gray-700 transition-colors duration-200 hover:text-purple-600">
+            <a (click)="quickAddContact()" class="flex items-center space-x-3 text-gray-700 transition-colors duration-200 hover:text-purple-600 cursor-pointer">
               <i class="fa-solid fa-user-plus h-5 w-5"></i>
               <span>Add New Contacts</span>
             </a>
           </li>
           <li>
-            <a href="#" class="flex items-center space-x-3 text-gray-700 transition-colors duration-200 hover:text-purple-600">
+            <a (click)="quickCreateTemplate()" class="flex items-center space-x-3 text-gray-700 transition-colors duration-200 hover:text-purple-600 cursor-pointer">
               <i class="fa-solid fa-edit h-5 w-5"></i>
               <span>Create Template</span>
             </a>
           </li>
           <li>
-            <a href="#" class="flex items-center space-x-3 text-gray-700 transition-colors duration-200 hover:text-purple-600">
-              <i class="fa-solid fa-paper-plane h-5 w-5"></i>
-              <span>Send Test Email</span>
-            </a>
-          </li>
-          <li>
-            <a href="#" class="flex items-center space-x-3 text-gray-700 transition-colors duration-200 hover:text-purple-600">
-              <i class="fa-solid fa-chart-bar h-5 w-5"></i>
-              <span>View Analytics</span>
+            <a (click)="quickCreateCampaign()" class="flex items-center space-x-3 text-gray-700 transition-colors duration-200 hover:text-purple-600 cursor-pointer">
+              <i class="fa-solid fa-bullhorn h-5 w-5"></i>
+              <span>Create Campaign</span>
             </a>
           </li>
         </ul>

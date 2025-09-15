@@ -16,6 +16,8 @@ interface MessageTemplate {
 })
 export class MessageListComponent implements OnInit {
   templates: MessageTemplate[] = [];
+  private allTemplates: MessageTemplate[] = [];
+  searchTerm: string = '';
 
   // Modal state
   showTemplateModal = false;
@@ -41,14 +43,32 @@ export class MessageListComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadTemplates();
+    if (history.state.openAddModal) {
+      this.openAddTemplateModal();
+    }
   }
 
   loadTemplates() {
     const workspaceId = localStorage.getItem('workspaceId') || '';
     this.messageTemplateService.getTemplates(workspaceId).subscribe({
-      next: (data) => this.templates = data,
+      next: (data) => {
+        this.allTemplates = data;
+        this.templates = data;
+      },
       error: (err) => console.error('Error fetching templates:', err)
     });
+  }
+
+  onSearchChange(): void {
+    const term = this.searchTerm.toLowerCase();
+    if (!term) {
+      this.templates = [...this.allTemplates];
+    } else {
+      this.templates = this.allTemplates.filter(template =>
+        template.name.toLowerCase().includes(term) ||
+        template.type.toLowerCase().includes(term)
+      );
+    }
   }
 
   openAddTemplateModal() {

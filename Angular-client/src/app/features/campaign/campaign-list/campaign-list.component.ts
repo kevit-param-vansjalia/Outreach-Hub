@@ -70,6 +70,9 @@ export class CampaignListComponent implements OnInit {
     // ensure workspace id present and attempt fetch
     this.workspaceId = localStorage.getItem('workspaceId') || '';
     this.fetchCampaignsAndTemplates();
+    if (history.state.openAddModal) {
+      this.openAddCampaignModal();
+    }
   }
 
   fetchCampaignsAndTemplates() {

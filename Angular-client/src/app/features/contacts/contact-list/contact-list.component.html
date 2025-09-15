@@ -44,7 +44,13 @@
   <div class="flex items-center mb-8">
     <div class="flex items-center w-full bg-white rounded-lg shadow-sm border border-gray-200 px-4 py-2">
       <i class="fa-solid fa-search text-gray-400 mr-3"></i>
-      <input type="text" placeholder="Search contacts by name..." class="w-full text-gray-700 focus:outline-none placeholder-gray-400"/>
+      <input 
+        type="text" 
+        placeholder="Search contacts by name..." 
+        class="w-full text-gray-700 focus:outline-none placeholder-gray-400"
+        [(ngModel)]="searchTerm"
+        (input)="onSearchChange()"
+      />
     </div>
   </div>
 

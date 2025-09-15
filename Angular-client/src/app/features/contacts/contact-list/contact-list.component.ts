@@ -14,6 +14,8 @@ interface ContactForm {
 })
 export class ContactListComponent implements OnInit {
   contacts: Contact[] = [];
+  private allContacts: Contact[] = [];
+  searchTerm: string = '';
 
   // Toggle view state
   viewMode: 'my' | 'workspace' = 'my';
@@ -36,18 +38,27 @@ export class ContactListComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadContacts();
+    if (history.state.openAddModal) {
+      this.openAddContactModal();
+    }
   }
 
   loadContacts() {
     if (this.viewMode === 'my') {
       this.contactsService.getContactsByUser().subscribe({
-        next: (data: Contact[]) => (this.contacts = data),
+        next: (data: Contact[]) => {
+          this.allContacts = data;
+          this.onSearchChange(); // Re-apply search filter
+        },
         error: (err) => console.error('Error fetching user contacts:', err)
       });
     } else {
       const workspaceId = localStorage.getItem('workspaceId') || '';
       this.contactsService.getContactsByWorkspace(workspaceId).subscribe({
-        next: (data: Contact[]) => (this.contacts = data),
+        next: (data: Contact[]) => {
+          this.allContacts = data;
+          this.onSearchChange(); // Re-apply search filter
+        },
         error: (err) => console.error('Error fetching workspace contacts:', err)
       });
     }
@@ -55,7 +66,19 @@ export class ContactListComponent implements OnInit {
 
   switchView(mode: 'my' | 'workspace') {
     this.viewMode = mode;
+    this.searchTerm = ''; // Reset search term on view switch
     this.loadContacts();
+  }
+
+  onSearchChange(): void {
+    const term = this.searchTerm.toLowerCase();
+    if (!term) {
+      this.contacts = [...this.allContacts];
+    } else {
+      this.contacts = this.allContacts.filter(contact =>
+        contact.name.toLowerCase().includes(term)
+      );
+    }
   }
 
   openAddContactModal() {

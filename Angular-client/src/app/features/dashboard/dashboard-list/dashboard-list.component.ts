@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ChartConfiguration, ChartOptions } from 'chart.js';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard-list',
@@ -7,6 +8,8 @@ import { ChartConfiguration, ChartOptions } from 'chart.js';
   styleUrls: ['./dashboard-list.component.scss']
 })
 export class DashboardListComponent {
+
+  constructor(private router: Router) {}
 
   userRole = localStorage.getItem('workspaceRole') || '';
 
@@ -32,4 +35,16 @@ export class DashboardListComponent {
   public pieChartData: ChartConfiguration<'pie'>['data']['datasets'] = [
     { data: [68, 20, 12], backgroundColor: ['#6366f1', '#f43f5e', '#f59e0b'] }
   ];
+
+  quickAddContact() {
+    this.router.navigate(['/contacts'], { state: { openAddModal: true } });
+  }
+
+  quickCreateTemplate() {
+    this.router.navigate(['/message-template'], { state: { openAddModal: true } });
+  }
+
+  quickCreateCampaign() {
+    this.router.navigate(['/campaign'], { state: { openAddModal: true } });
+  }
 }

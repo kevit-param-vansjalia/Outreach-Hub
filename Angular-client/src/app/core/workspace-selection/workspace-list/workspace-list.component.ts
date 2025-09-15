@@ -1,5 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import {
+  trigger,
+  state,
+  style,
+  animate,
+  transition,
+} from '@angular/animations';
 
 interface Workspace {
   workspaceId: string;
@@ -10,7 +17,27 @@ interface Workspace {
 @Component({
   selector: 'app-workspace-list',
   templateUrl: './workspace-list.component.html',
-  styleUrls: ['./workspace-list.component.scss']
+  styleUrls: ['./workspace-list.component.scss'],
+  animations: [
+    trigger('float', [
+      state('in', style({ transform: 'translateY(0)' })),
+      transition('void => *', [
+        style({ transform: 'translateY(20px)', opacity: 0 }),
+        animate('0.5s ease-out'),
+      ]),
+    ]),
+    trigger('slideIn', [
+      state('in', style({ transform: 'translateX(0)' })),
+      transition('void => *', [
+        style({ transform: 'translateX(-100%)' }),
+        animate('0.7s ease-out'),
+      ]),
+    ]),
+    trigger('fadeIn', [
+      state('in', style({ opacity: 1 })),
+      transition('void => *', [style({ opacity: 0 }), animate('0.5s ease-in')]),
+    ]),
+  ],
 })
 export class WorkspaceListComponent implements OnInit {
   workspaces: Workspace[] = [];
