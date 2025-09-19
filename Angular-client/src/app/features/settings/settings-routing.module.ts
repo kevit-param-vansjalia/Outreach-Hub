@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { SettingListComponent } from './setting-list/setting-list.component';
+import { SettingsListComponent } from './setting-list/setting-list.component';
 
 const routes: Routes = [
-  { path: '', component: SettingListComponent}
+  { path: '', component: SettingsListComponent}
 ];
 
 @NgModule({
