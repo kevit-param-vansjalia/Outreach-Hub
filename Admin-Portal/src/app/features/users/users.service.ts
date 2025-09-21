@@ -18,4 +18,8 @@ export class UsersService {
   createUser(user: Partial<User>): Observable<User> {
     return this.http.post<User>(`${this.apiUrl}/create`, user);
   }
+
+  updateUser(id: string, user: Partial<User>): Observable<User> {
+    return this.http.patch<User>(`${this.apiUrl}/update/${id}`, user);
+  }
 }
