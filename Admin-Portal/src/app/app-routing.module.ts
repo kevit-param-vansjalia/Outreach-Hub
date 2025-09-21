@@ -22,6 +22,12 @@ const routes: Routes = [
     loadChildren: () =>
       import('./features/workspaces/workspaces.module').then((m) => m.WorkspacesModule),
   },
+  {
+    path: 'users',
+    component: MainLayoutComponent,
+    loadChildren: () =>
+      import('./features/users/users.module').then((m) => m.UsersModule),
+  },
    { path: '**', redirectTo: '' },
 ];
 

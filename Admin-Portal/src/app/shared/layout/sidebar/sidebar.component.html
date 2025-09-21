@@ -77,6 +77,29 @@
             </a>
           </li>
 
+          <!-- Users -->
+          <li class="mb-2">
+            <a routerLink="/users" routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }" #usersRla="routerLinkActive"
+              class="flex items-center rounded-lg transition-colors duration-150 ease-in-out relative font-medium hover:bg-gray-700"
+              [ngClass]="{
+                'bg-blue-500/20 text-blue-400 font-semibold': usersRla.isActive, 
+                'text-gray-400': !usersRla.isActive, 'p-3': !(isSidebarCollapsed$ | async),
+                'p-2 justify-center': (isSidebarCollapsed$ | async)
+              }">
+              <span class="absolute left-0 top-0 h-full w-1 bg-blue-500 rounded-lg"
+                [ngClass]="{'hidden': !usersRla.isActive}"></span>
+              <i class="fa-solid fa-users w-5 h-5 transition-colors duration-300 ease-in-out"
+                [ngClass]="{
+                  'text-blue-400': usersRla.isActive, 
+                  'text-gray-400': !usersRla.isActive,
+                  'mr-3': !(isSidebarCollapsed$ | async)
+                }">
+              </i>
+              <span *ngIf="!(isSidebarCollapsed$ | async)">Users</span>
+            </a>
+          </li>
+
         </ul>
       </nav>
     </div>
