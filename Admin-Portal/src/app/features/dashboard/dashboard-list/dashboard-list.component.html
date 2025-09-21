@@ -1,0 +1,79 @@
+<div class="p-6 md:p-8 min-h-screen">
+  <!-- Header -->
+  <div class="flex items-center justify-between pb-8">
+    <div>
+      <h1 class="text-3xl font-bold text-gray-100">Admin Dashboard</h1>
+      <p class="text-gray-400 mt-1">Overview of the entire platform.</p>
+    </div>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <!-- Total Users -->
+    <div class="bg-gray-800 p-6 rounded-lg shadow-lg flex items-center justify-between">
+      <div>
+        <h3 class="text-sm font-medium text-gray-400">Total Users</h3>
+        <p class="text-3xl font-bold text-gray-100 mt-2">1,482</p>
+        <p class="text-xs text-green-500 mt-1">+15% from last month</p>
+      </div>
+      <div class="bg-blue-500/20 p-3 rounded-full">
+        <i class="fa-solid fa-users h-6 w-6 text-blue-400"></i>
+      </div>
+    </div>
+
+    <!-- Total Revenue -->
+    <div class="bg-gray-800 p-6 rounded-lg shadow-lg flex items-center justify-between">
+      <div>
+        <h3 class="text-sm font-medium text-gray-400">Total Revenue</h3>
+        <p class="text-3xl font-bold text-gray-100 mt-2">$25,670</p>
+        <p class="text-xs text-green-500 mt-1">+$3,210 this month</p>
+      </div>
+      <div class="bg-blue-500/20 p-3 rounded-full">
+        <i class="fa-solid fa-dollar-sign h-6 w-6 text-blue-400"></i>
+      </div>
+    </div>
+
+    <!-- Active Subscriptions -->
+    <div class="bg-gray-800 p-6 rounded-lg shadow-lg flex items-center justify-between">
+      <div>
+        <h3 class="text-sm font-medium text-gray-400">Active Subscriptions</h3>
+        <p class="text-3xl font-bold text-gray-100 mt-2">1,209</p>
+        <p class="text-xs text-gray-400 mt-1">92% conversion</p>
+      </div>
+      <div class="bg-blue-500/20 p-3 rounded-full">
+        <i class="fa-solid fa-gem h-6 w-6 text-blue-400"></i>
+      </div>
+    </div>
+
+    <!-- New Signups (Today) -->
+    <div class="bg-gray-800 p-6 rounded-lg shadow-lg flex items-center justify-between">
+      <div>
+        <h3 class="text-sm font-medium text-gray-400">New Signups (Today)</h3>
+        <p class="text-3xl font-bold text-gray-100 mt-2">38</p>
+        <p class="text-xs text-red-500 mt-1">-5% from yesterday</p>
+      </div>
+      <div class="bg-blue-500/20 p-3 rounded-full">
+        <i class="fa-solid fa-user-plus h-6 w-6 text-blue-400"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Signups Section -->
+  <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
+    <h3 class="text-lg font-semibold text-gray-100 mb-4">Recent Signups</h3>
+    <ul class="space-y-4">
+      <li *ngFor="let user of recentUsers" class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="bg-gray-700 h-10 w-10 rounded-full flex items-center justify-center">
+            <span class="font-bold text-gray-300">{{ user.initials }}</span>
+          </div>
+          <div>
+            <p class="font-semibold text-gray-100">{{ user.name }}</p>
+            <p class="text-sm text-gray-400">{{ user.email }}</p>
+          </div>
+        </div>
+        <span class="text-sm text-gray-400">{{ user.time }}</span>
+      </li>
+    </ul>
+  </div>
+</div>

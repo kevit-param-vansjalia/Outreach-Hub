@@ -12,7 +12,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  // ---------------- LOGIN ----------------
+  // ---------------- LOGIN (Regular users) ----------------
   async login(email: string, password: string) {
     const user = await this.userModel.findOne({ email }).populate('workspaces.workspaceId').exec();
     if (!user) {
@@ -24,7 +24,7 @@ export class AuthService {
       throw new UnauthorizedException('Invalid email or password');
     }
 
-    const tokens = await this.getTokens(user._id.toString(), user.email);
+    const tokens = await this.getTokens(user._id.toString(), user.email, user.isAdmin);
 
     return {
       accessToken: tokens.accessToken,
@@ -32,6 +32,39 @@ export class AuthService {
       user: {
         _id: user._id,
         email: user.email,
+        isAdmin: user.isAdmin,
+        workspaces: user.workspaces || [],
+      },
+    };
+  }
+
+  // ---------------- ADMIN LOGIN (Check isAdmin BEFORE token generation) ----------------
+  async adminLogin(email: string, password: string) {
+    const user = await this.userModel.findOne({ email }).populate('workspaces.workspaceId').exec();
+    if (!user) {
+      throw new UnauthorizedException('Invalid email or password');
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      throw new UnauthorizedException('Invalid email or password');
+    }
+
+    // ✅ CRITICAL: Check isAdmin flag BEFORE generating tokens
+    if (!user.isAdmin) {
+      throw new UnauthorizedException('Access denied. Admin privileges required.');
+    }
+
+    // Only generate tokens if user is admin
+    const tokens = await this.getTokens(user._id.toString(), user.email, user.isAdmin);
+
+    return {
+      accessToken: tokens.accessToken,
+      refreshToken: tokens.refreshToken,
+      user: {
+        _id: user._id,
+        email: user.email,
+        isAdmin: user.isAdmin,
         workspaces: user.workspaces || [],
       },
     };
@@ -49,10 +82,11 @@ export class AuthService {
       email,
       password: hashedPassword,
       workspaces: [],
+      isAdmin: false, // Default to false for new users
     });
 
     const savedUser = await newUser.save();
-    const tokens = await this.getTokens(savedUser._id.toString(), savedUser.email);
+    const tokens = await this.getTokens(savedUser._id.toString(), savedUser.email, savedUser.isAdmin);
 
     return {
       accessToken: tokens.accessToken,
@@ -60,6 +94,7 @@ export class AuthService {
       user: {
         _id: savedUser._id,
         email: savedUser.email,
+        isAdmin: savedUser.isAdmin,
         workspaces: [],
       },
     };
@@ -77,7 +112,7 @@ export class AuthService {
         throw new UnauthorizedException('User not found');
       }
 
-      const tokens = await this.getTokens(user._id.toString(), user.email);
+      const tokens = await this.getTokens(user._id.toString(), user.email, user.isAdmin);
       return {
         accessToken: tokens.accessToken,
         refreshToken: tokens.refreshToken,
@@ -88,8 +123,8 @@ export class AuthService {
   }
 
   // ---------------- TOKEN GENERATOR ----------------
-  private async getTokens(userId: string, email: string) {
-    const payload = { sub: userId, email };
+  private async getTokens(userId: string, email: string, isAdmin: boolean) {
+    const payload = { sub: userId, email, isAdmin };
 
     const accessToken = await this.jwtService.signAsync(payload, {
       secret: process.env.JWT_SECRET,
