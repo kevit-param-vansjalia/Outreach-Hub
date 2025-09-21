@@ -16,6 +16,12 @@ const routes: Routes = [
     loadChildren: () =>
       import('./features/dashboard/dashboard.module').then((m) => m.DashboardModule),
   },
+  {
+    path: 'workspaces',
+    component: MainLayoutComponent,
+    loadChildren: () =>
+      import('./features/workspaces/workspaces.module').then((m) => m.WorkspacesModule),
+  },
    { path: '**', redirectTo: '' },
 ];
 

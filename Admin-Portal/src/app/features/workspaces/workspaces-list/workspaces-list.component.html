@@ -1,1 +1,32 @@
-<p>workspaces-list works!</p>
+<div class="p-6 md:p-8 min-h-screen">
+  <!-- Header -->
+  <div class="flex items-center justify-between pb-8">
+    <div>
+      <h1 class="text-3xl font-bold text-gray-100">Your Workspaces</h1>
+      <p class="text-gray-400 mt-1">Select a workspace to manage.</p>
+    </div>
+  </div>
+
+  <!-- Workspace Cards -->
+  <div *ngIf="workspaces.length > 0; else noWorkspaces" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" [@cardAnimation]="workspaces.length">
+    <div *ngFor="let userWorkspace of workspaces" class="bg-gray-800 rounded-lg shadow-lg overflow-hidden transform transition-transform duration-300 hover:-translate-y-1 hover:shadow-blue-500/20 cursor-pointer">
+      <div class="p-6">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-xl font-bold text-gray-100 truncate">{{ userWorkspace.workspaceId.name }}</h2>
+          <span class="text-xs font-semibold px-2 py-1 rounded-full"
+                [ngClass]="{
+                  'bg-blue-500/20 text-blue-400': userWorkspace.role === 'Editor',
+                  'bg-gray-600 text-gray-300': userWorkspace.role === 'Viewer'
+                }">
+            {{ userWorkspace.role }}
+          </span>
+        </div>
+        <p class="text-sm text-gray-400">ID: {{ userWorkspace.workspaceId._id }}</p>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #noWorkspaces>
+    <p class="text-center text-gray-400 mt-16">You are not a part of any workspaces yet.</p>
+  </ng-template>
+</div>
