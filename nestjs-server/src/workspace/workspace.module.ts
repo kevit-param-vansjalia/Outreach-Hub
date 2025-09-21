@@ -3,6 +3,7 @@ import { WorkspaceController } from './workspace.controller';
 import { WorkspaceService } from './workspace.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Workspace, WorkspaceSchema } from 'src/schemas/workspace.schema';
+import { User, UserSchema } from 'src/schemas/user.schema';
 
 @Module({
   imports: [MongooseModule.forFeature([
@@ -10,6 +11,10 @@ import { Workspace, WorkspaceSchema } from 'src/schemas/workspace.schema';
           name: Workspace.name,
           schema: WorkspaceSchema,
         },
+        {
+          name: User.name,
+          schema: UserSchema,
+        }
         ])
       ],
   controllers: [WorkspaceController],

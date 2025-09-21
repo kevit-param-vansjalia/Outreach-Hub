@@ -31,7 +31,7 @@ export class User {
     default: [],
   })
   workspaces: {
-    workspaceId?: mongoose.Schema.Types.ObjectId;
+    workspaceId?: mongoose.Types.ObjectId;
     role?: 'Editor' | 'Viewer';
   }[];
 }

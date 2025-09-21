@@ -18,4 +18,8 @@ export class WorkspacesService {
   createWorkspace(workspace: Partial<Workspace>): Observable<Workspace> {
     return this.http.post<Workspace>(`${this.apiUrl}/create`, workspace);
   }
+
+  deleteWorkspace(id: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/delete/${id}`);
+  }
 }
