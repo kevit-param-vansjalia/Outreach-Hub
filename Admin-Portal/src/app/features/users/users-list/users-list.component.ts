@@ -44,6 +44,8 @@ export class UsersListComponent implements OnInit {
   users: User[] = [];
   isModalOpen = false;
   userForm: FormGroup;
+  modalMode: 'create' | 'edit' = 'create';
+  selectedUser: User | null = null;
 
   constructor(private usersService: UsersService, private fb: FormBuilder) {
     this.userForm = this.fb.group({
@@ -64,24 +66,63 @@ export class UsersListComponent implements OnInit {
     });
   }
 
-  openModal(): void {
+  openModal(user?: User): void {
+    if (user) {
+      // Edit mode
+      this.modalMode = 'edit';
+      this.selectedUser = user;
+      this.userForm.patchValue(user);
+      this.userForm.get('password')?.setValidators([Validators.minLength(6)]);
+      this.userForm.get('password')?.updateValueAndValidity();
+    } else {
+      // Create mode
+      this.modalMode = 'create';
+      this.selectedUser = null;
+      this.userForm.reset();
+      this.userForm.get('password')?.setValidators([Validators.required, Validators.minLength(6)]);
+      this.userForm.get('password')?.updateValueAndValidity();
+    }
     this.isModalOpen = true;
   }
 
   closeModal(): void {
     this.isModalOpen = false;
     this.userForm.reset();
+    this.selectedUser = null;
+    this.modalMode = 'create';
   }
 
   onSubmit(): void {
     if (this.userForm.invalid) {
       return;
     }
+    if (this.modalMode === 'create') {
+      const newUser = { ...this.userForm.value, isAdmin: false, workspaces: [] };
+      this.usersService.createUser(newUser).subscribe(createdUser => {
+        this.users.unshift(createdUser); // Add to the top of the list
+        this.closeModal();
+      });
+    } else if (this.selectedUser) {
+      const updatedData = { ...this.userForm.value };
+      // Don't send an empty password
+      if (!updatedData.password) {
+        delete updatedData.password;
+      }
+      this.usersService.updateUser(this.selectedUser._id, updatedData).subscribe(updatedUser => {
+        const index = this.users.findIndex(u => u._id === updatedUser._id);
+        if (index !== -1) {
+          this.users[index] = updatedUser;
+        }
+        this.closeModal();
+      });
+    }
+  }
 
-    const newUser = { ...this.userForm.value, isAdmin: false, workspaces: [] };
-    this.usersService.createUser(newUser).subscribe(createdUser => {
-      this.users.unshift(createdUser);
-      this.closeModal();
-    });
+  deleteUser(userId: string): void {
+    if (confirm('Are you sure you want to delete this user?')) {
+      this.usersService.deleteUser(userId).subscribe(() => {
+        this.users = this.users.filter(u => u._id !== userId);
+      });
+    }
   }
 }

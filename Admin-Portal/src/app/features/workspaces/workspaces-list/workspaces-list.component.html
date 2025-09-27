@@ -46,7 +46,7 @@
 
     <!-- All Workspaces View -->
     <div *ngSwitchCase="'all'" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" [@cardAnimation]="allWorkspaces.length">
-      <div *ngFor="let workspace of allWorkspaces" class="bg-gray-800 rounded-lg shadow-lg overflow-hidden transform transition-transform duration-300 hover:-translate-y-1 hover:shadow-blue-500/20 cursor-pointer">
+      <div *ngFor="let workspace of allWorkspaces" (click)="openDetailsModal(workspace)" class="bg-gray-800 rounded-lg shadow-lg overflow-hidden transform transition-transform duration-300 hover:-translate-y-1 hover:shadow-blue-500/20 cursor-pointer">
         <div class="p-6">
           <h2 class="text-xl font-bold text-gray-100 truncate">{{ workspace.name }}</h2>
           <p class="text-sm text-gray-400 mt-2">ID: {{ workspace._id }}</p>
@@ -104,7 +104,7 @@
         <div class="p-6 space-y-4 max-h-96 overflow-y-auto">
           <div *ngFor="let user of allUsers; let i = index" [formGroupName]="i" class="flex items-center justify-between p-3 bg-gray-700 rounded-lg">
             <div class="flex items-center">
-              <input type="checkbox" [formControlName]="'selected'" class="w-5 h-5 text-blue-600 bg-gray-600 border-gray-500 rounded focus:ring-blue-500">
+              <input type="checkbox" formControlName="selected" class="w-5 h-5 text-blue-600 bg-gray-600 border-gray-500 rounded focus:ring-blue-500">
               <div class="ml-4">
                 <p class="font-medium text-gray-100">{{ user.name }}</p>
                 <p class="text-sm text-gray-400">{{ user.email }}</p>
@@ -190,10 +190,10 @@
         </button>
       </div>
       <form [formGroup]="addUserForm" (ngSubmit)="saveAddedUsers()">
-        <div class="p-6 space-y-4 max-h-96 overflow-y-auto">
+        <div formArrayName="users" class="p-6 space-y-4 max-h-96 overflow-y-auto">
           <div *ngFor="let user of allUsers; let i = index" [formGroupName]="i" class="flex items-center justify-between p-3 bg-gray-700 rounded-lg">
             <div class="flex items-center">
-              <input type="checkbox" [formControlName]="'selected'" class="w-5 h-5 text-blue-600 bg-gray-600 border-gray-500 rounded focus:ring-blue-500">
+              <input type="checkbox" formControlName="selected" class="w-5 h-5 text-blue-600 bg-gray-600 border-gray-500 rounded focus:ring-blue-500">
               <div class="ml-4">
                 <p class="font-medium text-gray-100">{{ user.name }}</p>
                 <p class="text-sm text-gray-400">{{ user.email }}</p>
@@ -201,11 +201,17 @@
             </div>
             <div class="flex items-center space-x-4 text-sm text-gray-300">
               <label class="flex items-center">
-                <input type="radio" value="Editor" name="add-role-{{i}}" (change)="addUserArray.at(i).get('role')?.setValue('Editor')" [checked]="addUserArray.at(i).get('role')?.value === 'Editor'" class="w-4 h-4 text-blue-600 bg-gray-600 border-gray-500 focus:ring-blue-500">
+                <input type="radio" value="Editor" name="add-role-{{i}}"
+                       (change)="addUserArray.at(i).get('role')?.setValue('Editor')"
+                       [checked]="addUserArray.at(i).get('role')?.value === 'Editor'"
+                       class="w-4 h-4 text-blue-600 bg-gray-600 border-gray-500 focus:ring-blue-500">
                 <span class="ml-2">Editor</span>
               </label>
               <label class="flex items-center">
-                <input type="radio" value="Viewer" name="add-role-{{i}}" (change)="addUserArray.at(i).get('role')?.setValue('Viewer')" [checked]="addUserArray.at(i).get('role')?.value === 'Viewer'" class="w-4 h-4 text-blue-600 bg-gray-600 border-gray-500 focus:ring-blue-500">
+                <input type="radio" value="Viewer" name="add-role-{{i}}"
+                       (change)="addUserArray.at(i).get('role')?.setValue('Viewer')"
+                       [checked]="addUserArray.at(i).get('role')?.value === 'Viewer'"
+                       class="w-4 h-4 text-blue-600 bg-gray-600 border-gray-500 focus:ring-blue-500">
                 <span class="ml-2">Viewer</span>
               </label>
             </div>

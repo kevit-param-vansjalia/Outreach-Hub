@@ -188,11 +188,11 @@ export class WorkspacesListComponent implements OnInit {
   // --- Details Modal Methods ---
 
   openDetailsModal(workspace: Workspace): void {
-    this.selectedWorkspace = workspace;
-    this.workspaceUsers = this.allUsers
+    this.selectedWorkspace = { ...workspace }; // Use a copy to avoid unintended modifications
+    this.workspaceUsers = this.allUsers // Make sure allUsers is loaded
       .map(user => {
         // Handle workspaceId as string or object
-        const userWorkspace = user.workspaces.find(w => {
+        const userWorkspace = user.workspaces.find((w: any) => {
           if (typeof w.workspaceId === 'string') {
             return w.workspaceId === workspace._id;
           } else if (w.workspaceId && typeof w.workspaceId === 'object') {
@@ -202,7 +202,7 @@ export class WorkspacesListComponent implements OnInit {
         });
         return userWorkspace ? { user, role: userWorkspace.role } : null;
       })
-      .filter((item): item is { user: User; role: 'Editor' | 'Viewer' } => item !== null);
+      .filter((item): item is { user: User; role: 'Editor' | 'Viewer' } => !!item);
 
     this.isDetailsModalOpen = true;
     this.detailsModalStep = 'view';
@@ -212,6 +212,7 @@ export class WorkspacesListComponent implements OnInit {
     this.isDetailsModalOpen = false;
     this.selectedWorkspace = null;
     this.workspaceUsers = [];
+    this.detailsModalStep = 'view';
   }
 
   removeUserFromWorkspace(userId: string): void {
@@ -253,21 +254,17 @@ export class WorkspacesListComponent implements OnInit {
 
     this.usersService.updateUser(userId, { workspaces: updatedWorkspaces as any }).subscribe(() => {
       // Refresh local data
-      this.loadInitialData(); // Reload all data to ensure consistency
+      this.usersService.getUsers().subscribe(users => {
+        this.allUsers = users;
+        // Re-open the modal to reflect the role change in the list
+        this.openDetailsModal(this.selectedWorkspace!);
+      });
     });
   }
 
   goToAddUser(): void {
-    if (this.allUsers.length === 0) {
-      this.usersService.getUsers().subscribe(users => {
-        this.allUsers = users;
-        this.populateAddUserArray();
-        this.detailsModalStep = 'add';
-      });
-    } else {
-      this.populateAddUserArray();
-      this.detailsModalStep = 'add';
-    }
+    this.populateAddUserArray();
+    this.detailsModalStep = 'add';
   }
 
   private populateAddUserArray(): void {
@@ -282,49 +279,65 @@ export class WorkspacesListComponent implements OnInit {
   }
 
   saveAddedUsers(): void {
-    if (!this.selectedWorkspace) return;
+    if (!this.selectedWorkspace) {
+      return;
+    }
 
-      const updates = this.allUsers.map((user, index) => {
-        const formGroup = this.addUserArray.at(index);
-        const isSelected = formGroup.get('selected')?.value;
-        const newRole = formGroup.get('role')?.value;
-        const currentWorkspaceInfo = user.workspaces.find((w: any) => w.workspaceId._id === this.selectedWorkspace!._id);
-    
-        if (isSelected && !currentWorkspaceInfo) { // Add user
-          const updatedWorkspaces: UserWorkspaceUpdate[] = [
-            ...user.workspaces.map((w: any) => ({
-              workspaceId: typeof w.workspaceId === 'string' ? w.workspaceId : w.workspaceId._id,
-              role: w.role
-            })),
-            { workspaceId: this.selectedWorkspace!._id.toString(), role: newRole }
-          ];
-          return this.usersService.updateUser(user._id, { workspaces: updatedWorkspaces as any });
-        } else if (!isSelected && currentWorkspaceInfo) { // Remove user
-          const updatedWorkspaces: UserWorkspaceUpdate[] = user.workspaces
-            .filter((w: any) => {
-              if (typeof w.workspaceId === 'string') {
-                return w.workspaceId !== this.selectedWorkspace!._id;
-              } else if (w.workspaceId && typeof w.workspaceId === 'object') {
-                return w.workspaceId._id !== this.selectedWorkspace!._id;
-              }
-              return true;
-            })
-            .map((w: any) => ({
-              workspaceId: typeof w.workspaceId === 'string' ? w.workspaceId : w.workspaceId._id,
-              role: w.role
-            }));
-          return this.usersService.updateUser(user._id, { workspaces: updatedWorkspaces as any });
+    const workspaceIdToUpdate = this.selectedWorkspace._id;
+
+    const updateObservables = this.allUsers.map((user, index) => {
+      const formGroup = this.addUserArray.at(index);
+      const isSelectedInForm = formGroup.get('selected')?.value;
+      const newRole = formGroup.get('role')?.value;
+
+      const currentWorkspace = user.workspaces.find(
+        (w: any) => (w.workspaceId?._id || w.workspaceId) === workspaceIdToUpdate
+      );
+
+      const needsAdding = isSelectedInForm && !currentWorkspace;
+      const needsRemoving = !isSelectedInForm && currentWorkspace;
+      const needsRoleUpdate = isSelectedInForm && currentWorkspace && currentWorkspace.role !== newRole;
+
+      if (needsAdding || needsRemoving || needsRoleUpdate) {
+        let updatedWorkspaces: UserWorkspaceUpdate[];
+
+        if (needsRemoving) {
+          updatedWorkspaces = user.workspaces
+            .filter((w: any) => (w.workspaceId?._id || w.workspaceId) !== workspaceIdToUpdate)
+            .map((w: any) => ({ workspaceId: w.workspaceId?._id || w.workspaceId, role: w.role }));
+        } else { // needsAdding or needsRoleUpdate
+          const otherWorkspaces = user.workspaces
+            .filter((w: any) => (w.workspaceId?._id || w.workspaceId) !== workspaceIdToUpdate)
+            .map((w: any) => ({ workspaceId: w.workspaceId?._id || w.workspaceId, role: w.role }));
+          updatedWorkspaces = [...otherWorkspaces, { workspaceId: workspaceIdToUpdate, role: newRole }];
         }
-        return null;
-      }).filter(obs => obs !== null);
-    
-      if (updates.length > 0) {
-        forkJoin(updates).subscribe(() => {
-          this.loadInitialData(); // Reload all data
-          this.openDetailsModal(this.selectedWorkspace!); // Re-open the modal with fresh data
-        });
+        return this.usersService.updateUser(user._id, { workspaces: updatedWorkspaces as any });
       }
+
+      return null;
+    }).filter(obs => obs !== null);
+
+    if (updateObservables.length > 0) {
+      forkJoin(updateObservables).subscribe(() => {
+        // After all users are updated, reload all data to reflect changes everywhere.
+        this.workspacesService.getWorkspaces().subscribe(workspaces => {
+          this.allWorkspaces = workspaces;
+          const updatedWorkspace = this.allWorkspaces.find(ws => ws._id === workspaceIdToUpdate);
+          this.usersService.getUsers().subscribe(users => {
+            this.allUsers = users;
+            if (updatedWorkspace) {
+              this.openDetailsModal(updatedWorkspace); // Re-open the modal with fresh data
+            }
+          });
+        });
+      }, () => {
+        // Error case
+        this.detailsModalStep = 'view';
+      });
+    } else {
+      // If no updates are needed, just go back to the view
       this.detailsModalStep = 'view';
+    }
   }
 
   deleteWorkspace(): void {

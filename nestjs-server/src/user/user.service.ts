@@ -24,21 +24,10 @@ export class UserService {
     }
 
     async updateUser(id: string, updateUserDto: UpdateUserDto) {
-        const user = await this.userModel.findById(id);
-        if (!user) {
-            return null;
-        }
-        // Directly assign properties and mark 'workspaces' as modified
-        // to ensure Mongoose detects the change in the array of objects.
-        if (updateUserDto.workspaces) {
-            user.workspaces = updateUserDto.workspaces.map(w => ({
-                ...w,
-                workspaceId: new Types.ObjectId(w.workspaceId)
-            }));
-            user.markModified('workspaces');
-        }
-
-        return await user.save();
+        // The findByIdAndUpdate method is perfect for this.
+        // It finds the document by its ID and applies the updates from the DTO.
+        // The { new: true } option ensures that the updated document is returned.
+        return this.userModel.findByIdAndUpdate(id, updateUserDto, { new: true }).populate('workspaces.workspaceId').exec();
     }
 
     deleteUser(id: string) {
