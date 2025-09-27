@@ -10,7 +10,7 @@
   <!-- Stats Cards -->
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
     <!-- Total Users -->
-    <div class="bg-gray-800 p-6 rounded-lg shadow-lg flex items-center justify-between">
+    <div class="bg-gray-800 p-6 rounded-lg shadow-lg flex items-center justify-between transform transition-transform duration-300 hover:-translate-y-1 hover:shadow-blue-500/20">
       <div>
         <h3 class="text-sm font-medium text-gray-400">Total Users</h3>
         <p class="text-3xl font-bold text-gray-100 mt-2">{{ totalUsers }}</p>
@@ -21,7 +21,7 @@
     </div>
 
     <!-- Total Revenue -->
-    <div class="bg-gray-800 p-6 rounded-lg shadow-lg flex items-center justify-between">
+    <div class="bg-gray-800 p-6 rounded-lg shadow-lg flex items-center justify-between transform transition-transform duration-300 hover:-translate-y-1 hover:shadow-blue-500/20">
       <div>
         <h3 class="text-sm font-medium text-gray-400">Total Workspaces</h3>
         <p class="text-3xl font-bold text-gray-100 mt-2">{{ totalWorkspaces }}</p>
@@ -32,7 +32,7 @@
     </div>
 
     <!-- Active Subscriptions -->
-    <div class="bg-gray-800 p-6 rounded-lg shadow-lg flex items-center justify-between">
+    <div class="bg-gray-800 p-6 rounded-lg shadow-lg flex items-center justify-between transform transition-transform duration-300 hover:-translate-y-1 hover:shadow-blue-500/20">
       <div>
         <h3 class="text-sm font-medium text-gray-400">New Users (Today)</h3>
         <p class="text-3xl font-bold text-gray-100 mt-2">{{ newUsersToday }}</p>
@@ -46,7 +46,7 @@
   <!-- Charts Section -->
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
     <!-- Users Created Chart -->
-    <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
+    <div class="bg-gray-800 p-6 rounded-lg shadow-lg transform transition-transform duration-300 hover:-translate-y-1 hover:shadow-blue-500/20">
       <h3 class="text-lg font-semibold text-gray-100 mb-4">New Users Over Time</h3>
       <div *ngIf="userChartData.length > 0" class="chart-container">
         <ngx-charts-bar-vertical
@@ -65,7 +65,7 @@
     </div>
 
     <!-- Workspaces Created Chart -->
-    <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
+    <div class="bg-gray-800 p-6 rounded-lg shadow-lg transform transition-transform duration-300 hover:-translate-y-1 hover:shadow-blue-500/20">
       <h3 class="text-lg font-semibold text-gray-100 mb-4">New Workspaces Over Time</h3>
       <div *ngIf="workspaceChartData.length > 0" class="chart-container">
         <ngx-charts-area-chart

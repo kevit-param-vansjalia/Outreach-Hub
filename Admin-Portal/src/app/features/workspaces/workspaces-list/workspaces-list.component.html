@@ -46,7 +46,7 @@
 
     <!-- All Workspaces View -->
     <div *ngSwitchCase="'all'" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" [@cardAnimation]="allWorkspaces.length">
-      <div *ngFor="let workspace of allWorkspaces" (click)="openDetailsModal(workspace)" class="bg-gray-800 rounded-lg shadow-lg overflow-hidden transform transition-transform duration-300 hover:-translate-y-1 hover:shadow-blue-500/20 cursor-pointer">
+      <div *ngFor="let workspace of allWorkspaces" class="bg-gray-800 rounded-lg shadow-lg overflow-hidden transform transition-transform duration-300 hover:-translate-y-1 hover:shadow-blue-500/20">
         <div class="p-6">
           <h2 class="text-xl font-bold text-gray-100 truncate">{{ workspace.name }}</h2>
           <p class="text-sm text-gray-400 mt-2">ID: {{ workspace._id }}</p>

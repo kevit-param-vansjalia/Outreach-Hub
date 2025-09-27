@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
+import { jwtDecode } from 'jwt-decode';
 
 // Define the structure of the login response for type safety
 export interface AdminLoginResponse {
@@ -58,6 +59,22 @@ export class AuthService {
    * Checks if a user is currently logged in by verifying the presence of an access token.
    */
   public isLoggedIn(): boolean {
-    return !!localStorage.getItem('access_token');
+    const token = localStorage.getItem('access_token');
+
+    if (!token) {
+      return false;
+    }
+
+    try {
+      const decodedToken: { exp: number } = jwtDecode(token);
+      const expirationDate = new Date(0);
+      expirationDate.setUTCSeconds(decodedToken.exp);
+
+      // Return true if the token is not expired
+      return expirationDate.valueOf() > new Date().valueOf();
+    } catch (error) {
+      // If token is malformed, treat as not logged in
+      return false;
+    }
   }
 }
