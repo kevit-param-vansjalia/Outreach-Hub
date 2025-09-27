@@ -9,6 +9,7 @@ export interface Workspace { // Keep this export for the service
   _id: string;
   name: string;
   createdBy: string;
+  createdAt: string; // Add this line
 }
 
 export interface UserWorkspace {
