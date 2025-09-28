@@ -181,14 +181,13 @@
       </div>
 
       <div class="flex justify-end space-x-3 mt-6">
-        <button *ngIf="userRole === 'Editor'"
+        <button *ngIf="userRole === 'Editor'" (click)="openEditTemplate(selectedTemplate)"
           (click)="openEditTemplate(selectedTemplate)"
           class="px-4 py-2 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100"
         >
           Edit
         </button>
-        <button 
-          *ngIf="userRole === 'Editor'"
+        <button *ngIf="userRole === 'Editor'"
           (click)="deleteTemplate(selectedTemplate)"
           class="px-4 py-2 rounded-lg bg-purple-600 text-white hover:bg-red-700"
         >

@@ -14,7 +14,7 @@ export class CreateContactDto {
   name: string;
 
   @IsNotEmpty({ message: 'Phone number is required' })
-  @IsEmail({}, { message: 'Phone Number should be a string' })
+  @IsString()
   phoneNumber: string;
 
   @IsNotEmpty({ message: 'Tags cannot be empty' })

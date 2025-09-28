@@ -72,7 +72,7 @@
         <button (click)="openContactDetails(contact)" class="text-sm font-semibold text-purple-600 hover:text-purple-800 transition-colors duration-200">
           More details →
         </button>
-        <div *ngIf="userRole === 'Editor'" class="flex space-x-2">
+        <div *ngIf="userRole === 'Editor' && viewMode === 'my'" class="flex space-x-2">
           <button (click)="openEditContact(contact); $event.stopPropagation()" class="p-2 rounded-md hover:bg-gray-100 text-gray-500 hover:text-violet-600" title="Edit Contact">
             <i class="fa-solid fa-pencil-alt w-5 h-5"></i>
           </button>
@@ -131,8 +131,8 @@
           <span *ngFor="let tag of selectedContact.tags" class="px-2 py-1 text-xs bg-purple-100 text-purple-700 rounded-full">{{ tag }}</span>
         </div>
         <div class="flex justify-end space-x-3 mt-6">
-          <button *ngIf="userRole === 'Editor'" (click)="openEditContact(selectedContact)" class="px-4 py-2 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100">Edit</button>
-          <button *ngIf="userRole === 'Editor'" (click)="deleteContact(selectedContact); $event.stopPropagation()" class="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700">Delete</button>
+          <button *ngIf="userRole === 'Editor' && viewMode === 'my'" (click)="openEditContact(selectedContact)" class="px-4 py-2 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100">Edit</button>
+          <button *ngIf="userRole === 'Editor' && viewMode === 'my'" (click)="deleteContact(selectedContact); $event.stopPropagation()" class="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700">Delete</button>
         </div>
       </ng-container>
     </div>

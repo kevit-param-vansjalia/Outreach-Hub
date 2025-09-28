@@ -11,8 +11,12 @@ export class ContactService {
     @InjectModel(Contact.name) private contactModel: Model<Contact>
   ) {}
 
-  async createContact(createContactDto: CreateContactDto) {
-    const contact = new this.contactModel(createContactDto);
+  async createContact(createContactDto: CreateContactDto, userId: string) {
+    const contactData = {
+      ...createContactDto,
+      createdBy: userId,
+    };
+    const contact = new this.contactModel(contactData);
     return await contact.save();
   }
 

@@ -18,8 +18,4 @@ export class DashboardService {
   getContactsPerUser(workspaceId: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/stats/contacts-per-user/${workspaceId}`);
   }
-
-  getCampaignsByStatus(workspaceId: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/stats/campaigns-by-status/${workspaceId}`);
-  }
 }

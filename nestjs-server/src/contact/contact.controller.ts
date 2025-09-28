@@ -1,5 +1,5 @@
-import { Body, Controller, Delete, Get, HttpException, Param, Patch, Post, UseGuards, Req, Query } from '@nestjs/common';
-import { CreateContactDto } from './dtos/CreateContact.dto';
+import { Body, Controller, Delete, Get, HttpException, Param, Patch, Post, UseGuards, Req, Query, ForbiddenException } from '@nestjs/common';
+import { CreateContactDto } from './dtos/CreateContact.dto'; 
 import { ContactService } from './contact.service';
 import mongoose from 'mongoose';
 import { UpdateContactDto } from './dtos/UpdateContact.dto';
@@ -12,8 +12,8 @@ export class ContactController {
 
 @Post('create')
     createcontact(@Body() createcontactDto: CreateContactDto, @Req() req: { user: { sub: string } }) {
-        createcontactDto.createdBy = req.user.sub;
-        return this.contactsService.createContact(createcontactDto);
+        // Pass the DTO and the authenticated user's ID to the service
+        return this.contactsService.createContact(createcontactDto, req.user.sub);
     }
 
 @Get('get')
@@ -48,18 +48,32 @@ export class ContactController {
     }
 
     @Patch('update/:id')
-    async updatecontact(@Param('id') id: string, @Body() updateContactDto: UpdateContactDto) {
+    async updatecontact(@Param('id') id: string, @Body() updateContactDto: UpdateContactDto, @Req() req: { user: { sub: string } }) {
         const isValid = mongoose.Types.ObjectId.isValid(id);
         if(!isValid) throw new HttpException('Invalid Id', 404);
+
+        const contact = await this.contactsService.getContactById(id);
+        if (!contact) throw new HttpException('Contact Not Found', 404);
+        if (contact.createdBy.toString() !== req.user.sub) {
+            throw new ForbiddenException('You do not have permission to edit this contact.');
+        }
+
         const updatedContact = await this.contactsService.updateContact(id, updateContactDto);
         if(!updatedContact) throw new HttpException('Contact Not Found', 404);
         return updatedContact;
     }
 
     @Delete('delete/:id')
-    async deleteContact(@Param('id') id: string) {
+    async deleteContact(@Param('id') id: string, @Req() req: { user: { sub: string } }) {
         const isValid = mongoose.Types.ObjectId.isValid(id);
         if(!isValid) throw new HttpException('Invalid Id', 404);
+
+        const contact = await this.contactsService.getContactById(id);
+        if (!contact) throw new HttpException('Contact Not Found', 404);
+        if (contact.createdBy.toString() !== req.user.sub) {
+            throw new ForbiddenException('You do not have permission to delete this contact.');
+        }
+
         const deleteContact = await this.contactsService.deleteContact(id);
         return deleteContact;
     }

@@ -130,8 +130,6 @@
         <li class="mb-2 relative">
           <div (click)="toggleSettingsDropdown()"
             class="flex items-center rounded-lg transition-colors duration-150 ease-in-out relative font-medium hover:bg-gray-100 cursor-pointer"
-            [routerLinkActive]="['bg-violet-50', 'text-violet-700', 'font-semibold']" [routerLinkActiveOptions]="{exact: false}"
-            routerLink="/settings"
             [ngClass]="{'p-3': !isSidebarCollapsed, 'p-2 justify-center': isSidebarCollapsed}">
             
             <span class="absolute left-0 top-0 h-full w-1 bg-violet-700 rounded-lg" *ngIf="isSettingsActive()"></span>
