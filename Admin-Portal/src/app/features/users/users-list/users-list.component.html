@@ -1,0 +1,127 @@
+<div class="p-6 md:p-8 min-h-screen">
+  <!-- Header -->
+  <div class="flex items-center justify-between pb-8">
+    <div>
+      <h1 class="text-3xl font-bold text-gray-100">User Management</h1>
+      <p class="text-gray-400 mt-1">List of all registered users on the platform.</p>
+    </div>
+    <div>
+      <button (click)="openModal()"
+        class="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75 transition-colors duration-200">
+        <i class="fa-solid fa-plus mr-2"></i>New User
+      </button>
+    </div>
+  </div>
+
+  <!-- Users Table -->
+  <div class="bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-left">
+        <thead class="bg-gray-700/50">
+          <tr>
+            <th class="p-4 text-sm font-semibold text-gray-300 uppercase tracking-wider">Name</th>
+            <th class="p-4 text-sm font-semibold text-gray-300 uppercase tracking-wider">Email</th>
+            <th class="p-4 text-sm font-semibold text-gray-300 uppercase tracking-wider text-center">Role</th>
+            <th class="p-4 text-sm font-semibold text-gray-300 uppercase tracking-wider text-center">Workspaces</th>
+            <th class="p-4 text-sm font-semibold text-gray-300 uppercase tracking-wider">Joined On</th>
+            <th class="p-4 text-sm font-semibold text-gray-300 uppercase tracking-wider text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody *ngIf="users.length > 0" class="divide-y divide-gray-700" [@rowAnimation]="users.length">
+          <tr *ngFor="let user of users" class="hover:bg-gray-700/40 transition-colors duration-200">
+            <td class="p-4 whitespace-nowrap">
+              <p class="font-medium text-gray-100">{{ user.name || 'N/A' }}</p>
+            </td>
+            <td class="p-4 whitespace-nowrap text-gray-400">{{ user.email }}</td>
+            <td class="p-4 whitespace-nowrap text-center">
+              <span class="px-3 py-1 text-xs font-semibold rounded-full"
+                    [ngClass]="user.isAdmin ? 'bg-blue-500/20 text-blue-400' : 'bg-gray-600 text-gray-300'">
+                {{ user.isAdmin ? 'Admin' : 'User' }}
+              </span>
+            </td>
+            <td class="p-4 whitespace-nowrap text-gray-400 text-center">{{ user.workspaces.length }}</td>
+            <td class="p-4 whitespace-nowrap text-gray-400">{{ user.createdAt | date: 'mediumDate' }}</td>
+            <td class="p-4 whitespace-nowrap text-center text-sm font-medium">
+              <button (click)="openModal(user)" class="text-blue-400 hover:text-blue-300 mr-4">
+                <i class="fa-solid fa-pencil-alt"></i>
+                <span class="sr-only">Edit</span>
+              </button>
+              <button (click)="deleteUser(user._id)" class="text-red-400 hover:text-red-300">
+                <i class="fa-solid fa-trash-alt"></i>
+                <span class="sr-only">Delete</span>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div *ngIf="users.length === 0" class="p-8 text-center text-gray-500">
+        <p>No users found.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add User Modal -->
+<div *ngIf="isModalOpen" class="fixed inset-0 bg-black bg-opacity-50 z-40 flex items-center justify-center"
+  (click)="closeModal()">
+  <div class="bg-gray-800 rounded-lg shadow-2xl w-full max-w-md m-4" (click)="$event.stopPropagation()">
+    <!-- Modal Header -->
+    <div class="flex justify-between items-center p-5 border-b border-gray-700">
+      <h3 class="text-xl font-semibold text-gray-100">
+        {{ modalMode === 'create' ? 'Create New User' : 'Edit User' }}
+      </h3>
+      <button (click)="closeModal()"
+        class="text-gray-400 bg-transparent hover:bg-gray-600 hover:text-gray-100 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
+        <i class="fa-solid fa-times w-5 h-5"></i>
+      </button>
+    </div>
+
+    <!-- Modal Body -->
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+      <div class="p-6 space-y-6">
+        <!-- Name -->
+        <div>
+          <label for="name" class="block mb-2 text-sm font-medium text-gray-300">Name</label>
+          <input type="text" id="name" formControlName="name"
+            class="w-full px-4 py-3 bg-gray-700 border-2 border-gray-600 rounded-xl text-white placeholder-gray-400 transition-all duration-200 focus:outline-none focus:border-blue-500 focus:shadow-lg focus:shadow-blue-500/20"
+            placeholder="John Doe">
+        </div>
+        <!-- Email -->
+        <div>
+          <label for="email" class="block mb-2 text-sm font-medium text-gray-300">Email</label>
+          <input type="email" id="email" formControlName="email"
+            class="w-full px-4 py-3 bg-gray-700 border-2 border-gray-600 rounded-xl text-white placeholder-gray-400 transition-all duration-200 focus:outline-none focus:border-blue-500 focus:shadow-lg focus:shadow-blue-500/20"
+            placeholder="name@company.com">
+        </div>
+        <!-- Phone Number -->
+        <div>
+          <label for="phoneNumber" class="block mb-2 text-sm font-medium text-gray-300">Phone Number
+            (Optional)</label>
+          <input type="tel" id="phoneNumber" formControlName="phoneNumber"
+            class="w-full px-4 py-3 bg-gray-700 border-2 border-gray-600 rounded-xl text-white placeholder-gray-400 transition-all duration-200 focus:outline-none focus:border-blue-500 focus:shadow-lg focus:shadow-blue-500/20"
+            placeholder="+1234567890">
+        </div>
+        <!-- Password -->
+        <div>
+          <label for="password" class="block mb-2 text-sm font-medium text-gray-300">Password</label>
+          <input type="password" id="password" formControlName="password"
+            class="w-full px-4 py-3 bg-gray-700 border-2 border-gray-600 rounded-xl text-white placeholder-gray-400 transition-all duration-200 focus:outline-none focus:border-blue-500 focus:shadow-lg focus:shadow-blue-500/20"            
+            [placeholder]="modalMode === 'create' ? '••••••••' : 'Leave blank to keep current password'">
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="flex items-center p-6 space-x-2 border-t border-gray-700 rounded-b">
+        <button type="submit" [disabled]="userForm.invalid"
+          class="w-full py-3 px-6 bg-blue-600 text-white font-semibold rounded-xl transition-all duration-300 ease-out hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed">          
+          {{ modalMode === 'create' ? 'Create User' : 'Save Changes' }}
+        </button>
+        <button type="button" (click)="closeModal()"
+          class="w-full py-3 px-6 bg-gray-600 text-white font-semibold rounded-xl transition-all duration-300 ease-out hover:bg-gray-500">
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
