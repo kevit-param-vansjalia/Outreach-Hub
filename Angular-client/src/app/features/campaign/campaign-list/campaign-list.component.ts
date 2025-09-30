@@ -178,6 +178,37 @@ export class CampaignListComponent implements OnInit {
     this.resetForm();
   }
 
+  launchCampaign(campaign: Campaign) {
+  if (localStorage.getItem('role') === 'Viewer') return;
+
+  const payload: Partial<Campaign> = { status: 'Running' };
+  this.campaignService.updateCampaign(campaign._id!, payload).subscribe({
+    next: (res) => {
+      campaign.status = 'Running';
+      // Safely update selectedCampaign only if it exists
+      if (this.selectedCampaign && this.selectedCampaign._id === campaign._id) {
+        this.selectedCampaign.status = 'Running';
+      }
+    },
+    error: (err) => console.error('Error launching campaign:', err)
+  });
+}
+
+completeCampaign(campaign: Campaign) {
+  if (localStorage.getItem('role') === 'Viewer') return;
+
+  const payload: Partial<Campaign> = { status: 'Completed' };
+  this.campaignService.updateCampaign(campaign._id!, payload).subscribe({
+    next: (res) => {
+      campaign.status = 'Completed';
+      if (this.selectedCampaign && this.selectedCampaign._id === campaign._id) {
+        this.selectedCampaign.status = 'Completed';
+      }
+    },
+    error: (err) => console.error('Error completing campaign:', err)
+  });
+}
+
   saveCampaign() {
     if (localStorage.getItem('role') === 'Viewer') {
       console.warn('Viewer role cannot create campaigns.');
