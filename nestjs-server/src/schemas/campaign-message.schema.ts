@@ -10,8 +10,8 @@ export class CampaignMessage extends Document {
   @Prop({ type: Types.ObjectId, ref: 'Campaign', required: true })
   campaign: Types.ObjectId;
 
-  @Prop({ type: Types.ObjectId, ref: 'Contact', required: true })
-   contactIds: Types.ObjectId[];
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'Contact' }], required: true })
+  contactIds: Types.ObjectId[];
 
   @Prop({ type: Types.ObjectId, ref: 'User', required: true })
   createdBy: Types.ObjectId;

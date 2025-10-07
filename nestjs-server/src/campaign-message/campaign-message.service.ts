@@ -14,17 +14,12 @@ export class CampaignMessagesService {
   ) {}
 
   async create(
-    workspaceId: string,
-    campaignId: string,
     dto: CreateCampaignMessageDto,
     userId: string,
   ) {
     const message = new this.campaignMessageModel({
       ...dto,
-      workspace: new Types.ObjectId(workspaceId),
-      campaign: new Types.ObjectId(campaignId),
       createdBy: new Types.ObjectId(userId),
-      contactIds: dto.contactIds.map(id => new Types.ObjectId(id))
     });
     return message.save();
   }

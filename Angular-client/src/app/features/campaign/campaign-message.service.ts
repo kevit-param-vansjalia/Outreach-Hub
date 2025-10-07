@@ -13,7 +13,7 @@ export interface CampaignMessageCreatePayload {
   providedIn: 'root'
 })
 export class CampaignMessageService {
-  private apiUrl = 'http://localhost:3000/campaignMessage';
+  private apiUrl = 'http://localhost:3000/campaign-message';
 
   constructor(private http: HttpClient) {}
 

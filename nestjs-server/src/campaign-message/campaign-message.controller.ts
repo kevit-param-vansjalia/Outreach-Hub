@@ -5,7 +5,7 @@ import { CreateCampaignMessageDto } from './dto/campaign-message.dto';
 import { UpdateCampaignMessageDto } from './dto/updatecampaign-message.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
-@Controller('campaignMessage')
+@Controller('campaign-message')
 @UseGuards(JwtAuthGuard)
 export class CampaignMessageController {
   constructor(
@@ -17,15 +17,8 @@ export class CampaignMessageController {
     @Body() dto: CreateCampaignMessageDto,
     @Req() req,
   ) {
-    if (!dto.workspace || !dto.campaign) {
-      throw new HttpException('Workspace ID and Campaign ID are required in the request body.', 400);
-    }
-    return this.campaignMessagesService.create(
-      dto.workspace,
-      dto.campaign,
-      dto,
-      req.user._id,
-    );
+    // The ValidationPipe handles the checks for workspace and campaign from the DTO.
+    return this.campaignMessagesService.create(dto, req.user._id);
   }
 
   @Get('get/:workspaceId/:campaignId')
